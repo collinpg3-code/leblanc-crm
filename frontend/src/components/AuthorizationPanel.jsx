@@ -24,7 +24,7 @@ export default function AuthorizationPanel({ lead, onChange }) {
   }, [lead.id])
 
   const message = (link) =>
-    `Hi${lead.contact ? ' ' + lead.contact.split(/[<\s]/)[0] : ''}, here's the authorization form for your website security check. It takes about 3 minutes and lets us get started: ${link}\n\n— LeBlanc Solutions`
+    `Hi${lead.contact && /<|@/.test(lead.contact) ? ' ' + lead.contact.split(/[<\s]/)[0] : ''}, here's the project form for your website. It takes about 3 minutes and gives us permission to check your current site so we can get started: ${link}\n\n— LeBlanc Solutions`
 
   const share = async (link) => {
     const text = message(link)
@@ -61,7 +61,7 @@ export default function AuthorizationPanel({ lead, onChange }) {
   return (
     <div className="auth-panel">
       <div className="auth-head">
-        <h3>Testing authorization</h3>
+        <h3>Project authorization</h3>
         <span className={`auth-badge ${auth.status}`}>
           {{ none: 'Not sent', sent: 'Waiting to sign', expired: 'Link expired', signed: 'Signed', error: 'Unavailable' }[auth.status]}
         </span>
@@ -93,7 +93,7 @@ export default function AuthorizationPanel({ lead, onChange }) {
 
       {(auth.status === 'none' || auth.status === 'expired') && (
         <>
-          <p className="auth-muted">Send the client a private link to complete and sign the authorization on leblancsols.com. Required before any scan.</p>
+          <p className="auth-muted">Send the client a private link to sign the project and testing authorization on leblancsols.com. Required before we test their site.</p>
           <button className="btn-primary" onClick={create} disabled={busy}>{busy ? 'Creating…' : 'Send authorization'}</button>
         </>
       )}
@@ -121,7 +121,7 @@ function SignedCopy({ lead, signed, onClose }) {
           <button onClick={onClose}>Close</button>
         </div>
         <p className="eyebrow">LeBlanc Solutions</p>
-        <h2>Website Security Testing Authorization</h2>
+        <h2>Website Project &amp; Testing Authorization</h2>
         <p className="auth-muted">Signed electronically for {lead.name}</p>
 
         <dl className="signed-grid">

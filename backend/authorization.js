@@ -9,7 +9,7 @@
 
 const crypto = require('crypto');
 
-const TERMS_VERSION = '2026-10-12';
+const TERMS_VERSION = '2026-10-12.2';
 const LINK_DAYS = 30;
 const STANDARD_HOURS = 'Standard hours: after business hours (weekdays 6 pm to 7 am, and weekends)';
 const SITE_URL = 'https://leblancsols.com/authorize/';
@@ -19,9 +19,14 @@ const STAGE_ORDER = ['prospect', 'qualified', 'authorized', 'scan', 'report', 'f
 // stored hash always matches what was shown.
 const TERMS = [
   {
+    heading: 'Why we test',
+    text: 'Security testing is part of every LeBlanc project. For a redesign, we check your current website at the start so we know what to fix and what to protect, and we test your new website before it goes live. For a security check, testing is the service itself. We never test a website without the owner\'s written permission.'
+  },
+  {
     heading: 'How we test',
     items: [
       'We test only the websites and testing types approved on this form, during the testing window.',
+      'If we build you a new website, we also test it before launch. That testing is covered by this form.',
       'We do not run denial-of-service attacks, attempt to take sites offline, or deliberately delete or change your data.',
       'We do not access, copy or keep customer or personal data beyond the minimum needed to show that a problem exists.',
       'We do not use phishing, phone calls or other social engineering against your staff.',
@@ -48,7 +53,7 @@ const TERMS = [
   },
   {
     heading: 'Scope of this authorization',
-    text: 'This authorization covers only the websites, testing types and dates on this form. Any change must be agreed in writing. Your typed name below is your electronic signature and has the same effect as a handwritten one.'
+    text: 'This authorization covers only the websites, testing types and dates on this form, plus the new website we build for you. Any change must be agreed in writing. Your typed name below is your electronic signature and has the same effect as a handwritten one.'
   }
 ];
 const TERMS_HASH = crypto.createHash('sha256').update(JSON.stringify(TERMS)).digest('hex');
