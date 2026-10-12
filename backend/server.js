@@ -16,8 +16,8 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Credentials come from the environment (Render env vars in production).
-const VALID_USERNAME = process.env.CRM_USERNAME || 'CollinLB12';
-const VALID_PASSWORD = process.env.CRM_PASSWORD;
+const VALID_USERNAME = (process.env.CRM_USERNAME || 'CollinLB12').trim();
+const VALID_PASSWORD = (process.env.CRM_PASSWORD || '').trim();
 if (!VALID_PASSWORD) {
   console.warn('⚠️  CRM_PASSWORD is not set — all logins will be rejected.');
 }
@@ -93,7 +93,8 @@ function saveData(data) {
 
 // POST: Login
 app.post('/api/auth/login', (req, res) => {
-  const { username, password } = req.body;
+  const username = String(req.body.username || '').trim();
+  const password = String(req.body.password || '').trim();
 
   if (VALID_PASSWORD && username === VALID_USERNAME && safeEqual(password, VALID_PASSWORD)) {
     res.json({ token: makeToken(), user: username });
@@ -291,7 +292,12 @@ app.post('/api/leads/sync', authenticateToken, (req, res) => {
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    commit: (process.env.RENDER_GIT_COMMIT || 'local').slice(0, 7),
+    passwordConfigured: Boolean(VALID_PASSWORD),
+  });
 });
 
 // Start server
