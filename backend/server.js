@@ -7,10 +7,10 @@
  */
 
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
 const cors = require('cors');
 const crypto = require('crypto');
+const store = require('./store');
+const registerBacklogRoutes = require('./backlog');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -66,30 +66,9 @@ function authenticateToken(req, res, next) {
   next();
 }
 
-// Data file path
-const dataFile = path.join(__dirname, 'data.json');
-
-// Helper: Load data from JSON file
-function loadData() {
-  try {
-    if (fs.existsSync(dataFile)) {
-      const data = fs.readFileSync(dataFile, 'utf-8');
-      return JSON.parse(data);
-    }
-  } catch (err) {
-    console.error('Error loading data:', err);
-  }
-  return { engagements: [], activity: [], stats: {} };
-}
-
-// Helper: Save data to JSON file
-function saveData(data) {
-  try {
-    fs.writeFileSync(dataFile, JSON.stringify(data, null, 2));
-  } catch (err) {
-    console.error('Error saving data:', err);
-  }
-}
+// Data lives in Postgres when DATABASE_URL is set (see store.js)
+const loadData = store.load;
+const saveData = store.save;
 
 // Routes
 
@@ -240,57 +219,8 @@ app.post('/api/stats', authenticateToken, (req, res) => {
   res.json(data.stats);
 });
 
-// POST: Lead Scout agent integration (push leads)
-app.post('/api/leads/sync', authenticateToken, (req, res) => {
-  const { leads } = req.body;
-
-  if (!Array.isArray(leads)) {
-    return res.status(400).json({ error: 'Expected array of leads' });
-  }
-
-  const data = loadData();
-  let imported = 0;
-
-  leads.forEach(leadData => {
-    const existing = data.engagements.find(e =>
-      e.contact === leadData.contact || e.name === leadData.name
-    );
-
-    if (!existing) {
-      const engagement = {
-        id: `eng-${Date.now()}`,
-        name: leadData.name,
-        contact: leadData.contact,
-        industry: leadData.industry || 'Unknown',
-        location: leadData.location || 'Unknown',
-        stack: leadData.stack || 'Unknown',
-        website: leadData.website || null,
-        findings: leadData.findings || null,
-        stage: 'prospect',
-        service: 'Security Check',
-        estimatedValue: 100,
-        authorized: false,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        notes: 'Imported from Lead Scout agent',
-        progress: 10
-      };
-
-      data.engagements.push(engagement);
-      data.activity.push({
-        type: 'import',
-        title: `Lead imported: ${engagement.name}`,
-        description: `${engagement.name} (${engagement.industry})`,
-        timestamp: engagement.createdAt,
-        icon: '🤖'
-      });
-      imported++;
-    }
-  });
-
-  saveData(data);
-  res.json({ imported, total: data.engagements.length });
-});
+// Lead backlog: Lead Scout leads wait here until pulled into the pipeline
+registerBacklogRoutes(app, { authenticateToken, loadData, saveData });
 
 // POST: Public website contact form -> new prospect. No auth, so validate
 // strictly, rate-limit per IP, and silently drop bots that fill the honeypot.
@@ -378,12 +308,18 @@ app.get('/api/health', (req, res) => {
     commit: (process.env.RENDER_GIT_COMMIT || 'local').slice(0, 7),
     passwordConfigured: Boolean(VALID_PASSWORD),
     username: VALID_USERNAME,
+    storage: store.storageMode(),
   });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`\n✅ LeBlanc Dashboard Backend running at http://localhost:${PORT}`);
-  console.log(`📊 Dashboard: http://localhost:3000`);
-  console.log(`🔧 API: http://localhost:${PORT}/api/dashboard\n`);
+// Start server once stored data is loaded
+store.init().then(() => {
+  app.listen(PORT, () => {
+    console.log(`\n✅ LeBlanc Dashboard Backend running at http://localhost:${PORT}`);
+    console.log(`📊 Dashboard: http://localhost:3000`);
+    console.log(`🔧 API: http://localhost:${PORT}/api/dashboard\n`);
+  });
+}).catch(err => {
+  console.error('❌ Could not load CRM data — refusing to start so nothing gets overwritten:', err);
+  process.exit(1);
 });

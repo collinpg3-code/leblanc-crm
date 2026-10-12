@@ -1,131 +1,116 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { getApiUrl } from '../utils/api'
+import { parseCsv } from '../utils/csv'
 import '../styles/ImportLeads.css'
+
+const authHeaders = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem('crm-token')}` } })
+const errorText = (err) => err.response?.data?.error || err.message
 
 export default function ImportLeads({ onImportSuccess }) {
   const [showModal, setShowModal] = useState(false)
-  const [file, setFile] = useState(null)
+  const [backlog, setBacklog] = useState(null)
+  const [count, setCount] = useState(10)
   const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState(null)
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0])
-    setMessage('')
+  const refreshBacklog = async () => {
+    try {
+      const { data } = await axios.get(`${getApiUrl()}/backlog`, authHeaders())
+      setBacklog(data)
+    } catch (err) {
+      setMessage({ ok: false, text: `Couldn't load backlog: ${errorText(err)}` })
+    }
   }
 
-  const handleImport = async () => {
-    if (!file) {
-      setMessage('Please select a CSV file')
-      return
-    }
+  const open = () => {
+    setShowModal(true)
+    setMessage(null)
+    refreshBacklog()
+  }
 
+  const pull = async () => {
     setLoading(true)
+    setMessage(null)
     try {
-      const reader = new FileReader()
-      reader.onload = async (event) => {
-        const csv = event.target.result
-        const lines = csv.split('\n').slice(1) // Skip header
-        const leads = []
-
-        lines.forEach(line => {
-          if (line.trim()) {
-            const parts = line.split(',').map(s => s.trim())
-            const [business, contact, industry, location, stack, findings, website] = parts
-            if (business && contact) {
-              leads.push({
-                name: business,
-                contact,
-                industry,
-                location,
-                stack,
-                findings: findings || null,
-                website: website || null
-              })
-            }
-          }
-        })
-
-        if (leads.length === 0) {
-          setMessage('No valid leads found in CSV')
-          setLoading(false)
-          return
-        }
-
-        try {
-          const token = localStorage.getItem('crm-token')
-          const apiUrl = getApiUrl()
-          const response = await axios.post(`${apiUrl}/leads/sync`, { leads }, {
-            headers: { Authorization: `Bearer ${token}` }
-          })
-
-          setMessage(`✅ Imported ${response.data.imported} leads! (Total: ${response.data.total})`)
-          setFile(null)
-
-          setTimeout(() => {
-            setShowModal(false)
-            onImportSuccess()
-          }, 1500)
-        } catch (err) {
-          setMessage(`❌ Import failed: ${err.response?.data?.error || err.message}`)
-        }
-      }
-      reader.readAsText(file)
+      const { data } = await axios.post(`${getApiUrl()}/backlog/pull`, { count }, authHeaders())
+      setMessage({ ok: true, text: `Imported ${data.imported} lead${data.imported === 1 ? '' : 's'} into your pipeline. ${data.remaining} left in the backlog.` })
+      await refreshBacklog()
+      onImportSuccess()
     } catch (err) {
-      setMessage(`❌ Error reading file: ${err.message}`)
+      setMessage({ ok: false, text: `Import failed: ${errorText(err)}` })
     } finally {
       setLoading(false)
     }
   }
 
+  const addCsv = async (e) => {
+    const file = e.target.files[0]
+    e.target.value = ''
+    if (!file) return
+    setLoading(true)
+    setMessage(null)
+    try {
+      const leads = parseCsv(await file.text())
+      if (leads.length === 0) throw new Error('No rows found in that CSV')
+      const { data } = await axios.post(`${getApiUrl()}/backlog`, { leads }, authHeaders())
+      const skipped = data.skipped ? ` (${data.skipped} already in the CRM or backlog, skipped)` : ''
+      setMessage({ ok: true, text: `Added ${data.added} lead${data.added === 1 ? '' : 's'} to the backlog${skipped}.` })
+      await refreshBacklog()
+    } catch (err) {
+      setMessage({ ok: false, text: `Couldn't add CSV: ${errorText(err)}` })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const waiting = backlog?.count ?? 0
+
   return (
     <>
-      <button
-        onClick={() => setShowModal(true)}
-        className="import-btn"
-        title="Import leads from CSV"
-      >
-        📥 Import Leads
+      <button onClick={open} className="import-btn" title="Import leads from the backlog">
+        Import Leads
       </button>
 
       {showModal && (
         <div className="import-modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="import-modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="import-close-btn" onClick={() => setShowModal(false)}>✕</button>
+          <div className="import-modal-content" role="dialog" aria-label="Import leads" onClick={(e) => e.stopPropagation()}>
+            <button className="import-close-btn" onClick={() => setShowModal(false)} aria-label="Close">✕</button>
 
             <h2>Import Leads</h2>
-            <p>Upload a CSV file from Lead Scout</p>
-
-            <div className="import-upload-area">
-              <input
-                type="file"
-                accept=".csv"
-                onChange={handleFileChange}
-                disabled={loading}
-                className="import-file-input"
-              />
-              <p>{file ? `✓ ${file.name}` : 'Choose CSV file or drag & drop'}</p>
-            </div>
-
-            <div className="import-csv-format">
-              <h4>CSV Format:</h4>
-              <code>business,contact,industry,location,stack,findings,website</code>
-              <p>Required: business, contact. Optional: industry, location, stack, findings, website</p>
-            </div>
-
-            {message && (
-              <div className={`import-message ${message.includes('✅') ? 'success' : 'error'}`}>
-                {message}
-              </div>
+            <p className="import-backlog-count">
+              {backlog ? <><strong>{waiting}</strong> lead{waiting === 1 ? '' : 's'} waiting in the backlog</> : 'Loading backlog…'}
+            </p>
+            {backlog?.next?.length > 0 && (
+              <p className="import-next">Next up: {backlog.next.map(l => l.name).join(', ')}{waiting > backlog.next.length ? ', …' : ''}</p>
             )}
 
-            <button
-              onClick={handleImport}
-              disabled={!file || loading}
-              className="import-submit-btn"
-            >
-              {loading ? 'Importing...' : 'Import Leads'}
-            </button>
+            <div className="import-pull">
+              <label htmlFor="import-count">How many?</label>
+              <input
+                id="import-count"
+                type="number"
+                min="1"
+                max="50"
+                value={count}
+                onChange={(e) => setCount(Math.min(50, Math.max(1, parseInt(e.target.value, 10) || 1)))}
+                disabled={loading}
+              />
+              <button onClick={pull} disabled={loading || waiting === 0} className="import-submit-btn">
+                {loading ? 'Working…' : `Import ${Math.min(count, waiting || count)} lead${Math.min(count, waiting || count) === 1 ? '' : 's'}`}
+              </button>
+            </div>
+
+            {message && <div className={`import-message ${message.ok ? 'success' : 'error'}`}>{message.text}</div>}
+
+            <div className="import-add">
+              <h4>Add Lead Scout results to the backlog</h4>
+              <label className="import-file-label">
+                <input type="file" accept=".csv" onChange={addCsv} disabled={loading} className="import-file-input" />
+                Choose a leads.csv file
+              </label>
+              <p>Works with Lead Scout's CSV (business, url, sub_niche, location, stack, public_flags, contact, …). Duplicates are skipped.</p>
+            </div>
           </div>
         </div>
       )}
