@@ -4,142 +4,292 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Apex Auto Spa — demo by LeBlanc Solutions</title>
-<meta name="description" content="A premium, bold sample website built by LeBlanc Solutions to demonstrate our high-end design end.">
+<meta name="description" content="A luxury sample website built by LeBlanc Solutions.">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add('js');</script>
 <style>
-  :root{--bg:#0B0908;--bg2:#141010;--panel:#1C1613;--gold:#D9A866;--gold-dk:#B4854A;--cream:#F3ECE3;--mut:#9A8E82;--line:#2A221D;}
+  :root{--bg:#070605;--bg2:#0E0C0A;--ivory:#EDE6DA;--mut:#8D8378;--gold:#C9A96E;--gold-lt:#E6CF9F;--hair:rgba(237,230,218,.09);--ease:cubic-bezier(.32,.72,0,1);--serif:'Cormorant Garamond',Georgia,serif;}
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Archivo',system-ui,sans-serif;background:var(--bg);color:var(--cream);line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased;}
-  h1,h2,h3{font-family:'Playfair Display',Georgia,serif;font-weight:500;line-height:1.08;letter-spacing:.01em;}
-  a{color:var(--gold);text-decoration:none;}
-  .demo-bar{background:#15232E;color:#fff;font-size:13px;text-align:center;padding:9px 16px;}
-  .demo-bar a{color:#9fd3cc;font-weight:600;}
-  .wrap{max-width:1140px;margin:0 auto;padding:0 28px;}
-  header{position:sticky;top:0;background:rgba(11,9,8,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:10;}
-  .nav{display:flex;align-items:center;justify-content:space-between;height:78px;}
-  .logo{font-family:'Playfair Display',serif;font-size:22px;letter-spacing:.04em;}
-  .logo span{color:var(--gold);}
-  nav a.l{color:var(--cream);margin-left:30px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;}
-  nav a.l:hover{color:var(--gold);}
-  .btn{display:inline-block;border:1px solid var(--gold);color:var(--gold);padding:14px 30px;font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;transition:.2s;}
-  .btn:hover{background:var(--gold);color:var(--bg);}
-  .hero{min-height:92vh;display:flex;align-items:center;position:relative;overflow:hidden;background:radial-gradient(130% 110% at 72% 18%,#3a2416 0%,#1a0f0b 55%,#0b0908 100%);}
-  .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
-  .hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(11,9,8,.9) 0%,rgba(11,9,8,.55) 55%,rgba(11,9,8,.2) 100%);}
-  .hero .wrap{position:relative;z-index:2;}
-  .hero .eye{color:var(--gold);font-size:12px;letter-spacing:.4em;text-transform:uppercase;font-weight:700;}
-  .hero h1{font-size:clamp(48px,9vw,104px);margin:18px 0 8px;}
-  .hero h1 em{font-style:italic;color:var(--gold);}
-  .hero p{color:var(--mut);font-size:19px;max-width:44ch;margin:18px 0 34px;}
-  section{padding:110px 0;}
-  .sec-eye{color:var(--gold);font-size:12px;letter-spacing:.3em;text-transform:uppercase;font-weight:700;}
-  h2{font-size:clamp(34px,5vw,56px);margin:12px 0 0;}
-  .svcs{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:54px;}
-  .svc{background:var(--bg);padding:42px 34px;transition:.25s;}
-  .svc:hover{background:var(--panel);}
-  .svc .num{font-family:'Playfair Display',serif;color:var(--gold-dk);font-size:15px;}
-  .svc h3{font-size:26px;margin:14px 0 10px;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Manrope',system-ui,sans-serif;font-weight:300;background:var(--bg);color:var(--ivory);line-height:1.7;font-size:16px;-webkit-font-smoothing:antialiased;}
+  body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:40;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  h1,h2,h3{font-family:var(--serif);font-weight:300;line-height:1.02;letter-spacing:-.01em;}
+  em{font-style:italic;color:var(--gold-lt);}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 40px;}
+  .pill{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(201,169,110,.35);border-radius:999px;padding:6px 16px;font-size:10.5px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:500;}
+  .pill::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold);}
+  .rule{height:1px;background:linear-gradient(90deg,transparent,rgba(201,169,110,.55),transparent);}
+
+  /* floating island nav */
+  .nav{position:fixed;top:22px;left:50%;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:36px;padding:9px 9px 9px 28px;border-radius:999px;background:rgba(14,12,10,.55);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);border:1px solid var(--hair);white-space:nowrap;}
+  .logo{font-family:var(--serif);font-size:21px;letter-spacing:.28em;}
+  .logo b{font-weight:400;color:var(--gold);}
+  .nav .links a{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);margin-left:26px;transition:color .5s var(--ease);}
+  .nav .links a:hover{color:var(--ivory);}
+  .btn{display:inline-flex;align-items:center;gap:14px;border-radius:999px;padding:8px 8px 8px 26px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;background:linear-gradient(135deg,var(--gold-lt),var(--gold) 55%,#A9864C);color:#120E0A;transition:transform .6s var(--ease),box-shadow .6s var(--ease);box-shadow:0 10px 40px -12px rgba(201,169,110,.45),inset 0 1px 0 rgba(255,255,255,.4);}
+  .btn .ic{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:rgba(18,14,10,.12);font-size:14px;letter-spacing:0;transition:transform .6s var(--ease);}
+  .btn:hover .ic{transform:translate(3px,-2px) scale(1.06);}
+  .btn:active{transform:scale(.98);}
+  .btn.ghost{background:transparent;color:var(--ivory);border:1px solid var(--hair);box-shadow:none;}
+  .btn.ghost .ic{background:rgba(237,230,218,.07);}
+  .burger{display:none;width:42px;height:42px;border-radius:50%;border:1px solid var(--hair);background:transparent;position:relative;cursor:pointer;}
+  .burger span{position:absolute;left:13px;right:13px;height:1px;background:var(--ivory);transition:transform .6s var(--ease),top .6s var(--ease);}
+  .burger span:first-child{top:17px}.burger span:last-child{top:24px}
+  .menu-open .burger span:first-child{top:21px;transform:rotate(45deg)}
+  .menu-open .burger span:last-child{top:21px;transform:rotate(-45deg)}
+  .overlay{position:fixed;inset:0;z-index:25;background:rgba(7,6,5,.86);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity .6s var(--ease);}
+  .menu-open .overlay{opacity:1;pointer-events:auto;}
+  .overlay a{display:block;font-family:var(--serif);font-size:44px;text-align:center;line-height:1.5;opacity:0;transform:translateY(40px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
+  .menu-open .overlay a{opacity:1;transform:none;}
+  .menu-open .overlay a:nth-child(2){transition-delay:.07s}.menu-open .overlay a:nth-child(3){transition-delay:.14s}.menu-open .overlay a:nth-child(4){transition-delay:.21s}
+
+  /* hero */
+  .hero{position:relative;min-height:100dvh;display:flex;align-items:flex-end;overflow:hidden;padding:0 0 9vh;background:radial-gradient(120% 90% at 70% 20%,#2a1c12,#0b0907 60%,#070605);}
+  .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.06);animation:settle 6s var(--ease) forwards;}
+  @keyframes settle{to{transform:scale(1);}}
+  .hero::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(7,6,5,.6) 0%,rgba(7,6,5,.35) 30%,rgba(7,6,5,.82) 70%,var(--bg) 100%),radial-gradient(90% 70% at 50% 40%,transparent 40%,rgba(7,6,5,.7) 100%);}
+  .hero .wrap{position:relative;z-index:2;width:100%;}
+  .hero h1{font-size:clamp(56px,10.5vw,168px);margin:26px 0 30px;}
+  .hero h1 .ln{display:block;overflow:hidden;padding-bottom:.06em;}
+  .hero h1 .ln>span{display:inline-block;}
+  .hero-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap;}
+  .hero-foot p{max-width:38ch;color:#B9AFA3;font-size:17px;}
+  .hero-meta{position:absolute;right:40px;top:50%;z-index:2;transform:translateY(-50%) rotate(90deg);transform-origin:right center;font-size:10.5px;letter-spacing:.4em;text-transform:uppercase;color:var(--mut);}
+
+  /* marquee */
+  .marquee{border-block:1px solid var(--hair);overflow:hidden;padding:26px 0;background:var(--bg2);}
+  .marquee .track{display:flex;gap:64px;width:max-content;animation:slide 50s linear infinite;font-family:var(--serif);font-size:30px;font-style:italic;color:var(--mut);}
+  .marquee .track span::after{content:'✦';font-style:normal;font-size:12px;color:var(--gold);margin-left:64px;vertical-align:middle;}
+  @keyframes slide{to{transform:translateX(-50%);}}
+
+  section{padding:170px 0;}
+  .split{display:grid;grid-template-columns:1.1fr .9fr;gap:110px;align-items:start;}
+  .statement{font-family:var(--serif);font-size:clamp(36px,4.6vw,64px);font-weight:300;line-height:1.12;}
+  .principles{display:grid;gap:34px;padding-top:14px;}
+  .principle{display:grid;grid-template-columns:52px 1fr;gap:18px;padding-bottom:30px;border-bottom:1px solid var(--hair);}
+  .principle .n{font-family:var(--serif);font-size:20px;color:var(--gold);font-style:italic;}
+  .principle h3{font-size:26px;margin-bottom:6px;}
+  .principle p{color:var(--mut);font-size:15px;}
+
+  /* services list */
+  .sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;margin-bottom:70px;flex-wrap:wrap;}
+  .sec-head h2{font-size:clamp(44px,6vw,92px);margin-top:22px;max-width:12ch;}
+  .sec-head p{color:var(--mut);max-width:34ch;}
+  .svc{display:grid;grid-template-columns:90px 1fr 1.1fr 60px;gap:30px;align-items:center;padding:38px 0;border-top:1px solid var(--hair);transition:padding .7s var(--ease);}
+  .svc:last-child{border-bottom:1px solid var(--hair);}
+  .svc .n{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:22px;}
+  .svc h3{font-size:clamp(30px,3.4vw,46px);transition:transform .7s var(--ease),color .7s var(--ease);}
   .svc p{color:var(--mut);font-size:15px;}
-  .band{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-  .band .wrap{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;text-align:center;}
-  .stat .n{font-family:'Playfair Display',serif;font-size:56px;color:var(--gold);}
-  .stat .l{color:var(--mut);font-size:13px;letter-spacing:.18em;text-transform:uppercase;}
-  .cta{text-align:center;}
-  .cta h2{max-width:18ch;margin:0 auto 26px;}
-  footer{border-top:1px solid var(--line);padding:46px 0;color:var(--mut);font-size:13px;text-align:center;}
-  .backhome{position:fixed;left:20px;bottom:20px;z-index:60;border:1px solid var(--gold);color:var(--gold);background:rgba(11,9,8,.55);backdrop-filter:blur(4px);padding:9px 16px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;text-decoration:none;}
+  .svc .go{width:52px;height:52px;border-radius:50%;border:1px solid var(--hair);display:grid;place-items:center;color:var(--gold);transition:transform .7s var(--ease),background .7s var(--ease);}
+  .svc:hover h3{transform:translateX(14px);color:var(--gold-lt);}
+  .svc:hover .go{transform:rotate(-45deg);background:rgba(201,169,110,.1);}
+
+  /* packages: double-bezel cards */
+  .packages{background:var(--bg2);}
+  .pk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch;}
+  .shell{border-radius:2rem;padding:7px;background:rgba(237,230,218,.03);border:1px solid var(--hair);}
+  .shell.feat{background:linear-gradient(160deg,rgba(230,207,159,.5),rgba(201,169,110,.08) 40%,rgba(201,169,110,.35));border:none;transform:translateY(-22px);}
+  .core{height:100%;border-radius:calc(2rem - 7px);background:linear-gradient(180deg,#14110E,#0B0907);box-shadow:inset 0 1px 1px rgba(255,255,255,.07);padding:44px 38px 38px;display:flex;flex-direction:column;}
+  .core .tier{font-size:10.5px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);}
+  .core h3{font-size:44px;margin:14px 0 4px;}
+  .core .price{font-family:var(--serif);font-size:22px;color:var(--mut);font-style:italic;}
+  .core .price b{font-style:normal;font-weight:400;font-size:40px;color:var(--ivory);margin-right:6px;}
+  .core ul{list-style:none;margin:30px 0 36px;display:grid;gap:13px;font-size:15px;color:#BDB3A6;}
+  .core li{display:flex;gap:12px;}
+  .core li::before{content:'';flex:none;width:14px;height:1px;background:var(--gold);margin-top:12px;}
+  .core .btn{margin-top:auto;align-self:flex-start;}
+
+  /* process */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin-top:80px;position:relative;}
+  .steps::before{content:'';position:absolute;top:22px;left:0;right:0;height:1px;background:linear-gradient(90deg,rgba(201,169,110,.6),rgba(201,169,110,.05));}
+  .step .dot{width:45px;height:45px;border-radius:50%;border:1px solid rgba(201,169,110,.5);background:var(--bg);display:grid;place-items:center;font-family:var(--serif);font-style:italic;color:var(--gold);position:relative;}
+  .step h3{font-size:28px;margin:28px 0 8px;}
+  .step p{color:var(--mut);font-size:15px;}
+
+  /* quote */
+  .quote{text-align:center;}
+  .quote blockquote{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(32px,4.4vw,62px);line-height:1.18;max-width:22ch;margin:40px auto 34px;}
+  .quote cite{font-style:normal;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--mut);}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);border-block:1px solid var(--hair);}
+  .stat{padding:56px 20px;text-align:center;border-right:1px solid var(--hair);}
+  .stat:last-child{border-right:none;}
+  .stat b{display:block;font-family:var(--serif);font-weight:300;font-size:64px;line-height:1;color:var(--gold-lt);}
+  .stat span{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--mut);}
+
+  /* reserve */
+  .reserve{text-align:center;background:radial-gradient(70% 80% at 50% 100%,rgba(201,169,110,.14),transparent 70%);}
+  .reserve h2{font-size:clamp(52px,8.6vw,136px);margin:28px auto 26px;max-width:11ch;}
+  .reserve p{color:var(--mut);margin-bottom:44px;}
+  .reserve .contact{display:flex;justify-content:center;gap:48px;margin-top:70px;flex-wrap:wrap;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);}
+  footer{border-top:1px solid var(--hair);padding:40px 0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);}
+  footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+  .backhome{position:fixed;left:22px;bottom:22px;z-index:30;border:1px solid rgba(201,169,110,.45);color:var(--gold);background:rgba(7,6,5,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:999px;padding:10px 18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;transition:background .5s var(--ease),color .5s var(--ease);}
   .backhome:hover{background:var(--gold);color:var(--bg);}
-  @media(max-width:820px){.svcs{grid-template-columns:1fr;}nav a.l{display:none;}}
+
   /* motion */
-  @keyframes heroIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-  html.js .hero .wrap{animation:heroIn 1s .15s both;}
-  html.js .svc,html.js .stat,html.js .sec-eye,html.js section h2,html.js #craft p,html.js #book .btn{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1);}
-  html.js .in-view{opacity:1!important;transform:none!important;}
-  html.js .svcs .svc:nth-child(2){transition-delay:.1s}
-  html.js .svcs .svc:nth-child(3){transition-delay:.2s}
-  html.js .band .stat:nth-child(2){transition-delay:.08s}
-  html.js .band .stat:nth-child(3){transition-delay:.16s}
-  html.js .band .stat:nth-child(4){transition-delay:.24s}
-  @media(prefers-reduced-motion:reduce){html.js .hero .wrap{animation:none}html.js .svc,html.js .stat,html.js .sec-eye,html.js section h2,html.js #craft p,html.js #book .btn{opacity:1!important;transform:none!important;transition:none}}
+  html.js .reveal{opacity:0;transform:translateY(56px);filter:blur(8px);transition:opacity 1.2s var(--ease),transform 1.2s var(--ease),filter 1.2s var(--ease);}
+  html.js .reveal.in{opacity:1;transform:none;filter:none;}
+  html.js .hero h1 .ln>span{transform:translateY(105%);animation:up 1.4s var(--ease) forwards;}
+  html.js .hero .fade{opacity:0;animation:fade 1.4s var(--ease) 1s forwards;}
+  @keyframes up{to{transform:none;}}
+  @keyframes fade{to{opacity:1;}}
+
+  @media(max-width:900px){
+    .wrap{padding:0 20px;}
+    .nav{gap:14px;padding-left:20px;}.nav .links,.nav .btn{display:none;}.burger{display:block;}
+    .hero-meta{display:none;}
+    .backhome{left:auto;right:16px;bottom:16px;padding:8px 14px;font-size:10px;}
+    section{padding:110px 0;}
+    .split,.pk-grid,.steps{grid-template-columns:1fr;gap:56px;}
+    .shell.feat{transform:none;}
+    .svc{grid-template-columns:44px 1fr 44px;gap:16px;}
+    .svc p{grid-column:2/3;}
+    .svc .go{width:40px;height:40px;grid-row:1;grid-column:3;}
+    .steps::before{display:none;}
+    .stats{grid-template-columns:repeat(2,1fr);}
+    .stat:nth-child(2){border-right:none;}
+    .stat:nth-child(-n+2){border-bottom:1px solid var(--hair);}
+  }
+  @media(prefers-reduced-motion:reduce){
+    html.js .reveal,html.js .hero h1 .ln>span,html.js .hero .fade{opacity:1;transform:none;filter:none;animation:none;transition:none;}
+    .hero video{animation:none;transform:none;}.marquee .track{animation:none;}
+  }
 </style>
 </head>
 <body>
-<header>
-  <div class="wrap nav">
-    <div class="logo">APEX<span>·</span>AUTO SPA</div>
-    <nav>
-      <a class="l" href="#services">Services</a><a class="l" href="#craft">The craft</a>
-      <a class="btn" href="#book">Book</a>
-    </nav>
-  </div>
-</header>
-<main>
-  <section class="hero">
-    <!-- Drop your Higgsfield vehicle clip at assets/vehicle-hero.mp4 and it plays as the hero.
-         Until then, the cinematic gradient below shows. -->
-    <video class="hero-video" autoplay muted loop playsinline preload="auto">
-      <source src="assets/vehicle-hero.mp4" type="video/mp4">
-    </video>
-    <div class="hero-overlay" aria-hidden="true"></div>
-    <div class="wrap">
-      <p class="eye">Detailing · Paint protection · Ceramic coatings</p>
-      <h1>The art of the <em>flawless</em> finish.</h1>
-      <p>Concours-level detailing for cars that deserve it. By appointment, in a climate-controlled studio.</p>
-      <a class="btn" href="#book">Book the experience</a>
-    </div>
-  </section>
+<nav class="nav" aria-label="Main">
+  <a class="logo" href="#top">APEX<b>·</b></a>
+  <div class="links"><a href="#services">Services</a><a href="#packages">Packages</a><a href="#process">Process</a></div>
+  <a class="btn" href="#reserve">Reserve <span class="ic" aria-hidden="true">↗</span></a>
+  <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="overlay"><span></span><span></span></button>
+</nav>
+<div class="overlay" id="overlay">
+  <div><a href="#services">Services</a><a href="#packages">Packages</a><a href="#process">Process</a><a href="#reserve"><em>Reserve</em></a></div>
+</div>
 
-  <section id="services">
+<main id="top">
+  <section class="hero">
+    <video autoplay muted loop playsinline preload="auto" aria-hidden="true"><source src="assets/vehicle-hero.mp4" type="video/mp4"></video>
+    <span class="hero-meta">By appointment only · Est. 2012</span>
     <div class="wrap">
-      <p class="sec-eye">What we do</p>
-      <h2>Obsessive by design.</h2>
-      <div class="svcs">
-        <div class="svc"><div class="num">01</div><h3>Paint correction</h3><p>Multi-stage polishing that removes years of swirl and haze, restoring a wet, mirror depth.</p></div>
-        <div class="svc"><div class="num">02</div><h3>Ceramic coating</h3><p>A nano-ceramic layer that locks in the shine and shrugs off water, dirt and UV for years.</p></div>
-        <div class="svc"><div class="num">03</div><h3>Paint protection film</h3><p>Invisible, self-healing armour against stone chips and road rash on the panels that take the hits.</p></div>
+      <span class="pill fade">Concours detailing studio</span>
+      <h1><span class="ln"><span>The art of the</span></span><span class="ln"><span><em>flawless</em> finish.</span></span></h1>
+      <div class="hero-foot fade">
+        <p>Paint correction, ceramic coatings and protection film. One car at a time, in a private climate-controlled studio.</p>
+        <a class="btn" href="#reserve">Book the experience <span class="ic" aria-hidden="true">↗</span></a>
       </div>
     </div>
   </section>
 
-  <section class="band">
-    <div class="wrap">
-      <div class="stat"><div class="n">12+</div><div class="l">Years in the studio</div></div>
-      <div class="stat"><div class="n">900</div><div class="l">Cars perfected</div></div>
-      <div class="stat"><div class="n">5.0</div><div class="l">Average rating</div></div>
-      <div class="stat"><div class="n">∞</div><div class="l">Attention to detail</div></div>
+  <div class="marquee" aria-hidden="true">
+    <div class="track"><span>Paint correction</span><span>Ceramic coating</span><span>Paint protection film</span><span>Interior restoration</span><span>Concours preparation</span><span>Paint correction</span><span>Ceramic coating</span><span>Paint protection film</span><span>Interior restoration</span><span>Concours preparation</span></div>
+  </div>
+
+  <section>
+    <div class="wrap split">
+      <div class="reveal">
+        <span class="pill">The studio</span>
+        <p class="statement" style="margin-top:30px;">One car at a time. <em>Never rushed.</em> Finished only when it's perfect.</p>
+      </div>
+      <div class="principles">
+        <div class="principle reveal"><span class="n">i.</span><div><h3>Measured light</h3><p>Every panel is inspected under calibrated lighting. Nothing hides.</p></div></div>
+        <div class="principle reveal"><span class="n">ii.</span><div><h3>Master technicians</h3><p>Certified installers with over a decade on the finest cars.</p></div></div>
+        <div class="principle reveal"><span class="n">iii.</span><div><h3>Private studio</h3><p>Climate-controlled, dust-free and closed to the public.</p></div></div>
+      </div>
     </div>
   </section>
 
-  <section id="craft">
+  <section id="services" style="padding-top:40px;">
     <div class="wrap">
-      <p class="sec-eye">The craft</p>
-      <h2 style="max-width:16ch;">We treat every car like it's the only one.</h2>
-      <p style="color:var(--mut);font-size:18px;max-width:52ch;margin-top:20px;">One vehicle at a time. No production line, no rushing — just measured light, the right pad, and the patience to get it perfect before it leaves.</p>
+      <div class="sec-head reveal"><div><span class="pill">Services</span><h2>Obsessive by <em>design.</em></h2></div><p>Each service is tailored to your car's paint, age and use.</p></div>
+      <div class="svc reveal"><span class="n">01</span><h3>Paint correction</h3><p>Multi-stage polishing removes swirls and haze for a deep, mirror finish.</p><span class="go" aria-hidden="true">→</span></div>
+      <div class="svc reveal"><span class="n">02</span><h3>Ceramic coating</h3><p>A hard, glass-like layer that locks in the shine for years.</p><span class="go" aria-hidden="true">→</span></div>
+      <div class="svc reveal"><span class="n">03</span><h3>Protection film</h3><p>Invisible, self-healing film that stops stone chips and scratches.</p><span class="go" aria-hidden="true">→</span></div>
+      <div class="svc reveal"><span class="n">04</span><h3>Interior restoration</h3><p>Leather, Alcantara and carbon, cleaned and conditioned by hand.</p><span class="go" aria-hidden="true">→</span></div>
     </div>
   </section>
 
-  <section id="book" class="cta">
+  <section id="packages" class="packages">
     <div class="wrap">
-      <p class="sec-eye">Reserve</p>
-      <h2>Your car's best day is a booking away.</h2>
-      <a class="btn" href="#">Request an appointment</a>
+      <div class="sec-head reveal"><div><span class="pill">Packages</span><h2>Choose your <em>finish.</em></h2></div><p>Every package includes a hand wash, decontamination and a final inspection with you.</p></div>
+      <div class="pk-grid">
+        <div class="shell reveal"><div class="core">
+          <span class="tier">Signature</span><h3>Enhance</h3><div class="price"><b>$650</b>from</div>
+          <ul><li>Single-stage polish</li><li>12-month sealant</li><li>Interior refresh</li></ul>
+          <a class="btn ghost" href="#reserve">Reserve <span class="ic" aria-hidden="true">↗</span></a>
+        </div></div>
+        <div class="shell feat reveal"><div class="core">
+          <span class="tier">Atelier · Most chosen</span><h3>Perfect</h3><div class="price"><b>$1,850</b>from</div>
+          <ul><li>Two-stage paint correction</li><li>5-year ceramic coating</li><li>Wheels and glass coated</li><li>Full interior treatment</li></ul>
+          <a class="btn" href="#reserve">Reserve <span class="ic" aria-hidden="true">↗</span></a>
+        </div></div>
+        <div class="shell reveal"><div class="core">
+          <span class="tier">Concours</span><h3>Preserve</h3><div class="price"><b>$4,900</b>from</div>
+          <ul><li>Full correction to concours level</li><li>Full-body protection film</li><li>9-year ceramic coating</li><li>Annual care visit</li></ul>
+          <a class="btn ghost" href="#reserve">Reserve <span class="ic" aria-hidden="true">↗</span></a>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="process">
+    <div class="wrap">
+      <div class="reveal"><span class="pill">Process</span><h2 style="font-size:clamp(44px,6vw,92px);margin-top:22px;">Four quiet <em>steps.</em></h2></div>
+      <div class="steps">
+        <div class="step reveal"><span class="dot">1</span><h3>Consult</h3><p>We inspect your car with you and plan the work.</p></div>
+        <div class="step reveal"><span class="dot">2</span><h3>Prepare</h3><p>Wash, decontaminate and measure the paint.</p></div>
+        <div class="step reveal"><span class="dot">3</span><h3>Perfect</h3><p>Correction and protection, one panel at a time.</p></div>
+        <div class="step reveal"><span class="dot">4</span><h3>Reveal</h3><p>A private handover under studio light.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="quote" style="padding-top:60px;">
+    <div class="wrap reveal">
+      <span class="pill">Client words</span>
+      <blockquote>“It left looking better than the day I took delivery.”</blockquote>
+      <cite>Owner, 911 GT3 · Sample review</cite>
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="stat reveal"><b>12</b><span>Years in the studio</span></div>
+    <div class="stat reveal"><b>900+</b><span>Cars perfected</span></div>
+    <div class="stat reveal"><b>5.0</b><span>Average rating</span></div>
+    <div class="stat reveal"><b>1</b><span>Car at a time</span></div>
+  </div>
+
+  <section id="reserve" class="reserve">
+    <div class="wrap reveal">
+      <span class="pill">Reservations</span>
+      <h2>Your car's <em>finest</em> hour.</h2>
+      <p>Limited studio slots each month.</p>
+      <a class="btn" href="#top">Request an appointment <span class="ic" aria-hidden="true">↗</span></a>
+      <div class="contact"><span>Traverse City, MI</span><span>By appointment</span><span>Tue to Sat</span></div>
     </div>
   </section>
 </main>
-<footer><div class="wrap">Apex Auto Spa — a fictional demo by LeBlanc Solutions. Design cues from premium-brand systems.</div></footer>
+
+<footer><div class="wrap"><span>Apex Auto Spa</span><span>A sample site built by LeBlanc Solutions</span></div></footer>
 <a class="backhome" href="../index.html">← LeBlanc Solutions</a>
+
 <script>
 (function(){
-  var sel='.svc,.stat,.sec-eye,section h2,#craft p,#book .btn';
-  var els=[].slice.call(document.querySelectorAll(sel));
-  function show(e){e.classList.add('in-view');}
+  var b=document.querySelector('.burger');
+  function setMenu(open){document.body.classList.toggle('menu-open',open);b.setAttribute('aria-expanded',open);b.setAttribute('aria-label',open?'Close menu':'Open menu');}
+  b.addEventListener('click',function(){setMenu(!document.body.classList.contains('menu-open'));});
+  document.querySelectorAll('.overlay a').forEach(function(a){a.addEventListener('click',function(){setMenu(false);});});
+  document.querySelectorAll('.hero h1 .ln>span').forEach(function(s,i){s.style.animationDelay=(0.25+i*0.18)+'s';});
+  var els=[].slice.call(document.querySelectorAll('.reveal'));
+  els.forEach(function(e){var sib=[].slice.call(e.parentNode.children).filter(function(c){return c.classList.contains('reveal');});var i=sib.indexOf(e);if(i>0)e.style.transitionDelay=(i*0.09)+'s';});
+  function show(e){e.classList.add('in');}
   if(!('IntersectionObserver' in window)){els.forEach(show);return;}
-  var io=new IntersectionObserver(function(ents){ents.forEach(function(x){if(x.isIntersecting){show(x.target);io.unobserve(x.target);}});},{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+  var io=new IntersectionObserver(function(ents){ents.forEach(function(x){if(x.isIntersecting){show(x.target);io.unobserve(x.target);}});},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
   els.forEach(function(e){io.observe(e);});
-  setTimeout(function(){els.forEach(show);},2800);
+  setTimeout(function(){els.forEach(show);},5000);
 })();
 </script>
 </body>

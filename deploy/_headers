@@ -1,5 +1,5 @@
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-/x7W7R75k8Roq0WaVRQX9blP4OufE5xbAdzklGxsgpw=' 'sha256-Xf/OcHQyrtK4HXPSfkxwHTcgsfl/iImbh2+8o+9efV4=' 'sha256-AHzIh1bj0svw3GePti3WyvNs7XA8Al8rch1sbnH9qVE=' 'sha256-FqrMA1wMm2NWXAQiXnESWWRV9RpnBKMo/q7NGKz8mxM='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self' https://leblanc-backend.onrender.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-/x7W7R75k8Roq0WaVRQX9blP4OufE5xbAdzklGxsgpw=' 'sha256-Xf/OcHQyrtK4HXPSfkxwHTcgsfl/iImbh2+8o+9efV4=' 'sha256-AHzIh1bj0svw3GePti3WyvNs7XA8Al8rch1sbnH9qVE=' 'sha256-PQQH822u91AoW1crcbL4KnJTmOxUQgxka7DV0dRBAWY=' 'sha256-/0a+/CnCH00fH/wRHFMkhmm5J+eT/8kTKOB/78fUQEA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self' https://leblanc-backend.onrender.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
