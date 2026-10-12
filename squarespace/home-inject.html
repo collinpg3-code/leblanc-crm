@@ -1,4 +1,4 @@
-﻿<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap&family=Playfair+Display:wght@500;600&family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500" rel="stylesheet">
 <script>document.documentElement.classList.add("js");</script>
@@ -93,7 +93,7 @@ html.js #lb-site .hero .report, html.js #lb-site .section-head, html.js #lb-site
 #lb-site .card p{font-size:15.5px;color:#3a4851;flex:1;}
 #lb-site .card ul{list-style:none;margin:14px 0 0;}
 #lb-site .card li{font-size:14.5px;color:#3a4851;padding-left:22px;position:relative;margin-bottom:7px;}
-#lb-site .card li::before{content:"âœ“";position:absolute;left:0;color:var(--teal);font-weight:700;}
+#lb-site .card li::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:700;}
 #lb-site .showcase{background:var(--ink);color:#fff;}
 #lb-site .showcase h2, #lb-site .showcase h3{color:#fff;}
 #lb-site .showcase .section-head p{color:#AFC0C9;}
@@ -135,6 +135,21 @@ html.js #lb-site .hero .report, html.js #lb-site .section-head, html.js #lb-site
 #lb-site .cta-band{background:var(--canvas);text-align:center;}
 #lb-site .cta-band h2{font-size:clamp(30px,4.5vw,46px);margin-bottom:14px;}
 #lb-site .cta-band p{font-size:18px;color:var(--slate);max-width:52ch;margin:0 auto 26px;}
+#lb-site .contact-form{max-width:640px;margin:0 auto;text-align:left;display:grid;gap:16px;}
+#lb-site .contact-form .row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+#lb-site .contact-form label{display:grid;gap:6px;font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink);}
+#lb-site .contact-form input, #lb-site .contact-form textarea{font:400 16px var(--sans);color:var(--ink);background:var(--white);border:1.5px solid var(--line);padding:12px 14px;width:100%;box-sizing:border-box;border-radius:0;}
+#lb-site .contact-form input:focus, #lb-site .contact-form textarea:focus{outline:none;border-color:var(--teal);}
+#lb-site .contact-form textarea{resize:vertical;}
+#lb-site .contact-form .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
+#lb-site .contact-form button{justify-self:center;}
+#lb-site .contact-form button:disabled{opacity:.6;cursor:wait;}
+#lb-site .cta-band .form-status{min-height:1.5em;margin:0 auto;font-size:15px;text-align:center;}
+#lb-site .cta-band .form-status.ok{color:var(--teal);}
+#lb-site .cta-band .form-status.err{color:var(--rust);}
+#lb-site .cta-band .alt{font-size:15px;margin:22px auto 0;}
+#lb-site .cta-band .alt a{color:var(--teal);text-decoration:underline;}
+#lb-site footer.site .team{margin-left:10px;color:#5F7682;font-size:12px;}
 #lb-site footer.site{background:var(--ink);color:#C3D2DA;padding:54px 0 36px;}
 #lb-site footer.site .cols{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;}
 #lb-site footer.site .t{font-family:var(--serif);font-size:20px;color:#fff;}
@@ -143,7 +158,7 @@ html.js #lb-site .hero .report, html.js #lb-site .section-head, html.js #lb-site
 #lb-site footer.site a:hover{color:#fff;}
 #lb-site footer.site .legal{border-top:1px solid #2C3E4B;margin-top:30px;padding-top:18px;font-size:12.5px;color:#8CA2AD;max-width:70ch;}
 @media (max-width:860px){
-#lb-site .grid3, #lb-site .sc-grid, #lb-site .steps, #lb-site .comp-grid, #lb-site .hero .wrap{grid-template-columns:1fr;}
+#lb-site .grid3, #lb-site .sc-grid, #lb-site .steps, #lb-site .comp-grid, #lb-site .hero .wrap, #lb-site .contact-form .row{grid-template-columns:1fr;}
 #lb-site .nav nav{display:none;}
 #lb-site .nav nav.open{display:flex;position:absolute;top:72px;left:0;right:0;flex-direction:column;background:#fff;border-bottom:1px solid var(--line);padding:18px 24px;gap:16px;}
 #lb-site .menu-btn{display:inline-flex;background:none;border:1.5px solid var(--ink);padding:9px 14px;font-weight:600;cursor:pointer;}
@@ -182,16 +197,16 @@ html.js #lb-site .hero .report, html.js #lb-site .section-head, html.js #lb-site
   <section class="hero">
     <div class="wrap">
       <div class="hero-copy">
-        <p class="eyebrow">Website security Â· fixes Â· secure redesign</p>
+        <p class="eyebrow">Website security · fixes · secure redesign</p>
         <h1>A home inspection for your website.</h1>
         <p class="lede">We find the common security and compliance mistakes that get small businesses
-          broken into or sued, explain them in plain English, and â€” if you want â€” fix them for you or
+          broken into or sued, explain them in plain English, and — if you want — fix them for you or
           rebuild your site secure and accessible from the ground up.</p>
         <div class="cta-row">
-          <a class="btn btn-primary" href="#contact">Get my site checked â€” $100</a>
+          <a class="btn btn-primary" href="#contact">Get my site checked — $100</a>
           <a class="btn btn-ghost" href="#showcase">See our work</a>
         </div>
-        <p class="note">Report in 3 business days Â· We only test sites you own or are authorised to test.</p>
+        <p class="note">Report in 3 business days · We only test sites you own or are authorised to test.</p>
       </div>
       <aside class="report" aria-label="Example of a finished report">
         <div class="scanline" aria-hidden="true"></div>
@@ -200,7 +215,7 @@ html.js #lb-site .hero .report, html.js #lb-site .section-head, html.js #lb-site
         <div class="finding"><span class="sev h">HIGH</span><div><b>Your login link can be hijacked</b><i>A crafted link sends your customers to a convincing fake of your site.</i></div></div>
         <div class="finding"><span class="sev m">MED</span><div><b>Unlimited password guesses</b><i>Nothing stops a bot from trying thousands of passwords in a row.</i></div></div>
         <div class="finding"><span class="sev l">LOW</span><div><b>Missing browser protection</b><i>A one-line setting that blocks a common trick is switched off.</i></div></div>
-        <div class="report-sum">2 high Â· 1 medium Â· 1 low â€” each with its fix, in the order that matters.</div>
+        <div class="report-sum">2 high · 1 medium · 1 low — each with its fix, in the order that matters.</div>
       </aside>
     </div>
   </section>
@@ -210,7 +225,7 @@ html.js #lb-site .hero .report, html.js #lb-site .section-head, html.js #lb-site
       <div class="section-head">
         <p class="eyebrow">What we do</p>
         <h2>Three ways we keep your site safe</h2>
-        <p>Start with a check. Fix it yourself from our plain-English report, or have us handle it â€”
+        <p>Start with a check. Fix it yourself from our plain-English report, or have us handle it —
           all the way up to a full secure rebuild.</p>
       </div>
       <div class="grid3">
@@ -229,23 +244,23 @@ html.js #lb-site .hero .report, html.js #lb-site .section-head, html.js #lb-site
         <div class="card">
           <span class="k">Remediation</span>
           <div class="price">from $450</div>
-          <p>Short on time or not technical? We implement the fixes for you â€” security headers, login
-            hardening, email spoofing protection, outdated components â€” and verify each one.</p>
+          <p>Short on time or not technical? We implement the fixes for you — security headers, login
+            hardening, email spoofing protection, outdated components — and verify each one.</p>
           <ul>
             <li>We apply the fixes</li>
-            <li>Nothing breaks â€” staged safely</li>
+            <li>Nothing breaks — staged safely</li>
             <li>Before / after proof</li>
           </ul>
         </div>
         <div class="card">
           <span class="k">Secure redesign</span>
           <div class="price">Quote</div>
-          <p>When the site is fragile or risky, we rebuild it secure <em>and</em> accessible by default â€”
+          <p>When the site is fragile or risky, we rebuild it secure <em>and</em> accessible by default —
             fast, clean, and built to code so it can't become a liability.</p>
           <ul>
             <li>Secure by default</li>
             <li>WCAG accessibility built in</li>
-            <li>Clean or bold â€” your call</li>
+            <li>Clean or bold — your call</li>
           </ul>
         </div>
       </div>
@@ -257,7 +272,7 @@ html.js #lb-site .hero .report, html.js #lb-site .section-head, html.js #lb-site
       <div class="section-head">
         <p class="eyebrow">Showcase</p>
         <h2>We build for both ends of the spectrum</h2>
-        <p>Not every business wants a flashy site â€” and some absolutely do. We do both well, and both
+        <p>Not every business wants a flashy site — and some absolutely do. We do both well, and both
           are built secure and accessible underneath. Two sample builds:</p>
       </div>
       <div class="sc-grid">
@@ -271,7 +286,7 @@ html.js #lb-site .hero .report, html.js #lb-site .section-head, html.js #lb-site
           </div>
           <div class="sc-body">
             <span class="tag">Clean &amp; simple</span>
-            <h3>Cedar &amp; Co. â€” local bakery</h3>
+            <h3>Cedar &amp; Co. — local bakery</h3>
             <p>Calm, trustworthy, easy to run. The understated end: lots of whitespace, fast, and
               effortless to update. Perfect for a local service that just needs to look credible.</p>
             <a class="btn" href="/clean-demo" target="_blank" rel="noopener">View the demo</a>
@@ -281,14 +296,14 @@ html.js #lb-site .hero .report, html.js #lb-site .section-head, html.js #lb-site
           <div class="sc-thumb premium" aria-hidden="true">
             <div class="mock-prem">
               <div class="mp-t">APEX AUTO SPA</div>
-              <div class="mp-s">Detailing Â· PPF Â· Coatings</div>
+              <div class="mp-s">Detailing · PPF · Coatings</div>
               <div class="mp-btn">Book the experience</div>
             </div>
           </div>
           <div class="sc-body">
             <span class="tag">Premium &amp; bold</span>
-            <h3>Apex Auto Spa â€” luxury detailing</h3>
-            <p>Dramatic, high-end, cinematic. The flashy end: dark theme, big type, motion-ready â€”
+            <h3>Apex Auto Spa — luxury detailing</h3>
+            <p>Dramatic, high-end, cinematic. The flashy end: dark theme, big type, motion-ready —
               drawn from proven luxury-brand design systems. For businesses selling a premium feel.</p>
             <a class="btn" href="/premium-demo" target="_blank" rel="noopener">View the demo</a>
           </div>
@@ -303,9 +318,9 @@ html.js #lb-site .hero .report, html.js #lb-site .section-head, html.js #lb-site
         <div>
           <p class="eyebrow">Why build to code</p>
           <h2 style="font-size:clamp(28px,4vw,40px);margin:10px 0 14px;">A fast-built site can get
-            <span style="color:var(--rust)">expensive</span> â€” fast â€” before your first customer.</h2>
+            <span style="color:var(--rust)">expensive</span> — fast — before your first customer.</h2>
           <p class="muted">Security holes are only half the risk. Sites thrown together quickly also
-            break the law in ways that invite demand letters and lawsuits â€” no breach required. We
+            break the law in ways that invite demand letters and lawsuits — no breach required. We
             build to standards so your site is an asset, not a liability.</p>
         </div>
         <div class="comp-list">
@@ -321,7 +336,7 @@ html.js #lb-site .hero .report, html.js #lb-site .section-head, html.js #lb-site
           </div>
           <div class="comp-item">
             <h4>Security</h4>
-            <p>The headers, login protection and configuration that stop the common break-ins â€” the
+            <p>The headers, login protection and configuration that stop the common break-ins — the
               same checks in our $100 report, applied for real.</p>
           </div>
         </div>
@@ -344,14 +359,14 @@ html.js #lb-site .hero .report, html.js #lb-site .section-head, html.js #lb-site
         </div>
         <div class="step">
           <div class="n">2</div>
-          <h3>We check â€” or fix</h3>
+          <h3>We check — or fix</h3>
           <p>A non-destructive scan and plain-English report in three business days. Want it handled?
             We remediate or rebuild.</p>
         </div>
         <div class="step">
           <div class="n">3</div>
           <h3>We confirm it's closed</h3>
-          <p>We re-scan to prove each fix actually worked â€” so you can see the before and after.</p>
+          <p>We re-scan to prove each fix actually worked — so you can see the before and after.</p>
         </div>
       </div>
     </div>
@@ -360,10 +375,24 @@ html.js #lb-site .hero .report, html.js #lb-site .section-head, html.js #lb-site
   <section id="contact" class="cta-band">
     <div class="wrap">
       <p class="eyebrow">Get in touch</p>
-      <h2>Find out what's exposed â€” before someone else does.</h2>
-      <p>Email your website address and confirm you own it. We'll reply with next steps and payment
+      <h2>Find out what's exposed — before someone else does.</h2>
+      <p>Tell us about your website and confirm you own it. We'll reply with next steps and payment
         details, and point you to the right service.</p>
-      <a class="btn btn-primary" href="mailto:contact@leblancsols.com">contact@leblancsols.com</a>
+      <form class="contact-form" id="contact-form" novalidate>
+        <div class="row">
+          <label>Your name<input name="name" required maxlength="100" autocomplete="name"></label>
+          <label>Email<input name="email" type="email" required maxlength="200" autocomplete="email"></label>
+        </div>
+        <div class="row">
+          <label>Business name<input name="business" maxlength="150" autocomplete="organization"></label>
+          <label>Website<input name="website" maxlength="300" placeholder="yourbusiness.com" autocomplete="url"></label>
+        </div>
+        <label>Anything we should know?<textarea name="message" rows="4" maxlength="2000"></textarea></label>
+        <label class="hp" aria-hidden="true">Leave blank<input name="company_site" tabindex="-1" autocomplete="off"></label>
+        <button class="btn btn-primary" type="submit">Request a security check</button>
+        <p class="form-status" role="status" aria-live="polite"></p>
+      </form>
+      <p class="alt">Prefer email? <a href="mailto:contact@leblancsols.com">contact@leblancsols.com</a></p>
     </div>
   </section>
 
@@ -398,10 +427,37 @@ html.js #lb-site .hero .report, html.js #lb-site .section-head, html.js #lb-site
         <p><a href="mailto:contact@leblancsols.com">contact@leblancsols.com</a></p>
       </div>
     </div>
-    <p class="legal">Â© 2026 LeBlanc Solutions. All rights reserved. We test only websites you own or are
-      authorised to test. Showcase examples are fictional demonstrations built by LeBlanc Solutions.</p>
+    <p class="legal">© 2026 LeBlanc Solutions. All rights reserved. We test only websites you own or are
+      authorised to test. Showcase examples are fictional demonstrations built by LeBlanc Solutions.
+      <a class="team" href="https://leblanc-crm.netlify.app/login" rel="nofollow noopener" target="_blank">Team</a></p>
   </div>
 </footer>
+
+<script>
+  (function(){
+    var f=document.getElementById('contact-form');
+    if(!f) return;
+    var status=f.querySelector('.form-status'),btn=f.querySelector('button');
+    f.addEventListener('submit',function(e){
+      e.preventDefault();
+      var d={};new FormData(f).forEach(function(v,k){d[k]=v;});
+      if(!d.name.trim()||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email.trim())){
+        status.textContent='Please enter your name and a valid email.';status.className='form-status err';return;
+      }
+      btn.disabled=true;status.className='form-status';status.textContent='Sending… (this can take up to a minute)';
+      fetch('https://leblanc-backend.onrender.com/api/public/contact',{
+        method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)
+      }).then(function(r){return r.json().catch(function(){return {};}).then(function(j){
+        if(!r.ok) throw new Error(j.error||'Something went wrong.');
+        f.reset();status.className='form-status ok';
+        status.textContent="Thanks — we've got it and will reply within one business day.";
+      });}).catch(function(err){
+        status.className='form-status err';
+        status.textContent=(err.message||'Something went wrong.')+' You can also email contact@leblancsols.com.';
+      }).then(function(){btn.disabled=false;});
+    });
+  })();
+</script>
 
 <script>
   var mb=document.querySelector('.menu-btn'),mn=document.getElementById('menu');

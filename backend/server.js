@@ -36,6 +36,7 @@ function safeEqual(a, b) {
 }
 
 // Middleware
+app.set('trust proxy', 1); // Render sits behind one proxy; req.ip = real client
 app.use(cors());
 app.use(express.json());
 
@@ -289,6 +290,79 @@ app.post('/api/leads/sync', authenticateToken, (req, res) => {
 
   saveData(data);
   res.json({ imported, total: data.engagements.length });
+});
+
+// POST: Public website contact form -> new prospect. No auth, so validate
+// strictly, rate-limit per IP, and silently drop bots that fill the honeypot.
+const WEBSITE_ORIGIN = /^https:\/\/([a-z0-9-]+\.)*(leblancsols\.com|squarespace\.com)$/i;
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const recentSubmissions = new Map(); // ip -> timestamps in the last hour
+
+function tooManySubmissions(ip) {
+  const now = Date.now();
+  const recent = (recentSubmissions.get(ip) || []).filter(t => now - t < 60 * 60 * 1000);
+  recent.push(now);
+  recentSubmissions.set(ip, recent);
+  return recent.length > 5;
+}
+
+const field = (value, max) => String(value ?? '').trim().slice(0, max);
+
+app.post('/api/public/contact', (req, res) => {
+  const origin = req.headers.origin;
+  if (origin && !WEBSITE_ORIGIN.test(origin)) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+  if (field(req.body.company_site, 10)) {
+    return res.status(201).json({ ok: true }); // honeypot filled: pretend success
+  }
+  if (tooManySubmissions(req.ip)) {
+    return res.status(429).json({ error: 'Too many requests. Please email us instead.' });
+  }
+
+  const name = field(req.body.name, 100);
+  const email = field(req.body.email, 200);
+  const business = field(req.body.business, 150);
+  const website = field(req.body.website, 300).replace(/^https?:\/\//i, '').replace(/\/+$/, '');
+  const message = field(req.body.message, 2000);
+
+  if (!name || !EMAIL.test(email)) {
+    return res.status(400).json({ error: 'Please enter your name and a valid email.' });
+  }
+
+  const now = new Date().toISOString();
+  const engagement = {
+    id: `eng-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`,
+    name: business || name,
+    contact: `${name} <${email}>`,
+    industry: 'Unknown',
+    location: 'Unknown',
+    stack: 'Unknown',
+    website: website || null,
+    findings: null,
+    stage: 'prospect',
+    service: 'Security Check',
+    estimatedValue: 100,
+    authorized: false,
+    source: 'website',
+    createdAt: now,
+    updatedAt: now,
+    notes: message ? `Website form: ${message}` : 'Website form (no message)',
+    progress: 10
+  };
+
+  const data = loadData();
+  data.engagements.push(engagement);
+  data.activity.push({
+    type: 'created',
+    title: `Website enquiry: ${engagement.name}`,
+    description: `${name} <${email}>`,
+    timestamp: now,
+    icon: '🌐'
+  });
+  saveData(data);
+
+  res.status(201).json({ ok: true });
 });
 
 // Health check
