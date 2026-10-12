@@ -156,6 +156,7 @@ section{padding:84px 0;}
 .contact-form input,.contact-form textarea{font:400 16px var(--sans);color:var(--ink);background:var(--white);border:1.5px solid var(--line);padding:12px 14px;width:100%;box-sizing:border-box;border-radius:0;}
 .contact-form input:focus,.contact-form textarea:focus{outline:none;border-color:var(--teal);}
 .contact-form textarea{resize:vertical;}
+.contact-form .opt{font-weight:400;color:var(--slate);}
 .contact-form .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
 .contact-form button{justify-self:center;}
 .contact-form button:disabled{opacity:.6;cursor:wait;}

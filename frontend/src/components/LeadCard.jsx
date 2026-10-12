@@ -39,6 +39,18 @@ export default function LeadCard({ lead, stageColors, onSelect, isSelected }) {
       )}
 
       <div className="card-info">
+        {lead.contact && (
+          <div className="info-row">
+            <span className="label">Contact:</span>
+            <span>{lead.contact}</span>
+          </div>
+        )}
+        {lead.phone && (
+          <div className="info-row">
+            <span className="label">Phone:</span>
+            <a href={`tel:${lead.phone.replace(/[^\d+]/g, '')}`} onClick={(e) => e.stopPropagation()}>{lead.phone}</a>
+          </div>
+        )}
         <div className="info-row">
           <span className="label">Stack:</span>
           <span>{lead.stack}</span>

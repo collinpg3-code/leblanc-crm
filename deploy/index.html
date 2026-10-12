@@ -244,9 +244,10 @@
           <label>Email<input name="email" type="email" required maxlength="200" autocomplete="email"></label>
         </div>
         <div class="row">
+          <label><span>Phone <span class="opt">(optional)</span></span><input name="phone" type="tel" maxlength="40" autocomplete="tel"></label>
           <label>Business name<input name="business" maxlength="150" autocomplete="organization"></label>
-          <label>Website<input name="website" maxlength="300" placeholder="yourbusiness.com" autocomplete="url"></label>
         </div>
+        <label>Website<input name="website" maxlength="300" placeholder="yourbusiness.com" autocomplete="url"></label>
         <label>Anything we should know?<textarea name="message" rows="4" maxlength="2000"></textarea></label>
         <label class="hp" aria-hidden="true">Leave blank<input name="company_site" tabindex="-1" autocomplete="off"></label>
         <button class="btn btn-primary" type="submit">Request a security check</button>
@@ -303,6 +304,9 @@
       var d={};new FormData(f).forEach(function(v,k){d[k]=v;});
       if(!d.name.trim()||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email.trim())){
         status.textContent='Please enter your name and a valid email.';status.className='form-status err';return;
+      }
+      if(d.phone.trim()&&!/^[0-9+().\-\s]{7,40}$/.test(d.phone.trim())){
+        status.textContent='Please enter a valid phone number.';status.className='form-status err';return;
       }
       btn.disabled=true;status.className='form-status';status.textContent='Sending… (this can take up to a minute)';
       fetch('https://leblanc-backend.onrender.com/api/public/contact',{

@@ -322,6 +322,7 @@ app.post('/api/public/contact', (req, res) => {
 
   const name = field(req.body.name, 100);
   const email = field(req.body.email, 200);
+  const phone = field(req.body.phone, 40);
   const business = field(req.body.business, 150);
   const website = field(req.body.website, 300).replace(/^https?:\/\//i, '').replace(/\/+$/, '');
   const message = field(req.body.message, 2000);
@@ -329,12 +330,16 @@ app.post('/api/public/contact', (req, res) => {
   if (!name || !EMAIL.test(email)) {
     return res.status(400).json({ error: 'Please enter your name and a valid email.' });
   }
+  if (phone && !/^[0-9+().\-\s]{7,40}$/.test(phone)) {
+    return res.status(400).json({ error: 'Please enter a valid phone number.' });
+  }
 
   const now = new Date().toISOString();
   const engagement = {
     id: `eng-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`,
     name: business || name,
     contact: `${name} <${email}>`,
+    phone: phone || null,
     industry: 'Unknown',
     location: 'Unknown',
     stack: 'Unknown',
@@ -356,7 +361,7 @@ app.post('/api/public/contact', (req, res) => {
   data.activity.push({
     type: 'created',
     title: `Website enquiry: ${engagement.name}`,
-    description: `${name} <${email}>`,
+    description: phone ? `${name} <${email}> · ${phone}` : `${name} <${email}>`,
     timestamp: now,
     icon: '🌐'
   });
