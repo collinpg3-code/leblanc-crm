@@ -78,9 +78,15 @@ function toEngagement(lead, now) {
 
 module.exports = function registerBacklogRoutes(app, { authenticateToken, loadData, saveData }) {
   // How many leads are waiting, plus a short preview of what's next.
+  // ?known=1 also lists every business already in the backlog or pipeline,
+  // so the refill job can avoid researching them again.
   app.get('/api/backlog', authenticateToken, (req, res) => {
-    const { backlog } = loadData();
-    res.json({ count: backlog.length, next: backlog.slice(0, 5).map(l => ({ name: l.name, industry: l.industry })) });
+    const { backlog, engagements } = loadData();
+    const body = { count: backlog.length, next: backlog.slice(0, 5).map(l => ({ name: l.name, industry: l.industry })) };
+    if (req.query.known) {
+      body.known = [...backlog, ...engagements].map(l => ({ name: l.name, website: l.website || null }));
+    }
+    res.json(body);
   });
 
   // Add leads to the backlog (CSV upload in the CRM).
