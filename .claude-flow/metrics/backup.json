@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-10-12T17:42:55.810Z",
+  "backedUp": true,
+  "backups": [
+    {
+      "backedUp": true,
+      "path": "C:\\tools\\leblanc-solutions\\.swarm\\backups\\memory-2026-10-12T17-42-55-795Z.db",
+      "sizeBytes": 180224,
+      "rotatedAway": [],
+      "dbPath": "C:\\tools\\leblanc-solutions\\.swarm\\memory.db"
+    },
+    {
+      "backedUp": false,
+      "skipped": "no-db",
+      "dbPath": "C:\\tools\\leblanc-solutions\\.swarm\\agentdb-memory.db"
+    }
+  ],
+  "path": "C:\\tools\\leblanc-solutions\\.swarm\\backups\\memory-2026-10-12T17-42-55-795Z.db",
+  "sizeBytes": 180224,
+  "rotatedAway": 0
+}

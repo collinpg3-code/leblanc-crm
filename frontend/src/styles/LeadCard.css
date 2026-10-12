@@ -1,0 +1,143 @@
+.lead-card {
+  background: white;
+  border-radius: 8px;
+  border-left: 4px solid #ccc;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.lead-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.lead-card.selected {
+  box-shadow: 0 6px 16px rgba(25, 118, 210, 0.2);
+  border-left-width: 6px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 1rem;
+}
+
+.card-header h3 {
+  color: #333;
+  margin: 0;
+  flex: 1;
+}
+
+.stage-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  margin-left: 0.5rem;
+}
+
+.card-meta {
+  margin-bottom: 1rem;
+}
+
+.card-meta p {
+  margin: 0.25rem 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.location {
+  color: #999;
+}
+
+.card-info {
+  margin-bottom: 1rem;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.9rem;
+}
+
+.info-row .label {
+  color: #999;
+  font-weight: 500;
+}
+
+.info-row .value {
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.card-footer {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 1rem;
+}
+
+.notes {
+  color: #999;
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.progress-bar {
+  background: #f0f0f0;
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, #1976d2, #42a5f5);
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.card-website {
+  background: #e3f2fd;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+}
+
+.card-website a {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.card-website a:hover {
+  text-decoration: underline;
+}
+
+.card-findings {
+  background: #fff3e0;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin: 0.75rem 0;
+  border-left: 3px solid #ff9800;
+}
+
+.findings-label {
+  margin: 0 0 0.25rem 0;
+  color: #e65100;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.findings-text {
+  margin: 0;
+  color: #bf360c;
+  font-size: 0.8rem;
+  line-height: 1.3;
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "version": 1,
+  "name": "protector",
+  "modVersion": "0.1.1",
+  "mode": "learn",
+  "guard": true,
+  "calls": 10,
+  "blocked": 0,
+  "startedAt": 1791826215298,
+  "startedMs": 1791826215298,
+  "updatedAt": 1791827984521,
+  "updatedMs": 1791827984521,
+  "summary": "Project Anatole · learn · 0 open alerts · 0 blocked · baseline learning 36%",
+  "alerts": {
+    "open": 0,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "total": 0
+  },
+  "baseline": {
+    "state": "learning",
+    "maturity": 36,
+    "events": 12,
+    "sessions": 7,
+    "firstSeenAt": 1791825896676
+  },
+  "rules": {
+    "total": 13,
+    "block": 4,
+    "notify": 9,
+    "off": 0
+  },
+  "degraded": false
+}

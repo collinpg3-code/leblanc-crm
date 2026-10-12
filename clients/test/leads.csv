@@ -1,0 +1,4 @@
+﻿business,contact,industry,location,stack,public_flags,outreach_angle,notes
+"Tech Startup Inc","cto@techstartup.io","SaaS","San Francisco, CA","React + Node.js","Missing CSP","Secure redesign","Test"
+"Local Dental","admin@dental.com","Healthcare","Austin, TX","WordPress","Weak headers","Security check","Test"
+"Ecommerce Shop","owner@shop.com","Retail","Miami, FL","Shopify","Exposed config","Remediation","Test"

@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-10-12T20:02:55.925Z",
+  "projectRoot": "C:\\tools\\leblanc-solutions",
+  "structure": {
+    "hasPackageJson": true,
+    "hasTsConfig": false,
+    "hasClaudeConfig": true,
+    "hasClaudeFlow": true
+  },
+  "scannedAt": 1791835375925
+}

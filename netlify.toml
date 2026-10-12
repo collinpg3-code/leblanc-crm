@@ -1,0 +1,29 @@
+[build]
+  command = "npm run build"
+  functions = "backend"
+  publish = "frontend/dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[dev]
+  command = "npm run dev:all"
+  port = 3000
+  publish = "frontend/dist"
+  functions = "backend"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/server:path"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[context.production.environment]
+  NODE_ENV = "production"
+
+[context.deploy-preview.environment]
+  NODE_ENV = "staging"

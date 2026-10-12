@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apex Auto Spa — demo by LeBlanc Solutions</title>
+<meta name="description" content="A premium, bold sample website built by LeBlanc Solutions to demonstrate our high-end design end.">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+  :root{--bg:#0B0908;--bg2:#141010;--panel:#1C1613;--gold:#D9A866;--gold-dk:#B4854A;--cream:#F3ECE3;--mut:#9A8E82;--line:#2A221D;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Archivo',system-ui,sans-serif;background:var(--bg);color:var(--cream);line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:'Playfair Display',Georgia,serif;font-weight:500;line-height:1.08;letter-spacing:.01em;}
+  a{color:var(--gold);text-decoration:none;}
+  .demo-bar{background:#15232E;color:#fff;font-size:13px;text-align:center;padding:9px 16px;}
+  .demo-bar a{color:#9fd3cc;font-weight:600;}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 28px;}
+  header{position:sticky;top:0;background:rgba(11,9,8,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:10;}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:78px;}
+  .logo{font-family:'Playfair Display',serif;font-size:22px;letter-spacing:.04em;}
+  .logo span{color:var(--gold);}
+  nav a.l{color:var(--cream);margin-left:30px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;}
+  nav a.l:hover{color:var(--gold);}
+  .btn{display:inline-block;border:1px solid var(--gold);color:var(--gold);padding:14px 30px;font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;transition:.2s;}
+  .btn:hover{background:var(--gold);color:var(--bg);}
+  .hero{min-height:92vh;display:flex;align-items:center;position:relative;overflow:hidden;background:radial-gradient(130% 110% at 72% 18%,#3a2416 0%,#1a0f0b 55%,#0b0908 100%);}
+  .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
+  .hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(11,9,8,.9) 0%,rgba(11,9,8,.55) 55%,rgba(11,9,8,.2) 100%);}
+  .hero .wrap{position:relative;z-index:2;}
+  .hero .eye{color:var(--gold);font-size:12px;letter-spacing:.4em;text-transform:uppercase;font-weight:700;}
+  .hero h1{font-size:clamp(48px,9vw,104px);margin:18px 0 8px;}
+  .hero h1 em{font-style:italic;color:var(--gold);}
+  .hero p{color:var(--mut);font-size:19px;max-width:44ch;margin:18px 0 34px;}
+  section{padding:110px 0;}
+  .sec-eye{color:var(--gold);font-size:12px;letter-spacing:.3em;text-transform:uppercase;font-weight:700;}
+  h2{font-size:clamp(34px,5vw,56px);margin:12px 0 0;}
+  .svcs{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:54px;}
+  .svc{background:var(--bg);padding:42px 34px;transition:.25s;}
+  .svc:hover{background:var(--panel);}
+  .svc .num{font-family:'Playfair Display',serif;color:var(--gold-dk);font-size:15px;}
+  .svc h3{font-size:26px;margin:14px 0 10px;}
+  .svc p{color:var(--mut);font-size:15px;}
+  .band{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .band .wrap{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;text-align:center;}
+  .stat .n{font-family:'Playfair Display',serif;font-size:56px;color:var(--gold);}
+  .stat .l{color:var(--mut);font-size:13px;letter-spacing:.18em;text-transform:uppercase;}
+  .cta{text-align:center;}
+  .cta h2{max-width:18ch;margin:0 auto 26px;}
+  footer{border-top:1px solid var(--line);padding:46px 0;color:var(--mut);font-size:13px;text-align:center;}
+  .backhome{position:fixed;left:20px;bottom:20px;z-index:60;border:1px solid var(--gold);color:var(--gold);background:rgba(11,9,8,.55);backdrop-filter:blur(4px);padding:9px 16px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;text-decoration:none;}
+  .backhome:hover{background:var(--gold);color:var(--bg);}
+  @media(max-width:820px){.svcs{grid-template-columns:1fr;}nav a.l{display:none;}}
+  /* motion */
+  @keyframes heroIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  html.js .hero .wrap{animation:heroIn 1s .15s both;}
+  html.js .svc,html.js .stat,html.js .sec-eye,html.js section h2,html.js #craft p,html.js #book .btn{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1);}
+  html.js .in-view{opacity:1!important;transform:none!important;}
+  html.js .svcs .svc:nth-child(2){transition-delay:.1s}
+  html.js .svcs .svc:nth-child(3){transition-delay:.2s}
+  html.js .band .stat:nth-child(2){transition-delay:.08s}
+  html.js .band .stat:nth-child(3){transition-delay:.16s}
+  html.js .band .stat:nth-child(4){transition-delay:.24s}
+  @media(prefers-reduced-motion:reduce){html.js .hero .wrap{animation:none}html.js .svc,html.js .stat,html.js .sec-eye,html.js section h2,html.js #craft p,html.js #book .btn{opacity:1!important;transform:none!important;transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <div class="logo">APEX<span>·</span>AUTO SPA</div>
+    <nav>
+      <a class="l" href="#services">Services</a><a class="l" href="#craft">The craft</a>
+      <a class="btn" href="#book">Book</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <!-- Drop your Higgsfield vehicle clip at assets/vehicle-hero.mp4 and it plays as the hero.
+         Until then, the cinematic gradient below shows. -->
+    <video class="hero-video" autoplay muted loop playsinline preload="auto">
+      <source src="assets/vehicle-hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="eye">Detailing · Paint protection · Ceramic coatings</p>
+      <h1>The art of the <em>flawless</em> finish.</h1>
+      <p>Concours-level detailing for cars that deserve it. By appointment, in a climate-controlled studio.</p>
+      <a class="btn" href="#book">Book the experience</a>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="wrap">
+      <p class="sec-eye">What we do</p>
+      <h2>Obsessive by design.</h2>
+      <div class="svcs">
+        <div class="svc"><div class="num">01</div><h3>Paint correction</h3><p>Multi-stage polishing that removes years of swirl and haze, restoring a wet, mirror depth.</p></div>
+        <div class="svc"><div class="num">02</div><h3>Ceramic coating</h3><p>A nano-ceramic layer that locks in the shine and shrugs off water, dirt and UV for years.</p></div>
+        <div class="svc"><div class="num">03</div><h3>Paint protection film</h3><p>Invisible, self-healing armour against stone chips and road rash on the panels that take the hits.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="stat"><div class="n">12+</div><div class="l">Years in the studio</div></div>
+      <div class="stat"><div class="n">900</div><div class="l">Cars perfected</div></div>
+      <div class="stat"><div class="n">5.0</div><div class="l">Average rating</div></div>
+      <div class="stat"><div class="n">∞</div><div class="l">Attention to detail</div></div>
+    </div>
+  </section>
+
+  <section id="craft">
+    <div class="wrap">
+      <p class="sec-eye">The craft</p>
+      <h2 style="max-width:16ch;">We treat every car like it's the only one.</h2>
+      <p style="color:var(--mut);font-size:18px;max-width:52ch;margin-top:20px;">One vehicle at a time. No production line, no rushing — just measured light, the right pad, and the patience to get it perfect before it leaves.</p>
+    </div>
+  </section>
+
+  <section id="book" class="cta">
+    <div class="wrap">
+      <p class="sec-eye">Reserve</p>
+      <h2>Your car's best day is a booking away.</h2>
+      <a class="btn" href="#">Request an appointment</a>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap">Apex Auto Spa — a fictional demo by LeBlanc Solutions. Design cues from premium-brand systems.</div></footer>
+<a class="backhome" href="../index.html">← LeBlanc Solutions</a>
+<script>
+(function(){
+  var sel='.svc,.stat,.sec-eye,section h2,#craft p,#book .btn';
+  var els=[].slice.call(document.querySelectorAll(sel));
+  function show(e){e.classList.add('in-view');}
+  if(!('IntersectionObserver' in window)){els.forEach(show);return;}
+  var io=new IntersectionObserver(function(ents){ents.forEach(function(x){if(x.isIntersecting){show(x.target);io.unobserve(x.target);}});},{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+  els.forEach(function(e){io.observe(e);});
+  setTimeout(function(){els.forEach(show);},2800);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+/**
+ * LeBlanc Solutions Dashboard Backend
+ * Express.js server for managing engagements and operations data
+ *
+ * Run: node backend/server.js
+ * API: http://localhost:3001
+ */
+
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
+const cors = require('cors');
+
+const app = express();
+const PORT = process.env.PORT || 3001;
+
+// Security credentials (move to env vars in production)
+const VALID_USERNAME = 'CollinLB12';
+const VALID_PASSWORD = 'REDACTED';
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Security headers
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'");
+  next();
+});
+
+// Auth middleware
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'No token provided' });
+  }
+
+  // Simple JWT-like token validation (in production, use proper JWT)
+  if (token !== `${VALID_USERNAME}:${VALID_PASSWORD}`) {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+
+  next();
+}
+
+// Data file path
+const dataFile = path.join(__dirname, 'data.json');
+
+// Helper: Load data from JSON file
+function loadData() {
+  try {
+    if (fs.existsSync(dataFile)) {
+      const data = fs.readFileSync(dataFile, 'utf-8');
+      return JSON.parse(data);
+    }
+  } catch (err) {
+    console.error('Error loading data:', err);
+  }
+  return { engagements: [], activity: [], stats: {} };
+}
+
+// Helper: Save data to JSON file
+function saveData(data) {
+  try {
+    fs.writeFileSync(dataFile, JSON.stringify(data, null, 2));
+  } catch (err) {
+    console.error('Error saving data:', err);
+  }
+}
+
+// Routes
+
+// POST: Login
+app.post('/api/auth/login', (req, res) => {
+  const { username, password } = req.body;
+
+  if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+    const token = `${VALID_USERNAME}:${VALID_PASSWORD}`;
+    res.json({ token, user: username });
+  } else {
+    res.status(401).json({ error: 'Invalid credentials' });
+  }
+});
+
+// GET: Get all data (dashboard view)
+app.get('/api/dashboard', authenticateToken, (req, res) => {
+  const data = loadData();
+
+  // Calculate metrics
+  const metrics = {
+    prospects: data.engagements.filter(e => e.stage === 'prospect').length,
+    qualified: data.engagements.filter(e => e.stage === 'qualified').length,
+    authorized: data.engagements.filter(e => e.stage === 'authorized').length,
+    reports: data.engagements.filter(e => e.stage === 'report').length,
+    fixes: data.engagements.filter(e => e.stage === 'fix').length,
+    revenue: data.engagements.reduce((sum, e) => sum + (e.estimatedValue || 0), 0),
+    conversions: data.engagements.filter(e => e.stage === 'report' || e.stage === 'fix').length,
+  };
+
+  res.json({
+    engagements: data.engagements,
+    activity: data.activity.slice(-10),
+    metrics,
+    stats: data.stats || {}
+  });
+});
+
+// GET: Get single engagement
+app.get('/api/engagements/:id', authenticateToken, (req, res) => {
+  const data = loadData();
+  const engagement = data.engagements.find(e => e.id === req.params.id);
+  if (!engagement) {
+    return res.status(404).json({ error: 'Engagement not found' });
+  }
+  res.json(engagement);
+});
+
+// POST: Create new engagement (from Lead Scout agent)
+app.post('/api/engagements', authenticateToken, (req, res) => {
+  const data = loadData();
+  const engagement = {
+    id: `eng-${Date.now()}`,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    ...req.body
+  };
+
+  data.engagements.push(engagement);
+
+  // Add activity log
+  data.activity.push({
+    type: 'created',
+    title: `New engagement: ${engagement.name}`,
+    description: `${engagement.name} (${engagement.stage})`,
+    timestamp: engagement.createdAt,
+    icon: '✨'
+  });
+
+  saveData(data);
+  res.status(201).json(engagement);
+});
+
+// PUT: Update engagement
+app.put('/api/engagements/:id', authenticateToken, (req, res) => {
+  const data = loadData();
+  const index = data.engagements.findIndex(e => e.id === req.params.id);
+
+  if (index === -1) {
+    return res.status(404).json({ error: 'Engagement not found' });
+  }
+
+  const oldStage = data.engagements[index].stage;
+  const updated = {
+    ...data.engagements[index],
+    ...req.body,
+    updatedAt: new Date().toISOString()
+  };
+
+  data.engagements[index] = updated;
+
+  // Log stage change
+  if (oldStage !== updated.stage) {
+    data.activity.push({
+      type: 'updated',
+      title: `${updated.name} moved to ${updated.stage}`,
+      description: `Stage changed from ${oldStage} to ${updated.stage}`,
+      timestamp: updated.updatedAt,
+      icon: '📝'
+    });
+  }
+
+  saveData(data);
+  res.json(updated);
+});
+
+// DELETE: Delete engagement
+app.delete('/api/engagements/:id', authenticateToken, (req, res) => {
+  const data = loadData();
+  const engagement = data.engagements.find(e => e.id === req.params.id);
+
+  if (!engagement) {
+    return res.status(404).json({ error: 'Engagement not found' });
+  }
+
+  data.engagements = data.engagements.filter(e => e.id !== req.params.id);
+
+  data.activity.push({
+    type: 'deleted',
+    title: `${engagement.name} deleted`,
+    description: `Engagement removed from pipeline`,
+    timestamp: new Date().toISOString(),
+    icon: '🗑️'
+  });
+
+  saveData(data);
+  res.json({ success: true });
+});
+
+// POST: Add activity
+app.post('/api/activity', authenticateToken, (req, res) => {
+  const data = loadData();
+  const activity = {
+    ...req.body,
+    timestamp: new Date().toISOString()
+  };
+
+  data.activity.push(activity);
+  saveData(data);
+  res.status(201).json(activity);
+});
+
+// POST: Update stats
+app.post('/api/stats', authenticateToken, (req, res) => {
+  const data = loadData();
+  data.stats = { ...data.stats, ...req.body };
+  saveData(data);
+  res.json(data.stats);
+});
+
+// POST: Lead Scout agent integration (push leads)
+app.post('/api/leads/sync', authenticateToken, (req, res) => {
+  const { leads } = req.body;
+
+  if (!Array.isArray(leads)) {
+    return res.status(400).json({ error: 'Expected array of leads' });
+  }
+
+  const data = loadData();
+  let imported = 0;
+
+  leads.forEach(leadData => {
+    const existing = data.engagements.find(e =>
+      e.contact === leadData.contact || e.name === leadData.name
+    );
+
+    if (!existing) {
+      const engagement = {
+        id: `eng-${Date.now()}`,
+        name: leadData.name,
+        contact: leadData.contact,
+        industry: leadData.industry || 'Unknown',
+        location: leadData.location || 'Unknown',
+        stack: leadData.stack || 'Unknown',
+        website: leadData.website || null,
+        findings: leadData.findings || null,
+        stage: 'prospect',
+        service: 'Security Check',
+        estimatedValue: 100,
+        authorized: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        notes: 'Imported from Lead Scout agent',
+        progress: 10
+      };
+
+      data.engagements.push(engagement);
+      data.activity.push({
+        type: 'import',
+        title: `Lead imported: ${engagement.name}`,
+        description: `${engagement.name} (${engagement.industry})`,
+        timestamp: engagement.createdAt,
+        icon: '🤖'
+      });
+      imported++;
+    }
+  });
+
+  saveData(data);
+  res.json({ imported, total: data.engagements.length });
+});
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`\n✅ LeBlanc Dashboard Backend running at http://localhost:${PORT}`);
+  console.log(`📊 Dashboard: http://localhost:3000`);
+  console.log(`🔧 API: http://localhost:${PORT}/api/dashboard\n`);
+});

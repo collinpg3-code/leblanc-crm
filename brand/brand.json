@@ -1,0 +1,31 @@
+{
+  "name": "LeBlanc Solutions",
+  "wordmarkTop": "LeBlanc",
+  "wordmarkBottom": "SOLUTIONS",
+  "tagline": "A home inspection for your website.",
+  "url": "leblancsols.com",
+  "contact": "contact@leblancsols.com",
+  "fonts": {
+    "serif": "Newsreader",
+    "sans": "Archivo",
+    "googleHref": "https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap"
+  },
+  "colors": {
+    "ink": "#15232E",
+    "navy": "#243551",
+    "slate": "#5A6B78",
+    "teal": "#16605E",
+    "canvas": "#E8EDEF",
+    "panel": "#FAFAFA",
+    "line": "#DAE2E7",
+    "white": "#FFFFFF",
+    "sev": {
+      "critical": "#8C2A12",
+      "high": "#A93D16",
+      "medium": "#B07A1E",
+      "low": "#5A6B78",
+      "info": "#8A98A4",
+      "good": "#16605E"
+    }
+  }
+}

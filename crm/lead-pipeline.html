@@ -1,0 +1,294 @@
+<title>Lead Pipeline</title>
+<style>
+  /* Layout: sticky header + tab bar over a single scrolling column of lead cards.
+     Palette: LeBlanc ink/teal/canvas + semantic status hues. */
+  :root{
+    --bg:#Eef2f4; --surface:#ffffff; --ink:#15232E; --slate:#5A6B78; --line:#D7DEE4;
+    --teal:#16605E; --teal-ink:#0F4A48; --rust:#A93D16; --soft:#F6F8F9;
+    --s-new:#6B7686; --s-pending:#B07A1E; --s-working:#1C7C9C; --s-won:#1E9E73; --s-dead:#9AA4AD;
+    --shadow:0 1px 2px rgba(21,35,46,.06),0 6px 20px rgba(21,35,46,.07);
+    --serif:'Newsreader',Georgia,'Times New Roman',serif;
+    --sans:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+    --bg:#0D151C; --surface:#15222C; --ink:#Eaf0f3; --slate:#9FB0BB; --line:#26333D;
+    --teal:#4FB6AC; --teal-ink:#6FD0C4; --rust:#E0875C; --soft:#111b22;
+    --s-new:#8A97A3; --s-pending:#D6A24A; --s-working:#56B4D4; --s-won:#45C194; --s-dead:#6B7680;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    color-scheme:dark;
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0D151C; --surface:#15222C; --ink:#EAF0F3; --slate:#9FB0BB; --line:#26333D;
+    --teal:#4FB6AC; --teal-ink:#6FD0C4; --rust:#E0875C; --soft:#111b22;
+    --s-new:#8A97A3; --s-pending:#D6A24A; --s-working:#56B4D4; --s-won:#45C194; --s-dead:#6B7680;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;font-size:15px}
+  .wrap{max-width:900px;margin:0 auto;padding-inline:16px}
+  a{color:var(--teal-ink)}
+  button{font-family:inherit;cursor:pointer}
+  h1{font-family:var(--serif);font-weight:500;letter-spacing:-.01em}
+
+  header.app{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+  .top{display:flex;align-items:center;gap:12px;padding-block:14px}
+  .mark{width:30px;height:30px;flex:none}
+  .brand .t{font-family:var(--serif);font-size:19px;line-height:1}
+  .brand .b{font-size:10px;letter-spacing:.3em;color:var(--slate);font-weight:600}
+  .spacer{flex:1}
+  .btn{border:1.5px solid var(--ink);background:var(--ink);color:#fff;border-radius:0;padding:9px 16px;font-weight:600;font-size:14px}
+  .btn:hover{background:var(--teal);border-color:var(--teal)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn.ghost:hover{background:var(--ink);color:#fff}
+
+  .tabs{display:flex;gap:4px;overflow-x:auto;padding-bottom:10px;scrollbar-width:thin}
+  .tab{border:1px solid var(--line);background:var(--surface);color:var(--slate);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600;white-space:nowrap;display:flex;gap:7px;align-items:center}
+  .tab .n{background:var(--soft);color:var(--slate);border-radius:999px;padding:0 7px;font-size:12px;font-variant-numeric:tabular-nums}
+  .tab[aria-selected="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .tab[aria-selected="true"] .n{background:rgba(255,255,255,.2);color:#fff}
+
+  main{padding-block:18px 60px}
+  .list{display:flex;flex-direction:column;gap:14px}
+  .msg{color:var(--slate);text-align:center;padding:50px 16px;font-size:15px}
+  .msg b{color:var(--ink);font-family:var(--serif);font-weight:500;font-size:20px;display:block;margin-bottom:6px}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:18px;display:flex;flex-direction:column;gap:12px}
+  .card.over{border-color:var(--rust)}
+  .chead{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap}
+  .chead .name{font-size:17px;font-weight:700;min-width:0}
+  .chead .meta{color:var(--slate);font-size:13px}
+  .pill{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff;border-radius:999px;padding:3px 10px;white-space:nowrap}
+  .contact{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:13.5px;align-items:center}
+  .contact .copy{border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:7px;padding:4px 10px;font-size:13px;font-weight:600;display:inline-flex;gap:6px;align-items:center}
+  .contact .copy:hover{border-color:var(--teal)}
+  .angle{background:var(--soft);border-left:3px solid var(--teal);padding:9px 12px;font-size:13px;color:var(--ink);border-radius:0 6px 6px 0}
+  .angle .flags{color:var(--slate);font-size:12px;margin-top:4px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .statusbtns{display:flex;gap:5px;flex-wrap:wrap}
+  .sb{border:1px solid var(--line);background:var(--surface);color:var(--slate);border-radius:999px;padding:5px 11px;font-size:12.5px;font-weight:600}
+  .sb[aria-pressed="true"]{color:#fff;border-color:transparent}
+  .log{border:1px solid var(--teal);background:transparent;color:var(--teal-ink);border-radius:7px;padding:6px 12px;font-size:13px;font-weight:600}
+  .log:hover{background:var(--teal);color:#fff}
+  .field{display:flex;flex-direction:column;gap:4px;min-width:0}
+  .field label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);font-weight:700}
+  textarea,input[type=text],input[type=date],input[type=tel]{font-family:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 11px;width:100%}
+  textarea{min-height:60px;resize:vertical;line-height:1.5}
+  input:focus,textarea:focus,.sb:focus-visible,.tab:focus-visible,button:focus-visible{outline:2.5px solid var(--teal);outline-offset:1px}
+  .cbrow{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+  .cbrow .field{flex:1;min-width:150px}
+  .due{color:var(--rust);font-weight:700;font-size:12px}
+  .banner{background:#fbe9e2;color:#7a2d12;border:1px solid #e9b9a6;border-radius:8px;padding:10px 14px;font-size:13.5px;margin-top:12px}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .banner{background:#2a1a12;color:#e7b49c;border-color:#5a3827}}
+
+  /* add-lead form */
+  .addform{background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .addform .full{grid-column:1/-1}
+  @media (max-width:520px){.addform{grid-template-columns:1fr}}
+</style>
+
+<header class="app">
+  <div class="wrap">
+    <div class="top">
+      <svg class="mark" viewBox="0 0 32 32" role="img" aria-label="LeBlanc Solutions">
+        <path d="M4 4h24v13c0 6.2-4.6 10.3-12 13C8.6 27.3 4 23.2 4 17Z" fill="#16605E"/>
+        <path d="M4 9.5h24" stroke="#fff" stroke-width="1.5" opacity=".5"/>
+        <circle cx="7.6" cy="6.8" r="1" fill="#fff" opacity=".6"/><circle cx="11" cy="6.8" r="1" fill="#fff" opacity=".6"/>
+        <path d="m10.5 16.6 4 4.2 8-8.4" fill="none" stroke="#fff" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="brand"><div class="t">Lead Pipeline</div><div class="b">LEBLANC SOLUTIONS</div></div>
+      <div class="spacer"></div>
+      <button class="btn" id="addBtn">+ Add lead</button>
+    </div>
+    <div class="tabs" id="tabs" role="tablist"></div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div id="addWrap" hidden></div>
+    <div id="content"><div class="msg">Loading your leads…</div></div>
+    <div id="banner"></div>
+  </div>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var STATUSES=[
+    {k:"new",label:"New",c:"--s-new"},
+    {k:"pending",label:"Pending",c:"--s-pending"},
+    {k:"working",label:"Working",c:"--s-working"},
+    {k:"won",label:"Won",c:"--s-won"},
+    {k:"dead",label:"Dead",c:"--s-dead"}
+  ];
+  var SMAP={}; STATUSES.forEach(function(s){SMAP[s.k]=s;});
+  var TAB="all", LEADS=[], db=null, canWrite=true;
+  var content=document.getElementById("content");
+  var tabsEl=document.getElementById("tabs");
+  var bannerEl=document.getElementById("banner");
+
+  function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function todayStr(){return new Date().toISOString().slice(0,10);}
+  function fmtDate(iso){ if(!iso) return ""; try{return new Date(iso).toLocaleDateString(undefined,{month:"short",day:"numeric"});}catch(e){return iso;} }
+
+  function counts(){
+    var c={all:LEADS.length}; STATUSES.forEach(function(s){c[s.k]=0;});
+    LEADS.forEach(function(l){ if(c[l.status]!=null)c[l.status]++; });
+    return c;
+  }
+  function renderTabs(){
+    var c=counts();
+    var items=[{k:"all",label:"All leads"}].concat(STATUSES.map(function(s){return{k:s.k,label:s.label};}));
+    tabsEl.innerHTML=items.map(function(it){
+      return '<button class="tab" role="tab" data-tab="'+it.k+'" aria-selected="'+(TAB===it.k)+'">'+esc(it.label)+' <span class="n">'+(c[it.k]||0)+'</span></button>';
+    }).join("");
+  }
+
+  function leadCard(l){
+    var over = l.status==="pending" && l.callbackDate && l.callbackDate < todayStr();
+    var pill = SMAP[l.status]||SMAP.new;
+    var contactBits=[];
+    if(l.phone) contactBits.push('<button class="copy" data-copy="'+esc(l.phone)+'" title="Copy number">☎ '+esc(l.phone)+'</button>');
+    if(l.email) contactBits.push('<button class="copy" data-copy="'+esc(l.email)+'" title="Copy email">✉ '+esc(l.email)+'</button>');
+    if(l.website) contactBits.push('<a href="'+esc(l.website)+'" target="_blank" rel="noopener">Visit site ↗</a>');
+    var sbtns=STATUSES.map(function(s){
+      var on=l.status===s.k;
+      return '<button class="sb" data-status="'+s.k+'" aria-pressed="'+on+'"'+(on?' style="background:var('+s.c+')"':'')+'>'+esc(s.label)+'</button>';
+    }).join("");
+    return '<div class="card'+(over?' over':'')+'" data-id="'+esc(l.id)+'">'
+      +'<div class="chead">'
+        +'<div style="flex:1;min-width:0"><div class="name">'+esc(l.business||"Untitled lead")+'</div>'
+        +'<div class="meta">'+esc([l.subNiche,l.location].filter(Boolean).join(" · "))+'</div></div>'
+        +'<span class="pill" style="background:var('+pill.c+')">'+esc(pill.label)+'</span>'
+      +'</div>'
+      +(contactBits.length?'<div class="contact">'+contactBits.join("")+'</div>':'')
+      +(l.angle||l.flags?'<div class="angle">'+esc(l.angle||"")+(l.flags?'<div class="flags">'+esc(l.flags)+'</div>':'')+'</div>':'')
+      +'<div class="row"><div class="statusbtns">'+sbtns+'</div><button class="log" data-log="1">☎ Log call</button></div>'
+      +'<div class="cbrow">'
+        +'<div class="field" style="flex:2"><label>Notes / call log</label><textarea data-notes="1" placeholder="What happened on the call…">'+esc(l.notes||"")+'</textarea></div>'
+        +'<div class="field"><label>Callback date</label><input type="date" data-cb="1" value="'+esc(l.callbackDate||"")+'">'
+          +(over?'<span class="due">Overdue — '+fmtDate(l.callbackDate)+'</span>':(l.lastContact?'<span style="font-size:12px;color:var(--slate)">Last contact '+fmtDate(l.lastContact)+'</span>':''))
+        +'</div>'
+      +'</div>'
+    +'</div>';
+  }
+
+  function render(){
+    renderTabs();
+    var rows=LEADS.slice();
+    if(TAB!=="all") rows=rows.filter(function(l){return l.status===TAB;});
+    // sort: pending by callback date asc (overdue first), others by business name
+    if(TAB==="pending"||TAB==="all"){
+      rows.sort(function(a,b){
+        var ap=a.status==="pending"?0:1, bp=b.status==="pending"?0:1;
+        if(ap!==bp) return ap-bp;
+        if(a.status==="pending"&&b.status==="pending") return (a.callbackDate||"9999")<(b.callbackDate||"9999")?-1:1;
+        return (a.business||"").localeCompare(b.business||"");
+      });
+    } else {
+      rows.sort(function(a,b){return (a.business||"").localeCompare(b.business||"");});
+    }
+    if(!rows.length){
+      var empty = LEADS.length===0
+        ? '<div class="msg"><b>No leads yet</b>Add your first prospect with “+ Add lead,” or your seeded shortlist will appear here.</div>'
+        : '<div class="msg"><b>Nothing in “'+esc((SMAP[TAB]||{label:TAB}).label||TAB)+'”</b>Move leads here as you work them.</div>';
+      content.innerHTML=empty; return;
+    }
+    content.innerHTML='<div class="list">'+rows.map(leadCard).join("")+'</div>';
+  }
+
+  // re-render guard so a live snapshot never clobbers a field you're typing in
+  var pending=false;
+  function safeRender(){
+    var a=document.activeElement;
+    if(a&&(a.tagName==="TEXTAREA"||a.tagName==="INPUT")&&a.closest&&a.closest(".card")){ pending=true; return; }
+    render();
+  }
+
+  async function writeLead(id,patch){
+    if(!db) return;
+    patch.updatedAt=new Date().toISOString();
+    try{ await db.collection("leads").doc(id).update(patch); }
+    catch(e){ if(e&&e.code==="invalid_argument"){ canWrite=false; showBanner(); } }
+  }
+  function findLead(id){ for(var i=0;i<LEADS.length;i++) if(LEADS[i].id===id) return LEADS[i]; return null; }
+
+  function showBanner(){
+    bannerEl.innerHTML = db
+      ? '<div class="banner">You can view this board but changes won’t save — you don’t have edit access to it.</div>'
+      : '<div class="banner">Can’t reach storage, so changes won’t save. Open this from your own Claude account to edit.</div>';
+  }
+
+  // events (delegated)
+  tabsEl.addEventListener("click",function(e){
+    var t=e.target.closest(".tab"); if(!t)return; TAB=t.getAttribute("data-tab"); render();
+  });
+  content.addEventListener("click",function(e){
+    var card=e.target.closest(".card"); if(!card)return; var id=card.getAttribute("data-id");
+    var sb=e.target.closest(".sb");
+    if(sb){ writeLead(id,{status:sb.getAttribute("data-status")}); return; }
+    if(e.target.closest("[data-log]")){
+      var l=findLead(id)||{}; var stamp="["+new Date().toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})+"] Called";
+      var notes = l.notes ? stamp+"\n"+l.notes : stamp;
+      writeLead(id,{notes:notes,lastContact:new Date().toISOString(), status:(l.status==="new"?"pending":l.status)});
+      return;
+    }
+    var cp=e.target.closest(".copy");
+    if(cp){ var txt=cp.getAttribute("data-copy"); try{ navigator.clipboard.writeText(txt).then(function(){ var o=cp.textContent; cp.textContent="Copied ✓"; setTimeout(function(){cp.textContent=o;},1200); }).catch(function(){}); }catch(e2){} return; }
+  });
+  content.addEventListener("change",function(e){
+    var card=e.target.closest(".card"); if(!card)return; var id=card.getAttribute("data-id");
+    if(e.target.matches("[data-cb]")) writeLead(id,{callbackDate:e.target.value});
+  });
+  content.addEventListener("blur",function(e){
+    var card=e.target.closest(".card"); if(!card)return; var id=card.getAttribute("data-id");
+    if(e.target.matches("[data-notes]")){ var l=findLead(id); if(l&&(l.notes||"")!==e.target.value) writeLead(id,{notes:e.target.value}); }
+    if(pending){ pending=false; render(); }
+  },true);
+
+  // add-lead form
+  var addWrap=document.getElementById("addWrap");
+  document.getElementById("addBtn").addEventListener("click",function(){
+    if(!addWrap.hidden){ addWrap.hidden=true; addWrap.innerHTML=""; return; }
+    addWrap.hidden=false;
+    addWrap.innerHTML='<form class="addform" id="addForm">'
+      +'<div class="field"><label>Business *</label><input type="text" name="business" required></div>'
+      +'<div class="field"><label>Type</label><input type="text" name="subNiche" placeholder="med spa, dental…"></div>'
+      +'<div class="field"><label>Phone</label><input type="tel" name="phone"></div>'
+      +'<div class="field"><label>Email</label><input type="text" name="email"></div>'
+      +'<div class="field full"><label>Website</label><input type="text" name="website" placeholder="https://…"></div>'
+      +'<div class="field full"><label>Location</label><input type="text" name="location"></div>'
+      +'<div class="row full"><button class="btn" type="submit">Save lead</button><button class="btn ghost" type="button" id="cancelAdd">Cancel</button></div>'
+      +'</form>';
+    document.getElementById("cancelAdd").onclick=function(){addWrap.hidden=true;addWrap.innerHTML="";};
+    document.getElementById("addForm").addEventListener("submit",async function(ev){
+      ev.preventDefault();
+      if(!db){showBanner();return;}
+      var f=ev.target, g=function(n){return (f.elements[n].value||"").trim();};
+      if(!g("business"))return;
+      var now=new Date().toISOString();
+      var doc={business:g("business"),subNiche:g("subNiche"),phone:g("phone"),email:g("email"),website:g("website"),location:g("location"),status:"new",notes:"",callbackDate:"",lastContact:"",createdAt:now,updatedAt:now};
+      try{ await db.collection("leads").doc().set(doc); addWrap.hidden=true; addWrap.innerHTML=""; }
+      catch(e){ if(e&&e.code==="invalid_argument"){canWrite=false;showBanner();} }
+    });
+  });
+
+  renderTabs();
+
+  // connect to the store
+  (async function(){
+    try{ db = await (window.claude && window.claude.use ? window.claude.use("db") : Promise.resolve(null)); }
+    catch(e){ db=null; }
+    if(!db){ render(); showBanner(); return; }
+    try{
+      db.collection("leads").onSnapshot(function(snap){
+        LEADS = snap.docs.map(function(d){ var o=d.data()||{}; o.id=d.id; return o; });
+        safeRender();
+      }, function(err){ if(err&&err.code){ /* keep last view */ } });
+    }catch(e){ render(); }
+  })();
+})();
+</script>

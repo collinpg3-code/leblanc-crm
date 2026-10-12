@@ -1,0 +1,11 @@
+# Documents & Spreadsheets
+
+Editable documents, planners, and spreadsheet-style layouts.
+
+**3 templates** · [← all categories](../README.md) · [browse on ppttemplate.ai](https://ppttemplate.ai/templates)
+
+| | | |
+|:--:|:--:|:--:|
+| <a href="https://ppttemplate.ai/templates/30-day-notice-letter-kit"><img src="https://cdn.ppttemplate.ai/templates/30-day-notice-letter-kit/v3/00.jpg" alt="30 Day Notice Resignation Letter Template Kit" width="300" loading="lazy"></a><br>**[30 Day Notice Resignation Letter Template Kit](https://ppttemplate.ai/templates/30-day-notice-letter-kit)**<br><sub>Build a polished 30 day notice resignation letter template for a clear, respectful departure.…</sub><br><sub>4 slides · [⬇ .pptx](https://cdn.ppttemplate.ai/templates/30-day-notice-letter-kit/v3/30-day-notice-letter-kit.pptx)</sub> | <a href="https://ppttemplate.ai/templates/persuasive-argument-planning-worksheet"><img src="https://cdn.ppttemplate.ai/templates/persuasive-argument-planning-worksheet/v3/00.jpg" alt="Persuasive Argument Planning Worksheet" width="300" loading="lazy"></a><br>**[Persuasive Argument Planning Worksheet](https://ppttemplate.ai/templates/persuasive-argument-planning-worksheet)**<br><sub>Build a stronger case with a persuasive argument planning worksheet that guides students…</sub><br><sub>4 slides · [⬇ .pptx](https://cdn.ppttemplate.ai/templates/persuasive-argument-planning-worksheet/v3/persuasive-argument-planning-worksheet.pptx)</sub> | <a href="https://ppttemplate.ai/templates/recommendation-letter-writing-guide"><img src="https://cdn.ppttemplate.ai/templates/recommendation-letter-writing-guide/v3/00.jpg" alt="Recommendation Letter Writing Guide" width="300" loading="lazy"></a><br>**[Recommendation Letter Writing Guide](https://ppttemplate.ai/templates/recommendation-letter-writing-guide)**<br><sub>Build a stronger recommendation letter writing guide for jobs, scholarships, and promotions…</sub><br><sub>4 slides · [⬇ .pptx](https://cdn.ppttemplate.ai/templates/recommendation-letter-writing-guide/v3/recommendation-letter-writing-guide.pptx)</sub> |
+
+Every preview opens its full slide-by-slide page on [ppttemplate.ai](https://ppttemplate.ai), where you can page through the deck before downloading.

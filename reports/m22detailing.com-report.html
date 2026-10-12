@@ -1,0 +1,180 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#15232E;--navy:#243551;--slate:#5A6B78;--teal:#16605E;
+    --canvas:#E8EDEF;--panel:#FAFAFA;--line:#DAE2E7;--white:#FFFFFF;
+    --serif:'Newsreader',Georgia,serif;--sans:'Archivo',system-ui,sans-serif;
+  }
+  @page{size:Letter;margin:0;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--sans);color:var(--ink);font-size:11pt;line-height:1.5;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .page{width:8.5in;min-height:11in;padding:0.85in 0.9in;background:var(--white);position:relative;page-break-after:always;}
+  .page:last-child{page-break-after:auto;}
+  h1,h2,h3{font-family:var(--serif);font-weight:500;color:var(--ink);line-height:1.15;}
+  .eyebrow{font-family:var(--sans);font-size:8.5pt;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:.35in;}
+  .wordmark .top{font-family:var(--serif);font-size:15pt;line-height:1;color:var(--ink);}
+  .wordmark .bot{font-family:var(--sans);font-size:9pt;letter-spacing:.34em;color:var(--slate);font-weight:600;}
+  /* cover */
+  .cover{background:var(--canvas);}
+  .cover .wordmark{margin-bottom:2.2in;}
+  .cover h1{font-size:40pt;margin:.1in 0 .25in;}
+  .cover .sub{font-size:13pt;color:var(--slate);max-width:5in;line-height:1.5;}
+  .cover .rule{width:2.4in;height:2px;background:var(--teal);margin:.5in 0;}
+  .cover .meta{font-size:10.5pt;color:var(--slate);}
+  .cover .meta strong{color:var(--ink);}
+  .cover .domain{font-family:var(--serif);font-size:18pt;color:var(--teal);margin:.05in 0 .35in;}
+  .footer{position:absolute;bottom:.5in;left:.9in;right:.9in;display:flex;justify-content:space-between;font-size:8.5pt;color:var(--slate);border-top:1px solid var(--line);padding-top:.12in;}
+  /* summary */
+  .lead{font-family:var(--serif);font-size:20pt;line-height:1.25;margin:.1in 0 .3in;max-width:6in;}
+  .tally{display:inline-block;background:var(--panel);border:1px solid var(--line);padding:.12in .22in;font-size:11pt;color:var(--ink);margin-bottom:.35in;}
+  .tally b{color:var(--teal);}
+  .cols{display:flex;gap:.4in;}
+  .col{flex:1;}
+  .strength{display:flex;gap:.14in;margin-bottom:.18in;}
+  .strength .dot{flex:none;width:.26in;height:.26in;background:var(--teal);color:#fff;font-size:10pt;text-align:center;line-height:.26in;margin-top:.02in;}
+  .strength h4{font-family:var(--sans);font-size:11pt;font-weight:600;margin-bottom:.02in;}
+  .strength p{font-size:9.5pt;color:var(--slate);}
+  .sec-title{font-size:22pt;margin-bottom:.08in;}
+  .sec-intro{color:var(--slate);max-width:6in;margin-bottom:.3in;font-size:11pt;}
+  /* findings */
+  .finding{border:1px solid var(--line);border-left:4px solid var(--teal);padding:.2in .24in;margin-bottom:.2in;background:var(--white);break-inside:avoid;}
+  .finding-head{display:flex;align-items:center;gap:.14in;margin-bottom:.08in;}
+  .finding-head h3{font-size:14pt;}
+  .chip{color:#fff;font-family:var(--sans);font-size:7.5pt;font-weight:700;letter-spacing:.08em;padding:.04in .1in;border-radius:2px;flex:none;}
+  .analogy{font-family:var(--serif);font-style:italic;color:var(--teal);font-size:11pt;margin-bottom:.08in;}
+  .meaning{font-size:10.5pt;color:var(--ink);margin-bottom:.12in;}
+  .fix{font-size:10pt;background:var(--panel);border:1px solid var(--line);padding:.12in .16in;color:var(--ink);}
+  .fix-label{display:block;font-family:var(--sans);font-size:8pt;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:.04in;}
+  .ranked{counter-reset:r;}
+  .ranked .finding{counter-increment:r;}
+  .ranked .finding-head h3::before{content:counter(r) ".  ";color:var(--slate);}
+  .close h1{font-size:28pt;margin-bottom:.2in;}
+  .close p{color:var(--slate);max-width:5.4in;margin-bottom:.14in;font-size:11pt;}
+  .close .cta{margin-top:.35in;font-size:12pt;}
+  .close .cta b{color:var(--teal);}
+</style></head><body>
+
+<section class="page cover">
+  <div class="wordmark"><div class="top">LeBlanc</div><div class="bot">SOLUTIONS</div></div>
+  <div class="eyebrow">Website Security Report</div>
+  <h1>M22 Detailing</h1>
+  <div class="domain">m22detailing.com</div>
+  <p class="sub">A home inspection for your website — the common, fixable problems we found, in plain English, ranked by what matters.</p>
+  <div class="rule"></div>
+  <div class="meta"><strong>Prepared by</strong> LeBlanc Solutions &nbsp;·&nbsp; 11 October 2026<br>Non-destructive external assessment &nbsp;·&nbsp; Authorised engagement</div>
+  <div class="footer"><span>LeBlanc Solutions</span><span>leblancsols.com</span></div>
+</section>
+
+<section class="page">
+  <div class="eyebrow">The bottom line</div>
+  <h2 class="lead">Good foundations. A handful of quick fixes will close the gaps.</h2>
+  <div class="tally"><b>1</b> medium · <b>2</b> low · <b>5</b> info — each with its fix, in the order that matters.</div>
+  <div class="cols">
+    <div class="col">
+      <div class="eyebrow" style="margin-bottom:.14in">What's working well</div>
+      <div class="strength"><div class="dot">✓</div><div><h4>Your connection is properly locked</h4><p>Valid TLSv1.3 certificate from Let's Encrypt, renewing in 70 days.</p></div></div><div class="strength"><div class="dot">✓</div><div><h4>Secret files are sealed off</h4><p>Sensitive paths like .env, .git and service-account keys all correctly refuse access (12 checked).</p></div></div><div class="strength"><div class="dot">✓</div><div><h4>No outdated parts with known holes</h4><p>Your site's JavaScript components (jquery, jquery-migrate) are current, with no known published flaws.</p></div></div><div class="strength"><div class="dot">✓</div><div><h4>Basic email protection is on</h4><p>SPF and a DMARC policy are configured, which helps stop others sending email as you.</p></div></div>
+    </div>
+    <div class="col">
+      <div class="eyebrow" style="margin-bottom:.14in">Your top fixes</div>
+      <div class="strength"><div class="dot" style="background:#B07A1E">1</div><div><h4>No shield against injected scripts</h4><p>Add a Content-Security-Policy. Roll it out in report-only mode first so nothing breaks, then switch it on.</p></div></div><div class="strength"><div class="dot" style="background:#5A6B78">2</div><div><h4>Your pages can be framed by a fake site</h4><p>Send an X-Frame-Options (or CSP frame-ancestors) header so other sites can't embed yours.</p></div></div><div class="strength"><div class="dot" style="background:#5A6B78">3</div><div><h4>Secure connection isn't strictly enforced</h4><p>Add a Strict-Transport-Security header so every visit is forced onto HTTPS.</p></div></div>
+    </div>
+  </div>
+  <div class="footer"><span>LeBlanc Solutions</span><span>leblancsols.com</span></div>
+</section>
+
+<section class="page">
+  <div class="eyebrow">What we found</div>
+  <h2 class="sec-title">The full list, ranked</h2>
+  <p class="sec-intro">Most break-ins rely on the same handful of mistakes. Here's what we found on your site, worst first, each with what it means and how to close it.</p>
+  <div class="ranked">
+    
+    <div class="finding">
+      <div class="finding-head">
+        <span class="chip" style="background:#B07A1E">MED</span>
+        <h3>No shield against injected scripts</h3>
+      </div>
+      <p class="analogy">Like leaving the upstairs windows unlocked — anything that climbs in can walk around freely.</p>
+      <p class="meaning">Your site doesn't tell the browser which scripts are allowed to run. A script slipped in through a plugin flaw or a third-party tag would execute on your pages — including your quote and contact forms.</p>
+      <div class="fix"><span class="fix-label">The fix</span>Add a Content-Security-Policy. Roll it out in report-only mode first so nothing breaks, then switch it on.</div>
+    </div>
+    <div class="finding">
+      <div class="finding-head">
+        <span class="chip" style="background:#5A6B78">LOW</span>
+        <h3>Your pages can be framed by a fake site</h3>
+      </div>
+      <p class="analogy">Like someone taping a photo of your storefront over your real front door.</p>
+      <p class="meaning">Without this setting, an attacker can load your site inside their own page and trick visitors into clicking things they can't see.</p>
+      <div class="fix"><span class="fix-label">The fix</span>Send an X-Frame-Options (or CSP frame-ancestors) header so other sites can't embed yours.</div>
+    </div>
+    <div class="finding">
+      <div class="finding-head">
+        <span class="chip" style="background:#5A6B78">LOW</span>
+        <h3>Secure connection isn't strictly enforced</h3>
+      </div>
+      <p class="analogy">Like a good lock on a door that can still be nudged open on the very first push.</p>
+      <p class="meaning">The padlock works, but a visitor's first request can be downgraded to an unencrypted connection on shared Wi-Fi before the secure one kicks in.</p>
+      <div class="fix"><span class="fix-label">The fix</span>Add a Strict-Transport-Security header so every visit is forced onto HTTPS.</div>
+    </div>
+    <div class="finding">
+      <div class="finding-head">
+        <span class="chip" style="background:#8A98A4">INFO</span>
+        <h3>Visitor trails can leak to other sites</h3>
+      </div>
+      <p class="analogy">Like handing a stranger a note of exactly where your customer just came from.</p>
+      <p class="meaning">Internal page addresses can be passed along to third-party sites as visitors click outbound links.</p>
+      <div class="fix"><span class="fix-label">The fix</span>Set a Referrer-Policy header to limit what's shared.</div>
+    </div>
+    <div class="finding">
+      <div class="finding-head">
+        <span class="chip" style="background:#8A98A4">INFO</span>
+        <h3>Browser features left switched on</h3>
+      </div>
+      <p class="analogy">Like leaving every appliance plugged in and running when you only use one.</p>
+      <p class="meaning">Camera, location and other browser features aren't restricted, widening what a malicious script could try to reach.</p>
+      <div class="fix"><span class="fix-label">The fix</span>Add a Permissions-Policy header that only allows the features you actually use.</div>
+    </div>
+    <div class="finding">
+      <div class="finding-head">
+        <span class="chip" style="background:#8A98A4">INFO</span>
+        <h3>Your admin door opens onto the public street</h3>
+      </div>
+      <p class="analogy">Like a shop's back-office door opening straight onto a busy sidewalk.</p>
+      <p class="meaning">Your WordPress login page is reachable by anyone on the internet, so automated bots can sit there trying password after password.</p>
+      <div class="fix"><span class="fix-label">The fix</span>Add login rate-limiting and two-factor sign-in, and consider moving the login to a non-obvious address.</div>
+    </div>
+    <div class="finding">
+      <div class="finding-head">
+        <span class="chip" style="background:#8A98A4">INFO</span>
+        <h3>A form endpoint worth double-checking</h3>
+      </div>
+      <p class="analogy">Like a mail slot you should make sure only accepts letters, not anything shoved through it.</p>
+      <p class="meaning">This address accepts input (such as a name and an attachment). It's worth confirming it rejects anything unexpected and limits file uploads. Affected: /api/me, /api/feedback.</p>
+      <div class="fix"><span class="fix-label">The fix</span>Validate and sanitise the inputs, and cap file type and size on any upload.</div>
+    </div>
+    <div class="finding">
+      <div class="finding-head">
+        <span class="chip" style="background:#8A98A4">INFO</span>
+        <h3>Look-alike email from your subdomains</h3>
+      </div>
+      <p class="analogy">Like someone printing letterhead with your address on it and mailing it out.</p>
+      <p class="meaning">Your main domain is protected against spoofing, but mail sent from your subdomains isn't — so it can be forged in your name.</p>
+      <div class="fix"><span class="fix-label">The fix</span>Tighten your DMARC record so subdomains are covered by the same quarantine policy.</div>
+    </div>
+  </div>
+  <div class="footer"><span>LeBlanc Solutions</span><span>leblancsols.com</span></div>
+</section>
+
+<section class="page close" style="background:var(--canvas)">
+  <div class="wordmark" style="margin-bottom:1.6in"><div class="top">LeBlanc</div><div class="bot">SOLUTIONS</div></div>
+  <div class="eyebrow">What happens next</div>
+  <h1>You fix, we re-check</h1>
+  <p>Work down the ranked list. When you're done, tell us and we scan again to confirm each item is actually closed — so you can see the before and after.</p>
+  <p>Prefer we handle it? We also implement the fixes for you, and can redesign the site to be secure from the ground up.</p>
+  <div class="cta">Get in touch &nbsp;·&nbsp; <b>contact@leblancsols.com</b></div>
+  <p style="margin-top:.5in;font-size:8.5pt;">This report finds common, fixable problems so you can close them before someone else finds them. It is not a guarantee against every possible attack, a full manual penetration test, or a compliance certificate. We test only sites you own or are authorised to test.</p>
+  <div class="footer"><span>LeBlanc Solutions</span><span>© 2026 LeBlanc Solutions</span></div>
+</section>
+
+</body></html>
