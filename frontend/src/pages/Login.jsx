@@ -20,7 +20,8 @@ export default function Login({ onLogin }) {
       localStorage.setItem('crm-token', response.data.token)
       onLogin()
     } catch (err) {
-      setError('Invalid credentials')
+      console.error('Login error:', err)
+      setError(err.response?.data?.error || 'Invalid credentials')
     } finally {
       setLoading(false)
     }
