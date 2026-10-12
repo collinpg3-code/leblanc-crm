@@ -8,3 +8,6 @@
 
 # Claude Code per-machine settings (may contain local approvals/secrets)
 .claude/settings.local.json
+
+# Local CRM data (production uses Postgres)
+backend/data.json

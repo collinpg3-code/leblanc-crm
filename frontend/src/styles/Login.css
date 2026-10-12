@@ -1,85 +1,40 @@
 .login-container {
+  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  padding: var(--gutter);
+  background: var(--canvas);
 }
 
 .login-box {
-  background: white;
-  padding: 3rem;
-  border-radius: 8px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
   width: 100%;
   max-width: 400px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--teal);
+  padding: 36px 32px 32px;
 }
 
-.login-box h1 {
-  color: #1976d2;
-  margin-bottom: 0.5rem;
-  font-size: 1.8rem;
-}
+.login-box h1 { font-size: 34px; margin: 28px 0 6px; }
+.login-box .subtitle { color: var(--slate); margin-bottom: 26px; }
 
-.login-box .subtitle {
-  color: #666;
-  margin-bottom: 2rem;
-  font-size: 0.9rem;
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: #333;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: #1976d2;
-  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
-}
+.login-box .form-group { margin-bottom: 18px; }
+.login-box label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
 
 .error-message {
-  background: #ffebee;
-  color: #c62828;
-  padding: 0.75rem;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
+  border-left: 3px solid var(--rust);
+  background: #F8EDE8;
+  color: var(--rust);
+  padding: 10px 12px;
+  font-size: 14px;
+  margin-bottom: 18px;
 }
 
-.login-btn {
-  width: 100%;
-  padding: 0.75rem;
-  background: #1976d2;
-  color: white;
-  font-weight: 600;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
+.login-btn { width: 100%; min-height: 48px; font-size: 15px; }
 
-.login-btn:hover:not(:disabled) {
-  background: #1565c0;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(25, 118, 210, 0.3);
-}
-
-.login-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+@media (max-width: 480px) {
+  .login-container { align-items: flex-start; padding-top: 48px; }
+  .login-box { padding: 28px 20px 24px; }
 }

@@ -1,8 +1,1 @@
-.loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  font-size: 1.2rem;
-  color: #1976d2;
-}
+/* App-level styles live in index.css */

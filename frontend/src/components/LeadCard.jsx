@@ -1,76 +1,64 @@
 import React from 'react'
+import { STAGE_LABELS } from '../utils/stages'
 import '../styles/LeadCard.css'
 
+const known = (v) => v && v !== 'Unknown'
+
 export default function LeadCard({ lead, stageColors, onSelect, isSelected }) {
+  const color = stageColors[lead.stage]
+  const meta = [lead.industry, lead.location].filter(known).join(' · ')
+
   return (
-    <div
+    <article
       className={`lead-card ${isSelected ? 'selected' : ''}`}
       onClick={onSelect}
-      style={{ borderLeftColor: stageColors[lead.stage] }}
+      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), onSelect())}
+      tabIndex={0}
+      role="button"
+      style={{ borderTopColor: color }}
     >
       <div className="card-header">
-        <h3>{lead.name}</h3>
-        <span
-          className="stage-badge"
-          style={{ backgroundColor: stageColors[lead.stage] }}
-        >
-          {lead.stage}
-        </span>
+        <span className="stage-badge" style={{ color, borderColor: color }}>{STAGE_LABELS[lead.stage] || lead.stage}</span>
+        {lead.source === 'website' && <span className="source-badge">Website</span>}
       </div>
+
+      <h3>{lead.name}</h3>
+      {meta && <p className="card-meta">{meta}</p>}
 
       {lead.website && (
-        <div className="card-website">
-          <a href={`https://${lead.website}`} target="_blank" rel="noopener noreferrer">
-            Link {lead.website}
-          </a>
-        </div>
+        <a className="card-website" href={`https://${lead.website}`} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+          {lead.website}
+        </a>
       )}
 
-      <div className="card-meta">
-        <p><strong>{lead.industry}</strong></p>
-        <p className="location">Location {lead.location}</p>
-      </div>
+      {lead.findings && <p className="card-findings">{lead.findings}</p>}
 
-      {lead.findings && (
-        <div className="card-findings">
-          <p className="findings-label">Issues:</p>
-          <p className="findings-text">{lead.findings}</p>
-        </div>
-      )}
-
-      <div className="card-info">
-        {lead.contact && (
+      <dl className="card-info">
+        {known(lead.contact) && (
           <div className="info-row">
-            <span className="label">Contact:</span>
-            <span>{lead.contact}</span>
+            <dt>Contact</dt>
+            <dd>{lead.contact}</dd>
           </div>
         )}
         {lead.phone && (
           <div className="info-row">
-            <span className="label">Phone:</span>
-            <a href={`tel:${lead.phone.replace(/[^\d+]/g, '')}`} onClick={(e) => e.stopPropagation()}>{lead.phone}</a>
+            <dt>Phone</dt>
+            <dd><a href={`tel:${lead.phone.replace(/[^\d+]/g, '')}`} onClick={(e) => e.stopPropagation()}>{lead.phone}</a></dd>
           </div>
         )}
         <div className="info-row">
-          <span className="label">Stack:</span>
-          <span>{lead.stack}</span>
+          <dt>Service</dt>
+          <dd>{lead.service}</dd>
         </div>
         <div className="info-row">
-          <span className="label">Service:</span>
-          <span>{lead.service}</span>
+          <dt>Value</dt>
+          <dd className="value">${lead.estimatedValue}</dd>
         </div>
-        <div className="info-row">
-          <span className="label">Value:</span>
-          <span className="value">${lead.estimatedValue}</span>
-        </div>
-      </div>
+      </dl>
 
-      <div className="card-footer">
-        <p className="notes">{lead.notes?.substring(0, 50)}...</p>
-        <div className="progress-bar">
-          <div className="progress-fill" style={{ width: `${lead.progress}%` }}></div>
-        </div>
+      <div className="progress-bar" aria-hidden="true">
+        <div className="progress-fill" style={{ width: `${lead.progress || 0}%`, background: color }} />
       </div>
-    </div>
+    </article>
   )
 }

@@ -6,6 +6,19 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["server.js"],
       "port": 4321
+    },
+    {
+      "name": "crm-backend",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["backend/server.js"],
+      "env": { "PORT": "3001", "CRM_PASSWORD": "local-dev-pw" },
+      "port": 3001
+    },
+    {
+      "name": "crm-frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "frontend", "run", "dev"],
+      "port": 3000
     }
   ]
 }

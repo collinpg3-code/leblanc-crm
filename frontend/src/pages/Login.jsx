@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import axios from 'axios'
 import { getApiUrl } from '../utils/api'
+import Logo from '../components/Logo'
 import '../styles/Login.css'
 
 export default function Login({ onLogin }) {
@@ -32,8 +33,9 @@ export default function Login({ onLogin }) {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h1>LeBlanc Solutions CRM</h1>
-        <p className="subtitle">Sales Pipeline & Lead Management</p>
+        <Logo subtitle="CRM" />
+        <h1>Sign in</h1>
+        <p className="subtitle">Sales pipeline and lead management.</p>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -43,7 +45,8 @@ export default function Login({ onLogin }) {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter username"
+              autoComplete="username"
+              autoCapitalize="none"
               disabled={loading}
             />
           </div>
@@ -55,15 +58,15 @@ export default function Login({ onLogin }) {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password"
+              autoComplete="current-password"
               disabled={loading}
             />
           </div>
 
-          {error && <div className="error-message">{error}</div>}
+          {error && <div className="error-message" role="alert">{error}</div>}
 
-          <button type="submit" disabled={loading} className="login-btn">
-            {loading ? 'Logging in...' : 'Login'}
+          <button type="submit" disabled={loading} className="login-btn btn-primary">
+            {loading ? 'Signing in…' : 'Sign in'}
           </button>
         </form>
       </div>

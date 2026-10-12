@@ -4,6 +4,7 @@ import { getApiUrl } from '../utils/api'
 import LeadsList from '../components/LeadsList'
 import Pipeline from '../components/Pipeline'
 import ImportLeads from '../components/ImportLeads'
+import Logo from '../components/Logo'
 import '../styles/Dashboard.css'
 
 export default function Dashboard({ onLogout }) {
@@ -44,61 +45,48 @@ export default function Dashboard({ onLogout }) {
     onLogout()
   }
 
-  if (loading) return <div className="loading">Loading CRM...</div>
+  if (loading) return <div className="loading">Loading CRM…</div>
+
+  const metricItems = [
+    ['Prospects', metrics.prospects || 0],
+    ['Qualified', metrics.qualified || 0],
+    ['Authorized', metrics.authorized || 0],
+    ['Reports', metrics.reports || 0],
+    ['Pipeline value', `$${(metrics.revenue || 0).toLocaleString()}`, true]
+  ]
 
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
-        <div className="header-left">
-          <h1>LeBlanc Solutions CRM</h1>
-          <p>Sales Pipeline & Lead Management</p>
-        </div>
-        <div className="header-right">
+        <Logo subtitle="CRM" />
+        <div className="header-actions">
           <ImportLeads onImportSuccess={fetchData} />
-          <button onClick={fetchData} className="refresh-btn" title="Refresh leads">
-            ↻ Refresh
+          <button onClick={fetchData} className="refresh-btn" title="Refresh leads" aria-label="Refresh">
+            <span aria-hidden="true">↻</span><span className="btn-label"> Refresh</span>
           </button>
-          <span className="user-info">CollinLB12</span>
-          <button onClick={handleLogout} className="logout-btn">Logout</button>
+          <button onClick={handleLogout} className="logout-btn">Log out</button>
         </div>
       </header>
 
-      <nav className="dashboard-nav">
-        <button
-          className={`nav-btn ${view === 'list' ? 'active' : ''}`}
-          onClick={() => setView('list')}
-        >
-          📋 Leads List
-        </button>
-        <button
-          className={`nav-btn ${view === 'pipeline' ? 'active' : ''}`}
-          onClick={() => setView('pipeline')}
-        >
-          📊 Pipeline
-        </button>
-      </nav>
+      <div className="dashboard-intro">
+        <p className="eyebrow">Sales pipeline</p>
+        <nav className="dashboard-nav" aria-label="View">
+          <button className={`nav-btn ${view === 'list' ? 'active' : ''}`} onClick={() => setView('list')}>
+            Leads
+          </button>
+          <button className={`nav-btn ${view === 'pipeline' ? 'active' : ''}`} onClick={() => setView('pipeline')}>
+            Pipeline
+          </button>
+        </nav>
+      </div>
 
       <div className="metrics-bar">
-        <div className="metric">
-          <span className="metric-label">Prospects</span>
-          <span className="metric-value">{metrics.prospects || 0}</span>
-        </div>
-        <div className="metric">
-          <span className="metric-label">Qualified</span>
-          <span className="metric-value">{metrics.qualified || 0}</span>
-        </div>
-        <div className="metric">
-          <span className="metric-label">Authorized</span>
-          <span className="metric-value">{metrics.authorized || 0}</span>
-        </div>
-        <div className="metric">
-          <span className="metric-label">Reports</span>
-          <span className="metric-value">{metrics.reports || 0}</span>
-        </div>
-        <div className="metric highlight">
-          <span className="metric-label">Pipeline Value</span>
-          <span className="metric-value">${metrics.revenue || 0}</span>
-        </div>
+        {metricItems.map(([label, value, highlight]) => (
+          <div key={label} className={`metric ${highlight ? 'highlight' : ''}`}>
+            <span className="metric-label">{label}</span>
+            <span className="metric-value">{value}</span>
+          </div>
+        ))}
       </div>
 
       <main className="dashboard-content">
