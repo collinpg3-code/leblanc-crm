@@ -17,7 +17,8 @@ const PORT = process.env.PORT || 3001;
 
 // Credentials come from the environment (Render env vars in production).
 const VALID_USERNAME = (process.env.CRM_USERNAME || 'CollinLB12').trim();
-const VALID_PASSWORD = (process.env.CRM_PASSWORD || '').trim();
+// Strip whitespace and accidental surrounding quotes pasted into the Render UI.
+const VALID_PASSWORD = (process.env.CRM_PASSWORD || '').trim().replace(/^(['"])(.*)\1$/, '$2');
 if (!VALID_PASSWORD) {
   console.warn('⚠️  CRM_PASSWORD is not set — all logins will be rejected.');
 }
@@ -297,6 +298,7 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     commit: (process.env.RENDER_GIT_COMMIT || 'local').slice(0, 7),
     passwordConfigured: Boolean(VALID_PASSWORD),
+    username: VALID_USERNAME,
   });
 });
 
