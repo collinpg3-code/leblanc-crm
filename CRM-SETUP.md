@@ -32,7 +32,7 @@ npm run dev
 **4. Login**
 - Go to http://localhost:3000
 - Username: `CollinLB12`
-- Password: `REDACTED`
+- Password: `<your CRM password>`
 
 ### Sync Leads from Lead Scout
 
@@ -73,7 +73,7 @@ git push origin main
 ```
 VITE_API_URL=https://crm.leblancsols.com
 CRM_USERNAME=CollinLB12
-CRM_PASSWORD=REDACTED
+CRM_PASSWORD=<your CRM password>
 ```
 
 **4. Add domain**
@@ -133,7 +133,7 @@ leblanc-solutions/
 ## Security
 
 ### Current Implementation
-- Basic token authentication (CollinLB12 : REDACTED)
+- Basic token authentication (CollinLB12 : <your CRM password>)
 - Security headers (CSP, HSTS, X-Frame-Options, etc.)
 - CORS enabled for cross-origin requests
 - Input validation on API endpoints
@@ -157,7 +157,7 @@ leblanc-solutions/
 - Check port 3001 is not in use: `netstat -ano | findstr :3001`
 
 ### Login fails
-- Verify username/password: `CollinLB12` / `REDACTED`
+- Verify username/password: `CollinLB12` / `<your CRM password>`
 - Check browser console for errors (F12)
 - Clear localStorage: `localStorage.clear()` in console
 

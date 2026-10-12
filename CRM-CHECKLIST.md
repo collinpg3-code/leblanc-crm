@@ -79,7 +79,7 @@ npm run dev
 1. Open http://localhost:3000 in browser
 2. Enter credentials:
    - Username: `CollinLB12`
-   - Password: `REDACTED`
+   - Password: `<your CRM password>`
 3. You should see the dashboard with sample leads
 
 **Time:** ~1 minute
@@ -117,7 +117,7 @@ Follow [DEPLOYMENT.md](DEPLOYMENT.md) for:
 ### Local Testing
 - [ ] Backend starts without errors
 - [ ] Frontend builds and loads
-- [ ] Login works (CollinLB12 / REDACTED)
+- [ ] Login works (CollinLB12 / <your CRM password>)
 - [ ] Dashboard shows sample leads
 - [ ] Can filter by stage
 - [ ] Can click lead to view details
@@ -184,7 +184,7 @@ Follow [DEPLOYMENT.md](DEPLOYMENT.md) for:
    - Check console errors: F12 → Console
 
 3. Login fails?
-   - Verify credentials: CollinLB12 / REDACTED
+   - Verify credentials: CollinLB12 / <your CRM password>
    - Check backend is running
    - Clear localStorage: `localStorage.clear()` in console
 

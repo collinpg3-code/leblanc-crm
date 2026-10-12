@@ -11,7 +11,7 @@ module.exports = {
   // CRM credentials (change these in production)
   auth: {
     username: process.env.CRM_USERNAME || 'CollinLB12',
-    password: process.env.CRM_PASSWORD || 'REDACTED'
+    password: process.env.CRM_PASSWORD
   },
 
   // Netlify configuration (for deployment)

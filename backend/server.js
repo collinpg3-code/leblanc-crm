@@ -10,13 +10,29 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Security credentials (move to env vars in production)
-const VALID_USERNAME = 'CollinLB12';
-const VALID_PASSWORD = 'REDACTED';
+// Credentials come from the environment (Render env vars in production).
+const VALID_USERNAME = process.env.CRM_USERNAME || 'CollinLB12';
+const VALID_PASSWORD = process.env.CRM_PASSWORD;
+if (!VALID_PASSWORD) {
+  console.warn('⚠️  CRM_PASSWORD is not set — all logins will be rejected.');
+}
+
+// Token = HMAC of the username keyed by the password: it never contains the
+// password, and every issued token stops working when the password changes.
+function makeToken() {
+  return crypto.createHmac('sha256', VALID_PASSWORD).update(VALID_USERNAME).digest('hex');
+}
+
+function safeEqual(a, b) {
+  const x = Buffer.from(String(a));
+  const y = Buffer.from(String(b));
+  return x.length === y.length && crypto.timingSafeEqual(x, y);
+}
 
 // Middleware
 app.use(cors());
@@ -41,8 +57,7 @@ function authenticateToken(req, res, next) {
     return res.status(401).json({ error: 'No token provided' });
   }
 
-  // Simple JWT-like token validation (in production, use proper JWT)
-  if (token !== `${VALID_USERNAME}:${VALID_PASSWORD}`) {
+  if (!VALID_PASSWORD || !safeEqual(token, makeToken())) {
     return res.status(401).json({ error: 'Invalid token' });
   }
 
@@ -80,9 +95,8 @@ function saveData(data) {
 app.post('/api/auth/login', (req, res) => {
   const { username, password } = req.body;
 
-  if (username === VALID_USERNAME && password === VALID_PASSWORD) {
-    const token = `${VALID_USERNAME}:${VALID_PASSWORD}`;
-    res.json({ token, user: username });
+  if (VALID_PASSWORD && username === VALID_USERNAME && safeEqual(password, VALID_PASSWORD)) {
+    res.json({ token: makeToken(), user: username });
   } else {
     res.status(401).json({ error: 'Invalid credentials' });
   }

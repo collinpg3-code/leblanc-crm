@@ -84,7 +84,7 @@ $body = @{ leads = $leads } | ConvertTo-Json
 Invoke-RestMethod -Uri "http://localhost:3001/api/leads/sync" `
   -Method Post `
   -ContentType "application/json" `
-  -Headers @{ Authorization = "Bearer CollinLB12:REDACTED" } `
+  -Headers @{ Authorization = "Bearer <token from /api/auth/login>" } `
   -Body $body
 ```
 

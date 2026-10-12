@@ -9,8 +9,13 @@ param(
   [string]$Username = "CollinLB12",
 
   [Parameter(Mandatory=$false)]
-  [string]$Password = "REDACTED"
+  [string]$Password = $env:CRM_PASSWORD
 )
+
+if (-not $Password) {
+  Write-Host "Set `$env:CRM_PASSWORD or pass -Password" -ForegroundColor Red
+  exit 1
+}
 
 # Verify CSV exists
 if (-not (Test-Path $CsvPath)) {

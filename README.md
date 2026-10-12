@@ -28,7 +28,7 @@ plain-English report → remediate or securely redesign.
 **Track leads, calls, and deals all in one place.**
 
 - **Access:** Login dashboard at `crm.leblancsols.com` (or localhost:3000 in development)
-- **Username:** CollinLB12 | **Password:** REDACTED
+- **Username:** CollinLB12 | **Password:** <your CRM password>
 - **Features:** Pipeline view, lead cards, call logging, stage tracking, metrics
 - **Auto-sync:** Lead Scout agent → CRM (bulk import leads)
 

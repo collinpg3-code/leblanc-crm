@@ -132,7 +132,7 @@ Add:
 ```
 VITE_API_URL = https://crm.leblancsols.com
 CRM_USERNAME = CollinLB12
-CRM_PASSWORD = REDACTED
+CRM_PASSWORD = <your CRM password>
 NODE_ENV = production
 ```
 
@@ -148,11 +148,11 @@ https://crm.leblancsols.com
 
 # Login
 Username: CollinLB12
-Password: REDACTED
+Password: <your CRM password>
 
 # Test API (in browser console)
 const res = await fetch('https://crm.leblancsols.com/api/dashboard', {
-  headers: { Authorization: 'Bearer CollinLB12:REDACTED' }
+  headers: { Authorization: 'Bearer <token from /api/auth/login>' }
 })
 console.log(await res.json())
 ```
@@ -169,7 +169,7 @@ Update your Lead Scout workflow to sync leads:
   -CsvPath "clients/batch1/leads.csv" `
   -CrmUrl "https://crm.leblancsols.com" `
   -Username "CollinLB12" `
-  -Password "REDACTED"
+  -Password "<your CRM password>"
 ```
 
 Or add this as a PowerShell scheduled task to run automatically.
@@ -195,11 +195,11 @@ netlify logs -s <site-id>
 Invoke-RestMethod -Uri "https://crm.leblancsols.com/api/auth/login" `
   -Method Post `
   -ContentType "application/json" `
-  -Body '{"username":"CollinLB12","password":"REDACTED"}'
+  -Body '{"username":"CollinLB12","password":"<your CRM password>"}'
 
 # Test dashboard
 Invoke-RestMethod -Uri "https://crm.leblancsols.com/api/dashboard" `
-  -Headers @{"Authorization"="Bearer CollinLB12:REDACTED"}
+  -Headers @{"Authorization"="Bearer <token from /api/auth/login>"}
 ```
 
 ---

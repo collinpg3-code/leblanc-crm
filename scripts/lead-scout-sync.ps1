@@ -4,7 +4,12 @@
 $CsvPath = "C:\tools\leblanc-solutions\clients\batch1\leads.csv"
 $CrmUrl = "http://localhost:3001"
 $CrmUsername = "CollinLB12"
-$CrmPassword = "REDACTED"
+$CrmPassword = $env:CRM_PASSWORD
+
+if (-not $CrmPassword) {
+  Write-Host "❌ Set `$env:CRM_PASSWORD first" -ForegroundColor Red
+  exit 1
+}
 
 Write-Host "`n🔍 Running Lead Scout..." -ForegroundColor Cyan
 uv tool run openoutreach run 5
@@ -38,10 +43,15 @@ if (Test-Path $CsvPath) {
   }
 
   if ($leads.Count -gt 0) {
-    $token = "$CrmUsername`:$CrmPassword"
     $body = @{ leads = $leads } | ConvertTo-Json -Depth 10
 
     try {
+      $login = Invoke-RestMethod -Uri "$CrmUrl/api/auth/login" `
+        -Method Post `
+        -ContentType "application/json" `
+        -Body (@{ username = $CrmUsername; password = $CrmPassword } | ConvertTo-Json)
+      $token = $login.token
+
       $response = Invoke-RestMethod -Uri "$CrmUrl/api/leads/sync" `
         -Method Post `
         -ContentType "application/json" `
