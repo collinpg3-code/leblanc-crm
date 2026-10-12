@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { getApiUrl } from '../utils/api'
 import '../styles/Login.css'
 
 export default function Login({ onLogin }) {
@@ -14,7 +15,7 @@ export default function Login({ onLogin }) {
     setLoading(true)
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || '/api'
+      const apiUrl = getApiUrl()
       const response = await axios.post(`${apiUrl}/auth/login`, { username, password })
       localStorage.setItem('crm-token', response.data.token)
       onLogin()

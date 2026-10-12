@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { getApiUrl } from '../utils/api'
 import LeadsList from '../components/LeadsList'
 import Pipeline from '../components/Pipeline'
 import ImportLeads from '../components/ImportLeads'
@@ -21,7 +22,8 @@ export default function Dashboard({ onLogout }) {
   const fetchData = async () => {
     try {
       const token = localStorage.getItem('crm-token')
-      const response = await axios.get('/api/dashboard', {
+      const apiUrl = getApiUrl()
+      const response = await axios.get(`${apiUrl}/dashboard`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       setLeads(response.data.engagements)

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { getApiUrl } from '../utils/api'
 import LeadCard from './LeadCard'
 import '../styles/LeadsList.css'
 
@@ -28,7 +29,8 @@ export default function LeadsList({ leads, onRefresh }) {
   const updateLead = async (leadId, updates) => {
     try {
       const token = localStorage.getItem('crm-token')
-      await axios.put(`/api/engagements/${leadId}`, updates, {
+      const apiUrl = getApiUrl()
+      await axios.put(`${apiUrl}/engagements/${leadId}`, updates, {
         headers: { Authorization: `Bearer ${token}` }
       })
       onRefresh()

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { getApiUrl } from '../utils/api'
 import '../styles/ImportLeads.css'
 
 export default function ImportLeads({ onImportSuccess }) {
@@ -53,7 +54,8 @@ export default function ImportLeads({ onImportSuccess }) {
 
         try {
           const token = localStorage.getItem('crm-token')
-          const response = await axios.post('/api/leads/sync', { leads }, {
+          const apiUrl = getApiUrl()
+          const response = await axios.post(`${apiUrl}/leads/sync`, { leads }, {
             headers: { Authorization: `Bearer ${token}` }
           })
 
