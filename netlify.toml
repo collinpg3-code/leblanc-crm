@@ -1,15 +1,3 @@
-[build]
-  command = "npm run build"
-  publish = "frontend/dist"
-
-[build.environment]
-  NODE_VERSION = "18"
-
-[dev]
-  command = "npm run dev:all"
-  port = 3000
-  publish = "frontend/dist"
-  functions = "backend"
 
 [[redirects]]
   from = "/api/*"
@@ -23,6 +11,7 @@
 
 [context.production.environment]
   NODE_ENV = "production"
+  VITE_API_URL = "https://leblanc-backend.onrender.com"
 
 [context.deploy-preview.environment]
   NODE_ENV = "staging"
