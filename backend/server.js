@@ -289,6 +289,14 @@ app.post('/api/public/contact', (req, res) => {
   const business = field(req.body.business, 150);
   const website = field(req.body.website, 300).replace(/^https?:\/\//i, '').replace(/\/+$/, '');
   const message = field(req.body.message, 2000);
+  // What the visitor asked for on the form. Redesign value is 0 until quoted.
+  const SERVICES = {
+    redesign: ['Website Redesign', 0],
+    check: ['Security Check', 100],
+    fixes: ['Security Fixes', 450],
+    unsure: ['Not sure yet', 0]
+  };
+  const [service, estimatedValue] = SERVICES[field(req.body.service, 20)] || SERVICES.redesign;
 
   if (!name || !EMAIL.test(email)) {
     return res.status(400).json({ error: 'Please enter your name and a valid email.' });
@@ -309,8 +317,8 @@ app.post('/api/public/contact', (req, res) => {
     website: website || null,
     findings: null,
     stage: 'prospect',
-    service: 'Security Check',
-    estimatedValue: 100,
+    service,
+    estimatedValue,
     authorized: false,
     source: 'website',
     createdAt: now,
