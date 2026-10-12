@@ -46,7 +46,9 @@ app.use((req, res, next) => {
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-  res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'");
+  res.setHeader('Content-Security-Policy', "default-src 'none'; frame-ancestors 'none'");
+  res.setHeader('Referrer-Policy', 'no-referrer');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=()');
   next();
 });
 
@@ -72,14 +74,38 @@ const saveData = store.save;
 
 // Routes
 
+// Login throttling: 5 failures per IP, or 30 overall, within 15 minutes blocks
+// further attempts until the window passes. Stops password guessing.
+const LOGIN_WINDOW_MS = 15 * 60 * 1000;
+const failedLogins = new Map(); // key -> timestamps of recent failures
+
+function recentFailures(key) {
+  const now = Date.now();
+  const recent = (failedLogins.get(key) || []).filter(t => now - t < LOGIN_WINDOW_MS);
+  failedLogins.set(key, recent);
+  return recent;
+}
+
 // POST: Login
 app.post('/api/auth/login', (req, res) => {
+  const ipFailures = recentFailures(`ip:${req.ip}`);
+  const allFailures = recentFailures('all');
+  if (ipFailures.length >= 5 || allFailures.length >= 30) {
+    const oldest = Math.min(...(ipFailures.length >= 5 ? ipFailures : allFailures));
+    const retryAfter = Math.ceil((oldest + LOGIN_WINDOW_MS - Date.now()) / 1000);
+    res.setHeader('Retry-After', String(retryAfter));
+    return res.status(429).json({ error: `Too many failed attempts. Try again in ${Math.ceil(retryAfter / 60)} minutes.` });
+  }
+
   const username = String(req.body.username || '').trim();
   const password = String(req.body.password || '').trim();
 
   if (VALID_PASSWORD && username === VALID_USERNAME && safeEqual(password, VALID_PASSWORD)) {
+    failedLogins.delete(`ip:${req.ip}`);
     res.json({ token: makeToken(), user: username });
   } else {
+    ipFailures.push(Date.now());
+    allFailures.push(Date.now());
     res.status(401).json({ error: 'Invalid credentials' });
   }
 });
