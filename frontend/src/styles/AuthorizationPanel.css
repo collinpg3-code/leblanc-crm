@@ -1,0 +1,42 @@
+.auth-panel { border: 1px solid var(--line); background: var(--panel); padding: 14px 16px; margin: 0 0 18px; }
+.auth-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.auth-head h3 { font-size: 19px; }
+.auth-badge { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; border: 1px solid; padding: 1px 7px; color: var(--slate); }
+.auth-badge.sent { color: #9A6A12; }
+.auth-badge.signed { color: var(--teal); background: #E6F0EF; }
+.auth-badge.expired, .auth-badge.error { color: var(--rust); }
+.auth-line { margin-bottom: 4px; }
+.auth-muted { font-size: 13px; color: var(--slate); margin-bottom: 10px; overflow-wrap: anywhere; }
+.auth-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.auth-btn { display: inline-flex; align-items: center; min-height: 42px; padding: 10px 18px; border: 1.5px solid var(--ink); color: var(--ink); text-decoration: none; font: 600 14px var(--sans); }
+.auth-note { font-size: 13px; color: var(--teal-dk); margin-top: 8px; overflow-wrap: anywhere; }
+.small { font-size: 12px; }
+
+/* Signed copy */
+.signed-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(21, 35, 46, .6); overflow-y: auto; padding: 24px var(--gutter); }
+.signed-copy { max-width: 760px; margin: 0 auto; background: var(--white); padding: 28px 32px 32px; border-top: 4px solid var(--teal); font-size: 14px; }
+.signed-toolbar { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 12px; }
+.signed-copy h2 { font-size: 28px; margin: 4px 0; }
+.signed-copy h4 { font: 600 14px var(--sans); margin: 16px 0 6px; }
+.signed-copy ul { padding-left: 20px; }
+.signed-copy li { margin-bottom: 3px; }
+.signed-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); margin: 16px 0 6px; }
+.signed-grid div { background: var(--panel); padding: 8px 10px; }
+.signed-grid dt { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
+.signed-grid dd { overflow-wrap: anywhere; }
+.signed-sig { margin-top: 22px; border-top: 1px solid var(--line); padding-top: 14px; }
+.sig-name { font-family: var(--serif); font-style: italic; font-size: 32px; color: var(--navy); border-bottom: 1.5px solid var(--ink); display: inline-block; min-width: 60%; padding: 0 4px 2px; margin-bottom: 6px; }
+
+@media (max-width: 640px) {
+  .signed-overlay { padding: 0; }
+  .signed-copy { padding: 20px var(--gutter) 28px; }
+  .signed-grid { grid-template-columns: 1fr; }
+}
+
+@media print {
+  body * { visibility: hidden; }
+  .signed-copy, .signed-copy * { visibility: visible; }
+  .signed-overlay { position: absolute; inset: 0; background: none; padding: 0; overflow: visible; }
+  .signed-copy { position: absolute; left: 0; top: 0; max-width: none; border: none; padding: 0; }
+  .signed-toolbar { display: none; }
+}

@@ -3,6 +3,7 @@ import axios from 'axios'
 import { getApiUrl } from '../utils/api'
 import { STAGES, STAGE_LABELS, STAGE_COLORS } from '../utils/stages'
 import LeadCard from './LeadCard'
+import AuthorizationPanel from './AuthorizationPanel'
 import '../styles/LeadsList.css'
 
 export default function LeadsList({ leads, onRefresh }) {
@@ -123,6 +124,8 @@ function LeadDetail({ lead, onClose, onUpdate }) {
             </div>
           ))}
         </dl>
+
+        <AuthorizationPanel lead={lead} />
 
         {lead.findings && (
           <div className="detail-findings">

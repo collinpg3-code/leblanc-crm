@@ -11,6 +11,7 @@ const cors = require('cors');
 const crypto = require('crypto');
 const store = require('./store');
 const registerBacklogRoutes = require('./backlog');
+const registerAuthorizationRoutes = require('./authorization');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -178,9 +179,10 @@ app.put('/api/engagements/:id', authenticateToken, (req, res) => {
   }
 
   const oldStage = data.engagements[index].stage;
+  const { authorization, id, ...changes } = req.body; // signed records and ids can't be edited here
   const updated = {
     ...data.engagements[index],
-    ...req.body,
+    ...changes,
     updatedAt: new Date().toISOString()
   };
 
@@ -250,7 +252,12 @@ registerBacklogRoutes(app, { authenticateToken, loadData, saveData });
 
 // POST: Public website contact form -> new prospect. No auth, so validate
 // strictly, rate-limit per IP, and silently drop bots that fill the honeypot.
-const WEBSITE_ORIGIN = /^https:\/\/(www\.)?(leblancsols\.com|calm-selkie-f8758a\.netlify\.app)$/i;
+const SITE_ORIGIN = /^https:\/\/(www\.)?(leblancsols\.com|calm-selkie-f8758a\.netlify\.app)$/i;
+// DEV_WEBSITE_ORIGIN (local only, e.g. http://localhost:4321) lets the local site preview call the API.
+const WEBSITE_ORIGIN = { test: (origin) => SITE_ORIGIN.test(origin) || (!!process.env.DEV_WEBSITE_ORIGIN && origin === process.env.DEV_WEBSITE_ORIGIN) };
+
+// Online testing authorization (private links signed on leblancsols.com/authorize)
+registerAuthorizationRoutes(app, { authenticateToken, loadData, saveData, websiteOrigin: WEBSITE_ORIGIN });
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const recentSubmissions = new Map(); // ip -> timestamps in the last hour
 

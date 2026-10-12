@@ -8,7 +8,7 @@ const TYPES = { ".html":"text/html", ".css":"text/css", ".js":"text/javascript",
   ".png":"image/png", ".jpg":"image/jpeg", ".svg":"image/svg+xml", ".ico":"image/x-icon" };
 http.createServer((req, res) => {
   let p = decodeURIComponent(req.url.split("?")[0]);
-  if (p === "/") p = "/index.html";
+  if (p.endsWith("/")) p += "index.html";
   const file = path.join(ROOT, p);
   if (!file.startsWith(ROOT)) { res.writeHead(403); return res.end("forbidden"); }
   fs.readFile(file, (err, data) => {

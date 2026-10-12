@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Testing Authorization — LeBlanc Solutions</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/authorize/authorize.css">
+<script src="/authorize/authorize.js" defer></script>
+</head>
+<body>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="/" aria-label="LeBlanc Solutions, home">
+      <svg class="mark" viewBox="0 0 32 32" role="img" aria-hidden="true">
+        <path d="M4 4h24v13c0 6.2-4.6 10.3-12 13C8.6 27.3 4 23.2 4 17Z" fill="#16605E"/>
+        <path d="M4 9.5h24" stroke="#FFFFFF" stroke-width="1.5" opacity=".5"/>
+        <circle cx="7.6" cy="6.8" r="1" fill="#FFFFFF" opacity=".6"/>
+        <circle cx="11" cy="6.8" r="1" fill="#FFFFFF" opacity=".6"/>
+        <path d="m10.5 16.6 4 4.2 8-8.4" fill="none" stroke="#FFFFFF" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="word"><span class="t">LeBlanc</span><span class="b">SOLUTIONS</span></span>
+    </a>
+  </div>
+</header>
+
+<main id="main" class="auth-page">
+  <div class="wrap auth-wrap">
+    <p class="eyebrow">Before we test</p>
+    <h1>Website Security Testing Authorization</h1>
+    <p class="lede">This form gives LeBlanc Solutions written permission to test the security of your website. We never test a site without it. It takes about three minutes.</p>
+
+    <div id="state-loading" class="auth-state">Loading your form…</div>
+    <div id="state-error" class="auth-state auth-error" hidden></div>
+
+    <form id="auth-form" novalidate hidden>
+      <fieldset>
+        <legend><span>1</span> Your details</legend>
+        <div class="grid2">
+          <label class="full">Business name<input name="business" required maxlength="150" autocomplete="organization"></label>
+          <label>Your name<input name="contactName" required maxlength="100" autocomplete="name"></label>
+          <label>Your role<input name="role" maxlength="100" placeholder="e.g. Owner" autocomplete="organization-title"></label>
+          <label>Email<input name="email" type="email" required maxlength="200" autocomplete="email"></label>
+          <label>Phone<input name="phone" type="tel" maxlength="40" autocomplete="tel"></label>
+        </div>
+        <p class="hint">Emergency contact during testing (if different from you)</p>
+        <div class="grid2">
+          <label>Name<input name="emergencyName" maxlength="100"></label>
+          <label>Phone<input name="emergencyPhone" type="tel" maxlength="40"></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span>2</span> Websites we may test</legend>
+        <p class="hint">Only the websites listed here will be tested. Anything not listed is out of scope.</p>
+        <div id="websites"></div>
+        <button type="button" class="btn btn-ghost btn-sm" id="add-site">+ Add another website</button>
+        <p class="hint small">Not in scope unless listed: other domains or subdomains, your hosting provider's systems, payment processors, email systems and other third-party services.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend><span>3</span> Type of testing</legend>
+        <label class="choice">
+          <input type="checkbox" name="recon" checked>
+          <span><strong>Recon testing (standard).</strong> Non-destructive checks of what any visitor can see: security headers, encryption, publicly visible software versions, exposed files, email/DNS records, and login behavior (a small number of failed sign-in attempts).</span>
+        </label>
+        <label class="choice">
+          <input type="checkbox" name="active">
+          <span><strong>Active testing (optional).</strong> Sends crafted test inputs to forms, search boxes and APIs to look for injection flaws. This may create test entries (for example contact-form submissions), trigger security alerts or appear in your logs.</span>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend><span>4</span> Testing window</legend>
+        <div class="grid2">
+          <label>Start date<input name="startDate" type="date" required></label>
+          <label>End date<input name="endDate" type="date" required></label>
+          <label>Allowed hours<input name="hours" maxlength="100" placeholder="e.g. Any time, or 6pm–6am"></label>
+          <label>Time zone<input name="timeZone" maxlength="60"></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span>5</span> Terms</legend>
+        <div id="terms" class="terms"></div>
+        <p class="service-line" id="service-line"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend><span>6</span> Sign</legend>
+        <div class="grid2">
+          <label>Type your full name<input name="signatureName" required maxlength="100" autocomplete="name"></label>
+          <label>Title<input name="signatureTitle" maxlength="100" placeholder="e.g. Owner"></label>
+        </div>
+        <div class="signature-preview" id="signature-preview" aria-hidden="true"></div>
+        <label class="choice">
+          <input type="checkbox" name="agreeTerms" required>
+          <span>I have read and agree to the terms above, and I confirm I own these websites or am authorized by the owner to approve this testing.</span>
+        </label>
+        <label class="choice">
+          <input type="checkbox" name="agreeSignature" required>
+          <span>I agree that typing my name above is my electronic signature and has the same effect as signing by hand.</span>
+        </label>
+      </fieldset>
+
+      <div class="submit-row">
+        <button type="submit" class="btn btn-primary">Sign and submit</button>
+        <p class="form-status" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+
+    <div id="state-done" class="auth-state auth-done" hidden>
+      <h2>Thank you — you're all set.</h2>
+      <p>Your signed authorization has been received. We'll be in touch to confirm the testing dates. If you need to change anything or stop testing at any time, email <a href="mailto:contact@leblancsols.com">contact@leblancsols.com</a>.</p>
+      <p class="small" id="done-time"></p>
+    </div>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p class="legal">© 2026 LeBlanc Solutions · <a href="mailto:contact@leblancsols.com">contact@leblancsols.com</a> · <a href="/">leblancsols.com</a></p>
+  </div>
+</footer>
+</body>
+</html>
