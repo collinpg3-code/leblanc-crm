@@ -5,3 +5,6 @@
 .claude-flow/data/
 .claude-flow/logs/
 .claude-flow/sessions/
+
+# Claude Code per-machine settings (may contain local approvals/secrets)
+.claude/settings.local.json

@@ -1,17 +1,8 @@
+// Dev uses the Vite proxy (/api -> localhost:3001). Production builds call the
+// Render backend directly; override with VITE_API_URL if it ever moves.
+const PROD_API_URL = 'https://leblanc-backend.onrender.com/api'
+
 export function getApiUrl() {
-  // Server-side rendering
-  if (typeof window === 'undefined') {
-    return '/api'
-  }
-
-  // Always use production backend unless explicitly on localhost
-  const hostname = window.location.hostname
-  const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.includes('localhost')
-
-  if (isLocalhost) {
-    return '/api'
-  }
-
-  // Production: use Render backend
-  return 'https://leblanc-backend.onrender.com/api'
+  if (import.meta.env.DEV) return '/api'
+  return import.meta.env.VITE_API_URL || PROD_API_URL
 }

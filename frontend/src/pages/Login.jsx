@@ -15,14 +15,10 @@ export default function Login({ onLogin }) {
     setLoading(true)
 
     try {
-      const apiBase = getApiUrl()
-      const loginUrl = `${apiBase}/auth/login`
-      console.log('Attempting login to:', loginUrl)
-      const response = await axios.post(loginUrl, { username, password })
+      const response = await axios.post(`${getApiUrl()}/auth/login`, { username, password })
       localStorage.setItem('crm-token', response.data.token)
       onLogin()
     } catch (err) {
-      console.error('Login error:', err)
       setError(err.response?.data?.error || 'Invalid credentials')
     } finally {
       setLoading(false)
