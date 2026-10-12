@@ -5,17 +5,17 @@
   background: var(--white);
   border: 1px solid var(--line);
   border-top: 3px solid var(--slate);
-  padding: 16px 18px 14px;
+  padding: 16px 18px 12px;
   cursor: pointer;
   transition: border-color .15s, box-shadow .15s;
   min-width: 0;
 }
-.lead-card:hover { border-color: var(--ink); box-shadow: 0 6px 18px rgba(21, 35, 46, .08); }
 .lead-card:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
 .lead-card.selected { border-color: var(--teal); }
+@media (hover: hover) { .lead-card:hover { border-color: var(--ink); box-shadow: 0 6px 18px rgba(21, 35, 46, .08); } }
 
-.card-header { display: flex; align-items: center; gap: 8px; }
-.stage-badge, .source-badge {
+.card-header { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.stage-badge, .source-badge, .service-badge {
   font-size: 11px;
   font-weight: 600;
   letter-spacing: .08em;
@@ -24,40 +24,26 @@
   padding: 1px 7px;
 }
 .source-badge { color: var(--teal); border-color: var(--teal); background: #E6F0EF; }
+.service-badge { margin-left: auto; color: var(--slate); border-color: var(--line); }
 
 .lead-card h3 { font-size: 21px; overflow-wrap: anywhere; }
 .card-meta { font-size: 13px; color: var(--slate); }
 
-.card-website {
-  font-size: 13px;
-  color: var(--teal);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.card-findings {
-  font-size: 13px;
+.card-summary {
+  font-size: 14px;
   color: var(--ink);
-  background: var(--panel);
-  border-left: 2px solid var(--rust);
-  border-top: 6px solid var(--panel);
-  border-bottom: 6px solid var(--panel);
-  padding: 0 10px; /* vertical padding would show part of a 4th clamped line */
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.card-info { display: grid; gap: 3px; margin-top: 2px; font-size: 13px; }
-.info-row { display: flex; justify-content: space-between; gap: 12px; min-width: 0; }
-.info-row dt { color: var(--slate); flex: none; }
-.info-row dd { text-align: right; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.info-row a { color: var(--teal); }
-.info-row .value { font-weight: 600; }
+.card-issue { display: flex; gap: 8px; align-items: baseline; font-size: 13px; color: var(--ink); }
+.card-issue span { flex: none; font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--rust); }
 
-.progress-bar { height: 3px; background: var(--canvas); margin-top: 6px; }
-.progress-fill { height: 100%; }
+.card-actions { display: flex; gap: 8px; margin-top: 6px; padding-top: 10px; border-top: 1px solid var(--line); }
+.card-actions a, .card-actions button {
+  display: grid; place-items: center; min-height: 40px; padding: 0 14px;
+  border: 1.5px solid var(--line); color: var(--ink); text-decoration: none; font: 600 13px var(--sans);
+}
+.card-actions button { margin-left: auto; border-color: var(--ink); }

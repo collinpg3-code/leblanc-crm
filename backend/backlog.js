@@ -6,6 +6,7 @@
  */
 
 const crypto = require('crypto');
+const { cleanBrief, SERVICE_VALUE } = require('./brief');
 
 const MAX_PULL = 50;
 const str = (v, max) => (v == null ? '' : String(v).trim().slice(0, max));
@@ -28,7 +29,8 @@ function cleanLead(raw) {
     stack: str(raw.stack, 400) || 'Unknown',
     findings: str(raw.findings || raw.public_flags, 1000) || null,
     angle: str(raw.outreach_angle || raw.angle, 1000) || null,
-    notes: str(raw.notes, 1000) || null
+    notes: str(raw.notes, 1000) || null,
+    brief: cleanBrief(raw.brief)
   };
 }
 
@@ -55,6 +57,7 @@ function addToBacklog(data, rawLeads) {
 
 function toEngagement(lead, now) {
   const notes = [lead.angle && `Angle: ${lead.angle}`, lead.notes].filter(Boolean).join('\n\n');
+  const service = lead.brief?.recommendedService || 'Website Redesign';
   return {
     id: `eng-${crypto.randomBytes(6).toString('hex')}`,
     name: lead.name,
@@ -65,8 +68,9 @@ function toEngagement(lead, now) {
     website: lead.website,
     findings: lead.findings,
     stage: 'prospect',
-    service: 'Security Check',
-    estimatedValue: 100,
+    service,
+    estimatedValue: SERVICE_VALUE[service] ?? 0,
+    brief: lead.brief || null,
     authorized: false,
     source: 'lead-scout',
     createdAt: now,
@@ -117,6 +121,26 @@ module.exports = function registerBacklogRoutes(app, { authenticateToken, loadDa
     }
     saveData(data);
     res.json({ imported: batch.length, remaining: data.backlog.length });
+  });
+
+  // Full export of every lead (pipeline + backlog), for backups before a reset.
+  app.get('/api/leads/export', authenticateToken, (req, res) => {
+    const { engagements, backlog } = loadData();
+    res.json({ exportedAt: new Date().toISOString(), engagements, backlog });
+  });
+
+  // Start fresh: remove all pipeline and backlog leads. Leads with a signed
+  // testing authorization are kept (legal record). Requires an exact phrase.
+  app.post('/api/leads/reset', authenticateToken, (req, res) => {
+    if (req.body.confirm !== 'DELETE ALL LEADS') return res.status(400).json({ error: 'Confirmation phrase missing.' });
+    const data = loadData();
+    const kept = data.engagements.filter(e => e.authorization?.signed);
+    const removed = { pipeline: data.engagements.length - kept.length, backlog: data.backlog.length };
+    data.engagements = kept;
+    data.backlog = [];
+    data.activity.push({ type: 'reset', title: 'Leads reset', description: `Removed ${removed.pipeline} pipeline and ${removed.backlog} backlog leads`, timestamp: new Date().toISOString(), icon: '🧹' });
+    saveData(data);
+    res.json({ removed, kept: kept.length });
   });
 
   // Lead Scout sync scripts: leads go to the backlog. Response keeps the

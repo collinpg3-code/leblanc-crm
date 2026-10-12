@@ -12,6 +12,7 @@ const crypto = require('crypto');
 const store = require('./store');
 const registerBacklogRoutes = require('./backlog');
 const registerAuthorizationRoutes = require('./authorization');
+const { registerBriefRoutes } = require('./brief');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -115,15 +116,16 @@ app.post('/api/auth/login', (req, res) => {
 app.get('/api/dashboard', authenticateToken, (req, res) => {
   const data = loadData();
 
-  // Calculate metrics
+  // Calculate metrics (archived leads don't count)
+  const active = data.engagements.filter(e => !e.archived);
   const metrics = {
-    prospects: data.engagements.filter(e => e.stage === 'prospect').length,
-    qualified: data.engagements.filter(e => e.stage === 'qualified').length,
-    authorized: data.engagements.filter(e => e.stage === 'authorized').length,
-    reports: data.engagements.filter(e => e.stage === 'report').length,
-    fixes: data.engagements.filter(e => e.stage === 'fix').length,
-    revenue: data.engagements.reduce((sum, e) => sum + (e.estimatedValue || 0), 0),
-    conversions: data.engagements.filter(e => e.stage === 'report' || e.stage === 'fix').length,
+    prospects: active.filter(e => e.stage === 'prospect').length,
+    qualified: active.filter(e => e.stage === 'qualified').length,
+    authorized: active.filter(e => e.stage === 'authorized').length,
+    reports: active.filter(e => e.stage === 'report').length,
+    fixes: active.filter(e => e.stage === 'fix').length,
+    revenue: active.reduce((sum, e) => sum + (e.estimatedValue || 0), 0),
+    conversions: active.filter(e => e.stage === 'report' || e.stage === 'fix').length,
   };
 
   res.json({
@@ -249,6 +251,9 @@ app.post('/api/stats', authenticateToken, (req, res) => {
 
 // Lead backlog: Lead Scout leads wait here until pulled into the pipeline
 registerBacklogRoutes(app, { authenticateToken, loadData, saveData });
+
+// Sales briefs (written by the Lead Scout refill job, shown in the CRM)
+registerBriefRoutes(app, { authenticateToken, loadData, saveData });
 
 // POST: Public website contact form -> new prospect. No auth, so validate
 // strictly, rate-limit per IP, and silently drop bots that fill the honeypot.

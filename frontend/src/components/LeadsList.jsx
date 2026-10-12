@@ -3,34 +3,49 @@ import axios from 'axios'
 import { getApiUrl } from '../utils/api'
 import { STAGES, STAGE_LABELS, STAGE_COLORS } from '../utils/stages'
 import LeadCard from './LeadCard'
-import AuthorizationPanel from './AuthorizationPanel'
+import LeadDetail from './LeadDetail'
 import '../styles/LeadsList.css'
+
+const authHeaders = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem('crm-token')}` } })
 
 export default function LeadsList({ leads, onRefresh }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStage, setFilterStage] = useState('all')
-  const [selectedLead, setSelectedLead] = useState(null)
+  const [selectedId, setSelectedId] = useState(null)
 
   const term = searchTerm.toLowerCase()
+  const archivedCount = leads.filter(l => l.archived).length
   const filtered = leads.filter(lead => {
     const matchesSearch = [lead.name, lead.contact, lead.website, lead.industry]
       .some(v => (v || '').toLowerCase().includes(term))
-    const matchesStage = filterStage === 'all' || lead.stage === filterStage
-    return matchesSearch && matchesStage
+    if (filterStage === 'archived') return lead.archived && matchesSearch
+    if (lead.archived) return false
+    return matchesSearch && (filterStage === 'all' || lead.stage === filterStage)
   })
+  // Keep the open lead in sync with the latest data after saves/refreshes.
+  const selected = leads.find(l => l.id === selectedId) || null
 
   const updateLead = async (leadId, updates) => {
     try {
-      const token = localStorage.getItem('crm-token')
-      await axios.put(`${getApiUrl()}/engagements/${leadId}`, updates, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      await axios.put(`${getApiUrl()}/engagements/${leadId}`, updates, authHeaders())
       onRefresh()
-      setSelectedLead(null)
+      if ('archived' in updates) setSelectedId(null)
     } catch (err) {
       console.error('Failed to update lead:', err)
     }
   }
+
+  const deleteLead = async (leadId) => {
+    try {
+      await axios.delete(`${getApiUrl()}/engagements/${leadId}`, authHeaders())
+      setSelectedId(null)
+      onRefresh()
+    } catch (err) {
+      console.error('Failed to delete lead:', err)
+    }
+  }
+
+  const filters = [['all', 'All'], ...STAGES.map(s => [s, STAGE_LABELS[s]]), ['archived', `Archived${archivedCount ? ` (${archivedCount})` : ''}`]]
 
   return (
     <div className="leads-list-container">
@@ -44,15 +59,11 @@ export default function LeadsList({ leads, onRefresh }) {
           aria-label="Search leads"
         />
 
-        <div className="filter-buttons" role="group" aria-label="Filter by stage">
-          {['all', ...STAGES].map(stage => (
-            <button
-              key={stage}
-              className={`filter-btn ${filterStage === stage ? 'active' : ''}`}
-              onClick={() => setFilterStage(stage)}
-            >
-              {stage !== 'all' && <span className="dot" style={{ background: STAGE_COLORS[stage] }} />}
-              {stage === 'all' ? 'All' : STAGE_LABELS[stage]}
+        <div className="filter-buttons" role="group" aria-label="Filter leads">
+          {filters.map(([id, label]) => (
+            <button key={id} className={`filter-btn ${filterStage === id ? 'active' : ''}`} onClick={() => setFilterStage(id)}>
+              {STAGE_COLORS[id] && <span className="dot" style={{ background: STAGE_COLORS[id] }} />}
+              {label}
             </button>
           ))}
         </div>
@@ -63,7 +74,7 @@ export default function LeadsList({ leads, onRefresh }) {
       <div className="leads-grid">
         {filtered.length === 0 ? (
           <div className="no-leads">
-            <h3>No leads here yet</h3>
+            <h3>{filterStage === 'archived' ? 'Nothing archived' : 'No leads here yet'}</h3>
             <p>Use <strong>Import Leads</strong> to pull leads from your backlog, or wait for website enquiries.</p>
           </div>
         ) : (
@@ -72,96 +83,16 @@ export default function LeadsList({ leads, onRefresh }) {
               key={lead.id}
               lead={lead}
               stageColors={STAGE_COLORS}
-              onSelect={() => setSelectedLead(lead)}
-              isSelected={selectedLead?.id === lead.id}
+              onSelect={() => setSelectedId(lead.id)}
+              isSelected={selectedId === lead.id}
             />
           ))
         )}
       </div>
 
-      {selectedLead && (
-        <LeadDetail lead={selectedLead} onClose={() => setSelectedLead(null)} onUpdate={updateLead} />
+      {selected && (
+        <LeadDetail key={selected.id} lead={selected} onClose={() => setSelectedId(null)} onUpdate={updateLead} onDelete={deleteLead} />
       )}
-    </div>
-  )
-}
-
-function LeadDetail({ lead, onClose, onUpdate }) {
-  const [notes, setNotes] = useState(lead.notes || '')
-  const [stage, setStage] = useState(lead.stage)
-  const [callStatus, setCallStatus] = useState(lead.callStatus || 'not_called')
-
-  const handleSave = () => {
-    onUpdate(lead.id, { notes, stage, callStatus, updatedAt: new Date().toISOString() })
-  }
-
-  const facts = [
-    ['Contact', lead.contact],
-    ['Phone', lead.phone && <a href={`tel:${lead.phone.replace(/[^\d+]/g, '')}`}>{lead.phone}</a>],
-    ['Website', lead.website && <a href={`https://${lead.website}`} target="_blank" rel="noopener noreferrer">{lead.website}</a>],
-    ['Stack', lead.stack],
-    ['Service', lead.service],
-    ['Value', `$${lead.estimatedValue}`]
-  ].filter(([, v]) => v && v !== 'Unknown')
-
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" role="dialog" aria-label={lead.name} onClick={(e) => e.stopPropagation()}>
-        <button className="close-btn" onClick={onClose} aria-label="Close">✕</button>
-
-        <p className="eyebrow" style={{ color: STAGE_COLORS[lead.stage] }}>{STAGE_LABELS[lead.stage]}</p>
-        <h2>{lead.name}</h2>
-        <p className="lead-meta">
-          {[lead.industry, lead.location].filter(v => v && v !== 'Unknown').join(' · ')}
-          {lead.source === 'website' && <span className="source-tag">Website enquiry</span>}
-        </p>
-
-        <dl className="detail-grid">
-          {facts.map(([label, value]) => (
-            <div className="detail-field" key={label}>
-              <dt>{label}</dt>
-              <dd>{value}</dd>
-            </div>
-          ))}
-        </dl>
-
-        <AuthorizationPanel lead={lead} />
-
-        {lead.findings && (
-          <div className="detail-findings">
-            <dt>Public signals</dt>
-            <dd>{lead.findings}</dd>
-          </div>
-        )}
-
-        <div className="detail-form">
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="lead-stage">Stage</label>
-              <select id="lead-stage" value={stage} onChange={(e) => setStage(e.target.value)}>
-                {STAGES.map(s => <option key={s} value={s}>{STAGE_LABELS[s]}</option>)}
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="lead-call">Call status</label>
-              <select id="lead-call" value={callStatus} onChange={(e) => setCallStatus(e.target.value)}>
-                <option value="not_called">Not called</option>
-                <option value="called">Called</option>
-                <option value="interested">Interested</option>
-                <option value="follow_up">Follow up</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="lead-notes">Notes</label>
-            <textarea id="lead-notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Add call notes…" rows={5} />
-          </div>
-
-          <button onClick={handleSave} className="save-btn btn-primary">Save changes</button>
-        </div>
-      </div>
     </div>
   )
 }

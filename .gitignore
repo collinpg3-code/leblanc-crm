@@ -11,3 +11,6 @@
 
 # Local CRM data (production uses Postgres)
 backend/data.json
+
+# Lead backups (business contact details, keep local)
+clients/archive/
