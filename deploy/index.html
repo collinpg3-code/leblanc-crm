@@ -236,9 +236,23 @@
     <div class="wrap">
       <p class="eyebrow">Get in touch</p>
       <h2>Find out what's exposed — before someone else does.</h2>
-      <p>Email your website address and confirm you own it. We'll reply with next steps and payment
+      <p>Tell us about your website and confirm you own it. We'll reply with next steps and payment
         details, and point you to the right service.</p>
-      <a class="btn btn-primary" href="mailto:contact@leblancsols.com">contact@leblancsols.com</a>
+      <form class="contact-form" id="contact-form" novalidate>
+        <div class="row">
+          <label>Your name<input name="name" required maxlength="100" autocomplete="name"></label>
+          <label>Email<input name="email" type="email" required maxlength="200" autocomplete="email"></label>
+        </div>
+        <div class="row">
+          <label>Business name<input name="business" maxlength="150" autocomplete="organization"></label>
+          <label>Website<input name="website" maxlength="300" placeholder="yourbusiness.com" autocomplete="url"></label>
+        </div>
+        <label>Anything we should know?<textarea name="message" rows="4" maxlength="2000"></textarea></label>
+        <label class="hp" aria-hidden="true">Leave blank<input name="company_site" tabindex="-1" autocomplete="off"></label>
+        <button class="btn btn-primary" type="submit">Request a security check</button>
+        <p class="form-status" role="status" aria-live="polite"></p>
+      </form>
+      <p class="alt">Prefer email? <a href="mailto:contact@leblancsols.com">contact@leblancsols.com</a></p>
     </div>
   </section>
 
@@ -274,9 +288,36 @@
       </div>
     </div>
     <p class="legal">© 2026 LeBlanc Solutions. All rights reserved. We test only websites you own or are
-      authorised to test. Showcase examples are fictional demonstrations built by LeBlanc Solutions.</p>
+      authorised to test. Showcase examples are fictional demonstrations built by LeBlanc Solutions.
+      <a class="team" href="https://leblanc-crm.netlify.app/login" rel="nofollow noopener" target="_blank">Team</a></p>
   </div>
 </footer>
+
+<script>
+  (function(){
+    var f=document.getElementById('contact-form');
+    if(!f) return;
+    var status=f.querySelector('.form-status'),btn=f.querySelector('button');
+    f.addEventListener('submit',function(e){
+      e.preventDefault();
+      var d={};new FormData(f).forEach(function(v,k){d[k]=v;});
+      if(!d.name.trim()||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email.trim())){
+        status.textContent='Please enter your name and a valid email.';status.className='form-status err';return;
+      }
+      btn.disabled=true;status.className='form-status';status.textContent='Sending… (this can take up to a minute)';
+      fetch('https://leblanc-backend.onrender.com/api/public/contact',{
+        method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)
+      }).then(function(r){return r.json().catch(function(){return {};}).then(function(j){
+        if(!r.ok) throw new Error(j.error||'Something went wrong.');
+        f.reset();status.className='form-status ok';
+        status.textContent="Thanks — we've got it and will reply within one business day.";
+      });}).catch(function(err){
+        status.className='form-status err';
+        status.textContent=(err.message||'Something went wrong.')+' You can also email contact@leblancsols.com.';
+      }).then(function(){btn.disabled=false;});
+    });
+  })();
+</script>
 
 <script>
   var mb=document.querySelector('.menu-btn'),mn=document.getElementById('menu');

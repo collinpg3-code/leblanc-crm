@@ -294,7 +294,7 @@ app.post('/api/leads/sync', authenticateToken, (req, res) => {
 
 // POST: Public website contact form -> new prospect. No auth, so validate
 // strictly, rate-limit per IP, and silently drop bots that fill the honeypot.
-const WEBSITE_ORIGIN = /^https:\/\/([a-z0-9-]+\.)*(leblancsols\.com|squarespace\.com)$/i;
+const WEBSITE_ORIGIN = /^https:\/\/(www\.)?(leblancsols\.com|calm-selkie-f8758a\.netlify\.app)$/i;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const recentSubmissions = new Map(); // ip -> timestamps in the last hour
 
