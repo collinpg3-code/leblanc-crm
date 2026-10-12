@@ -11,6 +11,7 @@ const crypto = require('crypto');
 
 const TERMS_VERSION = '2026-10-12';
 const LINK_DAYS = 30;
+const STANDARD_HOURS = 'Standard hours: after business hours (weekdays 6 pm to 7 am, and weekends)';
 const SITE_URL = 'https://leblancsols.com/authorize/';
 const STAGE_ORDER = ['prospect', 'qualified', 'authorized', 'scan', 'report', 'fix'];
 
@@ -97,14 +98,12 @@ function validateSubmission(body) {
     role: str(b.role, 100),
     email: str(b.email, 200),
     phone: str(b.phone, 40),
-    emergencyName: str(b.emergencyName, 100),
-    emergencyPhone: str(b.emergencyPhone, 40),
     websites: websites.slice(0, 10),
     recon: b.recon === true,
     active: b.active === true,
     startDate: str(b.startDate, 10),
     endDate: str(b.endDate, 10),
-    hours: str(b.hours, 100),
+    hours: b.standardHours === true ? STANDARD_HOURS : (str(b.hours, 100) || 'Any time'),
     timeZone: str(b.timeZone, 60),
     signatureName: str(b.signatureName, 100),
     signatureTitle: str(b.signatureTitle, 100),
@@ -121,6 +120,7 @@ function validateSubmission(body) {
   if (!v.recon && !v.active) errors.push('Choose at least one type of testing.');
   if (!DATE.test(v.startDate) || !DATE.test(v.endDate)) errors.push('Start and end dates are required.');
   else if (v.endDate < v.startDate) errors.push('End date must be on or after the start date.');
+  if (!v.timeZone) errors.push('Choose your time zone.');
   if (!v.signatureName) errors.push('Type your full name to sign.');
   if (!v.agreeTerms || !v.agreeSignature) errors.push('Please tick both agreement boxes.');
   return { values: v, errors };

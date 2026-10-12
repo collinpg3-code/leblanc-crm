@@ -16,7 +16,7 @@
     row.className = 'site-row';
     row.innerHTML =
       '<label>Website<input name="domain" maxlength="253" placeholder="example.com" inputmode="url" autocapitalize="none"></label>' +
-      '<label>Notes <span class="opt">(optional)</span><input name="notes" maxlength="300" placeholder="e.g. skip the staging site"></label>' +
+      '<label><span>Notes <span class="opt">(optional)</span></span><input name="notes" maxlength="300" placeholder="e.g. skip the staging site"></label>' +
       '<button type="button" class="remove" aria-label="Remove this website">✕</button>';
     row.querySelector('[name=domain]').value = domain || '';
     row.querySelector('[name=notes]').value = notes || '';
@@ -50,6 +50,25 @@
     });
   }
 
+  // Pre-select the visitor's zone; US zones that share rules map to the main option.
+  var ZONE_ALIASES = {
+    'America/Detroit': 'America/New_York', 'America/Indiana/Indianapolis': 'America/New_York', 'America/Kentucky/Louisville': 'America/New_York', 'America/Toronto': 'America/New_York',
+    'America/Menominee': 'America/Chicago', 'America/Indiana/Knox': 'America/Chicago', 'America/Winnipeg': 'America/Chicago',
+    'America/Boise': 'America/Denver', 'America/Edmonton': 'America/Denver', 'America/Vancouver': 'America/Los_Angeles'
+  };
+  function selectTimeZone(zone) {
+    var select = form.elements.timeZone;
+    zone = ZONE_ALIASES[zone] || zone;
+    if (!Array.prototype.some.call(select.options, function (o) { return o.value === zone; })) zone = 'America/New_York';
+    select.value = zone;
+  }
+
+  function toggleHours() {
+    var standard = form.elements.standardHours.checked;
+    $('hours-field').hidden = standard;
+    if (standard) form.elements.hours.value = '';
+  }
+
   function load() {
     if (!token) return show('state-error', 'This page needs the private link LeBlanc Solutions sent you. Please use that link, or email contact@leblancsols.com.');
     fetch(API + encodeURIComponent(token))
@@ -61,7 +80,7 @@
           if (form.elements[k] && typeof d.prefill[k] === 'string') form.elements[k].value = d.prefill[k];
         });
         (d.prefill.websites.length ? d.prefill.websites : [{}]).forEach(function (w) { siteRow(w.domain, w.notes); });
-        form.elements.timeZone.value = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+        selectTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone || '');
         form.elements.startDate.min = new Date().toISOString().slice(0, 10);
         renderTerms(d.terms);
         $('service-line').textContent = 'Service: ' + d.service + (d.fee ? ' · Fee: $' + d.fee : '');
@@ -77,12 +96,12 @@
     return {
       business: e.business.value, contactName: e.contactName.value, role: e.role.value,
       email: e.email.value, phone: e.phone.value,
-      emergencyName: e.emergencyName.value, emergencyPhone: e.emergencyPhone.value,
       websites: Array.prototype.map.call($('websites').children, function (row) {
         return { domain: row.querySelector('[name=domain]').value, notes: row.querySelector('[name=notes]').value };
       }),
       recon: e.recon.checked, active: e.active.checked,
-      startDate: e.startDate.value, endDate: e.endDate.value, hours: e.hours.value, timeZone: e.timeZone.value,
+      startDate: e.startDate.value, endDate: e.endDate.value,
+      standardHours: e.standardHours.checked, hours: e.hours.value, timeZone: e.timeZone.value,
       signatureName: e.signatureName.value, signatureTitle: e.signatureTitle.value,
       agreeTerms: e.agreeTerms.checked, agreeSignature: e.agreeSignature.checked
     };
@@ -92,6 +111,7 @@
     $('signature-preview').textContent = form.elements.signatureName.value;
   });
   $('add-site').addEventListener('click', function () { siteRow(); });
+  form.elements.standardHours.addEventListener('change', toggleHours);
 
   form.addEventListener('submit', function (ev) {
     ev.preventDefault();

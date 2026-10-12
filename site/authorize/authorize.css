@@ -1,4 +1,5 @@
 /* Testing authorization page (uses tokens from /styles.css) */
+[hidden] { display: none !important; }
 .auth-page { background: var(--canvas); padding: 48px 0 72px; }
 .auth-wrap { max-width: 760px; }
 .auth-page h1 { font-size: clamp(30px, 5vw, 44px); margin: 10px 0 12px; }
@@ -12,7 +13,9 @@
 .auth-done a { color: var(--teal); text-decoration: underline; }
 
 #auth-form fieldset { border: 1px solid var(--line); background: var(--white); padding: 22px 24px 18px; margin: 0 0 16px; }
-#auth-form legend { font-family: var(--serif); font-size: 22px; padding: 0 8px; margin-left: -8px; color: var(--ink); }
+/* Floating the legend keeps the section title inside the card instead of cutting the border */
+#auth-form legend { float: left; width: 100%; padding: 0 0 12px; margin: 0 0 16px; border-bottom: 1px solid var(--line); font-family: var(--serif); font-size: 22px; color: var(--ink); }
+#auth-form legend + * { clear: both; }
 #auth-form legend span { display: inline-grid; place-items: center; width: 26px; height: 26px; margin-right: 6px; background: var(--ink); color: #fff; font: 600 13px var(--sans); vertical-align: 3px; }
 
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -22,7 +25,22 @@
   font: 400 16px var(--sans); color: var(--ink); background: var(--white);
   border: 1.5px solid var(--line); border-radius: 0; padding: 11px 12px; width: 100%; box-sizing: border-box;
 }
-#auth-form input:focus { outline: none; border-color: var(--teal); }
+#auth-form select {
+  font: 400 16px var(--sans); color: var(--ink); background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2315232E' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 14px center;
+  border: 1.5px solid var(--line); border-radius: 0; padding: 11px 38px 11px 12px; width: 100%; box-sizing: border-box; appearance: none; -webkit-appearance: none;
+}
+#auth-form input:focus, #auth-form select:focus { outline: none; border-color: var(--teal); }
+
+/* On/off switch */
+#auth-form .switch { display: grid; grid-template-columns: 48px 1fr; gap: 12px; align-items: center; margin: 18px 0; font-weight: 400; font-size: 15px; line-height: 1.45; cursor: pointer; }
+#auth-form .switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+#auth-form .switch .track { position: relative; width: 48px; height: 28px; border-radius: 14px; background: var(--line); transition: background .15s; }
+#auth-form .switch .track::after { content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(21,35,46,.3); transition: transform .15s; }
+#auth-form .switch input:checked + .track { background: var(--teal); }
+#auth-form .switch input:checked + .track::after { transform: translateX(20px); }
+#auth-form .switch input:focus-visible + .track { outline: 2px solid var(--teal); outline-offset: 2px; }
+#auth-form .switch-text { color: var(--slate); }
+#auth-form .switch-text strong { color: var(--ink); }
 .opt { font-weight: 400; color: var(--slate); }
 .hint { font-size: 14px; color: var(--slate); margin: 14px 0 10px; }
 .hint.small, .small { font-size: 13px; }

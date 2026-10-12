@@ -48,11 +48,6 @@
           <label>Email<input name="email" type="email" required maxlength="200" autocomplete="email"></label>
           <label>Phone<input name="phone" type="tel" maxlength="40" autocomplete="tel"></label>
         </div>
-        <p class="hint">Emergency contact during testing (if different from you)</p>
-        <div class="grid2">
-          <label>Name<input name="emergencyName" maxlength="100"></label>
-          <label>Phone<input name="emergencyPhone" type="tel" maxlength="40"></label>
-        </div>
       </fieldset>
 
       <fieldset>
@@ -80,8 +75,34 @@
         <div class="grid2">
           <label>Start date<input name="startDate" type="date" required></label>
           <label>End date<input name="endDate" type="date" required></label>
-          <label>Allowed hours<input name="hours" maxlength="100" placeholder="e.g. Any time, or 6pm–6am"></label>
-          <label>Time zone<input name="timeZone" maxlength="60"></label>
+        </div>
+        <label class="switch">
+          <input type="checkbox" name="standardHours" checked>
+          <span class="track" aria-hidden="true"></span>
+          <span class="switch-text"><strong>Test during our standard hours</strong><br>After business hours: weekdays 6 pm to 7 am, and weekends.</span>
+        </label>
+        <div class="grid2">
+          <label id="hours-field" hidden>Allowed hours<input name="hours" maxlength="100" placeholder="e.g. Any time, or 9 pm to 5 am"></label>
+          <label>Your time zone
+            <select name="timeZone" required>
+              <optgroup label="Most common">
+                <option value="America/New_York">Eastern (ET)</option>
+                <option value="America/Chicago">Central (CT)</option>
+                <option value="America/Denver">Mountain (MT)</option>
+                <option value="America/Phoenix">Arizona (MST, no DST)</option>
+                <option value="America/Los_Angeles">Pacific (PT)</option>
+              </optgroup>
+              <optgroup label="Other">
+                <option value="America/Anchorage">Alaska (AKT)</option>
+                <option value="Pacific/Honolulu">Hawaii (HT)</option>
+                <option value="America/Puerto_Rico">Atlantic (AT)</option>
+                <option value="America/Halifax">Atlantic Canada</option>
+                <option value="Europe/London">UK (GMT/BST)</option>
+                <option value="Europe/Paris">Central Europe (CET)</option>
+                <option value="Australia/Sydney">Australia Eastern</option>
+              </optgroup>
+            </select>
+          </label>
         </div>
       </fieldset>
 

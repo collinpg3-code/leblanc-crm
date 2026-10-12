@@ -108,7 +108,6 @@ function SignedCopy({ lead, signed, onClose }) {
   const rows = [
     ['Business', signed.business], ['Contact', `${signed.contactName}${signed.role ? `, ${signed.role}` : ''}`],
     ['Email', signed.email], ['Phone', signed.phone],
-    ['Emergency contact', [signed.emergencyName, signed.emergencyPhone].filter(Boolean).join(' · ')],
     ['Testing approved', signed.active ? 'Recon testing and active testing' : 'Recon testing only'],
     ['Testing window', `${signed.startDate} to ${signed.endDate}${signed.hours ? ` · ${signed.hours}` : ''}${signed.timeZone ? ` (${signed.timeZone})` : ''}`],
     ['Service and fee', `${signed.service}${signed.fee ? ` · $${signed.fee}` : ''}`]
