@@ -1,8 +1,17 @@
 export function getApiUrl() {
-  if (typeof window === 'undefined') return '/api'
+  // Server-side rendering
+  if (typeof window === 'undefined') {
+    return '/api'
+  }
 
+  // Always use production backend unless explicitly on localhost
   const hostname = window.location.hostname
-  const isProduction = hostname !== 'localhost' && hostname !== '127.0.0.1'
+  const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.includes('localhost')
 
-  return isProduction ? 'https://leblanc-backend.onrender.com/api' : '/api'
+  if (isLocalhost) {
+    return '/api'
+  }
+
+  // Production: use Render backend
+  return 'https://leblanc-backend.onrender.com/api'
 }
