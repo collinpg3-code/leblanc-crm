@@ -19,7 +19,11 @@ export default function Login({ onLogin }) {
       localStorage.setItem('crm-token', response.data.token)
       onLogin()
     } catch (err) {
-      setError(err.response?.data?.error || 'Invalid credentials')
+      if (!err.response) {
+        setError(`Can't reach the server (${err.message}). Try again in a minute.`)
+      } else {
+        setError(err.response.data?.error || `Login failed (HTTP ${err.response.status})`)
+      }
     } finally {
       setLoading(false)
     }
