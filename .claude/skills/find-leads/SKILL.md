@@ -14,6 +14,11 @@ Collin could call them tomorrow, point at something real on their website, and t
 - Never invent a business, person, number, email, review count or finding. Unverified = leave it out.
 - People: only names/contact details the business publishes (its site, Google Business Profile, Michigan LARA filings, chamber/trade directory listings). No people-search/data-broker sites, no personal cell numbers or home addresses, no guessed email patterns.
 
+## What "amazing" looks like (Collin's gold-standard leads)
+- **Hankwitz Heating & Cooling, Ludington:** family HVAC business since 1975, owners named (David and Kelly Hankwitz), Readers' Choice winner, and **no real website** (their domain forwards to a directory page advertising competitors). A competitor in town has online service requests.
+- **Corble Builders, Petoskey:** custom builder since 2002, Builder of the Year badge, and a site with **visibly broken things** (dead email link, broken Facebook feed, menu items going nowhere). The owner publishes his own email.
+Pattern: established and proud (years, awards, reviews) + an obvious, embarrassing website problem you can point at + a named owner you can reach. Find more like these.
+
 ## 1. Who we want (ideal lead)
 - **Location:** Michigan, northern Michigan first (Traverse City, Petoskey, Charlevoix, Harbor Springs, Gaylord, Cadillac, Alpena, Manistee, Ludington), then Grand Rapids/Lansing suburbs.
 - **High-value niches first:** dental & orthodontics, med spas/aesthetics/dermatology, personal-injury/family/estate law, roofing, HVAC, plumbing, remodelers/builders, landscaping/hardscape, custom home builders, wedding venues, boutique hotels/resorts. Then chiro/PT, vets, CPAs, insurance agencies, real estate teams, auto body/detailing, salons/spas, restaurants.
