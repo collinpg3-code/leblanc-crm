@@ -73,7 +73,10 @@ export default function AuthorizationPanel({ lead, onChange }) {
             Signed by <strong>{auth.signed.signatureName}</strong>{auth.signed.signatureTitle ? `, ${auth.signed.signatureTitle}` : ''} on {fmt(auth.signed.signedAt)}
           </p>
           <p className="auth-muted">
-            {auth.signed.websites.map(w => w.domain).join(', ')} · {auth.signed.active ? 'Recon + active testing' : 'Recon only'} · {auth.signed.startDate} to {auth.signed.endDate}
+            {auth.signed.projectLabel || 'Website project'}
+            {auth.signed.websites?.length ? ` · ${auth.signed.websites.map(w => w.domain).join(', ')}` : ''}
+            {auth.signed.domain ? ` · ${auth.signed.domain}` : ''}
+            {auth.signed.startDate ? ` · ${auth.signed.startDate} to ${auth.signed.endDate}` : ''}
           </p>
           <button className="btn-primary" onClick={() => setShowCopy(true)}>View signed copy</button>
         </>
@@ -105,13 +108,18 @@ export default function AuthorizationPanel({ lead, onChange }) {
 }
 
 function SignedCopy({ lead, signed, onClose }) {
+  const isNew = signed.projectType === 'new'
+  const domainText = { have: signed.domain || 'Has a domain', need: 'Needs a domain (we help pick one)', unsure: 'Not sure yet' }[signed.domainPlan]
   const rows = [
+    ['Project', signed.projectLabel || 'Website project'],
     ['Business', signed.business], ['Contact', `${signed.contactName}${signed.role ? `, ${signed.role}` : ''}`],
     ['Email', signed.email], ['Phone', signed.phone],
-    ['Testing approved', signed.active ? 'Recon testing and active testing' : 'Recon testing only'],
-    ['Testing window', `${signed.startDate} to ${signed.endDate}${signed.hours ? ` · ${signed.hours}` : ''}${signed.timeZone ? ` (${signed.timeZone})` : ''}`],
-    ['Service and fee', `${signed.service}${signed.fee ? ` · $${signed.fee}` : ''}`]
-  ].filter(([, v]) => v)
+    isNew ? ['Domain name', domainText] : null,
+    isNew ? ['Testing approved', 'The new website we build, before launch and after major updates'] : ['Testing approved', signed.active ? 'Standard check and deeper testing' : 'Standard check'],
+    !isNew && (signed.startDate ? ['Testing window', `${signed.startDate} to ${signed.endDate}${signed.hours ? ` · ${signed.hours}` : ''}${signed.timeZone ? ` (${signed.timeZone})` : ''}`] : ['Testing window', `During the project${signed.hours ? ` · ${signed.hours}` : ''}`]),
+    ['Service and fee', `${signed.service}${signed.fee ? ` · $${signed.fee}` : ''}`],
+    signed.goals ? ['Their goals', signed.goals] : null
+  ].filter(r => r && r[1])
 
   return (
     <div className="signed-overlay" onClick={onClose}>
@@ -128,8 +136,12 @@ function SignedCopy({ lead, signed, onClose }) {
           {rows.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
         </dl>
 
-        <h4>Websites in scope</h4>
-        <ul>{signed.websites.map(w => <li key={w.domain}><strong>{w.domain}</strong>{w.notes ? ` (${w.notes})` : ''}</li>)}</ul>
+        {signed.websites?.length > 0 && (
+          <>
+            <h4>Websites in scope</h4>
+            <ul>{signed.websites.map(w => <li key={w.domain}><strong>{w.domain}</strong>{w.notes ? ` (${w.notes})` : ''}</li>)}</ul>
+          </>
+        )}
 
         {signed.terms.map(s => (
           <section key={s.heading}>

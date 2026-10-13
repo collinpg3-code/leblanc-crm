@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Project &amp; Testing Authorization — LeBlanc Solutions</title>
+<title>Project Authorization — LeBlanc Solutions</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,50 +31,82 @@
 
 <main id="main" class="auth-page">
   <div class="wrap auth-wrap">
-    <p class="eyebrow">Before we start</p>
-    <h1>Website Project &amp; Testing Authorization</h1>
-    <p class="lede">Every project starts with a security check of your current website, and your new site is tested before launch. This form gives us written permission to do that. It takes about three minutes.</p>
+    <p class="eyebrow">Let's get started</p>
+    <h1>Your project with LeBlanc</h1>
+    <p class="lede" id="lede">A quick form so we can get going. It takes about three minutes.</p>
 
     <div id="state-loading" class="auth-state">Loading your form…</div>
     <div id="state-error" class="auth-state auth-error" hidden></div>
 
     <form id="auth-form" novalidate hidden>
       <fieldset>
-        <legend><span>1</span> Your details</legend>
+        <legend><span>1</span> What are we working on?</legend>
+        <div class="choices" role="radiogroup" aria-label="Project type">
+          <label class="choice-card">
+            <input type="radio" name="projectType" value="new">
+            <span><strong>A new website</strong><small>We don't have a website yet.</small></span>
+          </label>
+          <label class="choice-card">
+            <input type="radio" name="projectType" value="redesign">
+            <span><strong>Redesign my website</strong><small>We have a site and want a better one.</small></span>
+          </label>
+          <label class="choice-card">
+            <input type="radio" name="projectType" value="security">
+            <span><strong>Security check or fixes</strong><small>Keep our site, make sure it's safe.</small></span>
+          </label>
+        </div>
+        <p class="service-line" id="service-line"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend><span>2</span> About you</legend>
         <div class="grid2">
           <label class="full">Business name<input name="business" required maxlength="150" autocomplete="organization"></label>
           <label>Your name<input name="contactName" required maxlength="100" autocomplete="name"></label>
-          <label>Your role<input name="role" maxlength="100" placeholder="e.g. Owner" autocomplete="organization-title"></label>
+          <label><span>Your role <span class="opt">(optional)</span></span><input name="role" maxlength="100" placeholder="e.g. Owner" autocomplete="organization-title"></label>
           <label>Email<input name="email" type="email" required maxlength="200" autocomplete="email"></label>
-          <label>Phone<input name="phone" type="tel" maxlength="40" autocomplete="tel"></label>
+          <label><span>Phone <span class="opt">(optional)</span></span><input name="phone" type="tel" maxlength="40" autocomplete="tel"></label>
+        </div>
+        <label class="goals"><span>What do you want from your website? <span class="opt">(optional)</span></span>
+          <textarea name="goals" rows="3" maxlength="1000" placeholder="e.g. More calls, online booking, look more professional"></textarea>
+        </label>
+      </fieldset>
+
+      <!-- New website: domain name -->
+      <fieldset data-show="new">
+        <legend><span>3</span> Your domain name</legend>
+        <p class="hint">Your domain is your web address, like yourbusiness.com.</p>
+        <div class="choices compact" role="radiogroup" aria-label="Domain name">
+          <label class="choice-card"><input type="radio" name="domainPlan" value="have"><span><strong>I have one</strong></span></label>
+          <label class="choice-card"><input type="radio" name="domainPlan" value="need"><span><strong>Not yet</strong><small>We'll help you pick one.</small></span></label>
+          <label class="choice-card"><input type="radio" name="domainPlan" value="unsure"><span><strong>Not sure</strong><small>We'll figure it out together.</small></span></label>
+        </div>
+        <label id="domain-field" hidden>Your domain<input name="domain" maxlength="253" placeholder="yourbusiness.com" inputmode="url" autocapitalize="none"></label>
+        <p class="note">Nothing gets tested today. We test your new website before it goes live.</p>
+      </fieldset>
+
+      <!-- Existing site: websites + testing -->
+      <fieldset data-show="redesign security">
+        <legend><span>3</span> Your current website</legend>
+        <p class="hint">Only the sites you list here (and any new site we build you) will be tested.</p>
+        <div id="websites"></div>
+        <button type="button" class="btn btn-ghost btn-sm" id="add-site">+ Add another website</button>
+
+        <div class="testing">
+          <p class="included"><strong>Included: a safe, standard check.</strong> We look at what any visitor can see: security settings, encryption, outdated software and login protection. It won't affect your customers.</p>
+          <label class="choice" data-show="security">
+            <input type="checkbox" name="active">
+            <span><strong>Also run deeper testing (optional).</strong> We send test inputs to forms and search boxes to look for hidden flaws. This may create test entries, like a contact-form message.</span>
+          </label>
         </div>
       </fieldset>
 
-      <fieldset>
-        <legend><span>2</span> Websites we may test</legend>
-        <p class="hint">List your current website(s). Only these, plus the new site we build for you, will be tested.</p>
-        <div id="websites"></div>
-        <button type="button" class="btn btn-ghost btn-sm" id="add-site">+ Add another website</button>
-        <p class="hint small">Not in scope unless listed: other domains or subdomains, your hosting provider's systems, payment processors, email systems and other third-party services.</p>
-      </fieldset>
-
-      <fieldset>
-        <legend><span>3</span> Type of testing</legend>
-        <label class="choice">
-          <input type="checkbox" name="recon" checked>
-          <span><strong>Recon testing (standard, part of every project).</strong> Non-destructive checks of what any visitor can see: security headers, encryption, publicly visible software versions, exposed files, email/DNS records, and login behavior (a small number of failed sign-in attempts).</span>
-        </label>
-        <label class="choice">
-          <input type="checkbox" name="active">
-          <span><strong>Active testing (optional).</strong> Sends crafted test inputs to forms, search boxes and APIs to look for injection flaws. This may create test entries (for example contact-form submissions), trigger security alerts or appear in your logs.</span>
-        </label>
-      </fieldset>
-
-      <fieldset>
-        <legend><span>4</span> Testing window</legend>
+      <fieldset data-show="redesign security">
+        <legend><span>4</span> When we can test</legend>
+        <p class="hint" data-show="redesign">Optional. Leave the dates blank and we'll test during the project.</p>
         <div class="grid2">
-          <label>Start date<input name="startDate" type="date" required></label>
-          <label>End date<input name="endDate" type="date" required></label>
+          <label>Start date<input name="startDate" type="date"></label>
+          <label>End date<input name="endDate" type="date"></label>
         </div>
         <label class="switch">
           <input type="checkbox" name="standardHours" checked>
@@ -84,7 +116,7 @@
         <div class="grid2">
           <label id="hours-field" hidden>Allowed hours<input name="hours" maxlength="100" placeholder="e.g. Any time, or 9 pm to 5 am"></label>
           <label>Your time zone
-            <select name="timeZone" required>
+            <select name="timeZone">
               <optgroup label="Most common">
                 <option value="America/New_York">Eastern (ET)</option>
                 <option value="America/Chicago">Central (CT)</option>
@@ -97,9 +129,6 @@
                 <option value="Pacific/Honolulu">Hawaii (HT)</option>
                 <option value="America/Puerto_Rico">Atlantic (AT)</option>
                 <option value="America/Halifax">Atlantic Canada</option>
-                <option value="Europe/London">UK (GMT/BST)</option>
-                <option value="Europe/Paris">Central Europe (CET)</option>
-                <option value="Australia/Sydney">Australia Eastern</option>
               </optgroup>
             </select>
           </label>
@@ -107,37 +136,37 @@
       </fieldset>
 
       <fieldset>
-        <legend><span>5</span> Terms</legend>
+        <legend><span class="num-terms">5</span> The fine print</legend>
+        <p class="hint">Plain English, and short. Please give it a read.</p>
         <div id="terms" class="terms"></div>
-        <p class="service-line" id="service-line"></p>
       </fieldset>
 
       <fieldset>
-        <legend><span>6</span> Sign</legend>
+        <legend><span class="num-sign">6</span> Sign</legend>
         <div class="grid2">
           <label>Type your full name<input name="signatureName" required maxlength="100" autocomplete="name"></label>
-          <label>Title<input name="signatureTitle" maxlength="100" placeholder="e.g. Owner"></label>
+          <label><span>Title <span class="opt">(optional)</span></span><input name="signatureTitle" maxlength="100" placeholder="e.g. Owner"></label>
         </div>
         <div class="signature-preview" id="signature-preview" aria-hidden="true"></div>
         <label class="choice">
           <input type="checkbox" name="agreeTerms" required>
-          <span>I have read and agree to the terms above, and I confirm I own these websites or am authorized by the owner to approve this testing.</span>
+          <span id="agree-text">I've read the fine print and I'm authorized to approve this for the business.</span>
         </label>
         <label class="choice">
           <input type="checkbox" name="agreeSignature" required>
-          <span>I agree that typing my name above is my electronic signature and has the same effect as signing by hand.</span>
+          <span>Typing my name above is my electronic signature.</span>
         </label>
       </fieldset>
 
       <div class="submit-row">
-        <button type="submit" class="btn btn-primary">Sign and submit</button>
+        <button type="submit" class="btn btn-primary">Sign and send</button>
         <p class="form-status" role="status" aria-live="polite"></p>
       </div>
     </form>
 
     <div id="state-done" class="auth-state auth-done" hidden>
-      <h2>Thank you — you're all set.</h2>
-      <p>Your signed authorization has been received. We'll be in touch with next steps for your project. If you need to change anything or stop testing at any time, email <a href="mailto:contact@leblancsols.com">contact@leblancsols.com</a>.</p>
+      <h2>Thank you — we're excited to get started!</h2>
+      <p>We've got your signed form. Collin will be in touch soon with next steps. Questions any time: <a href="mailto:contact@leblancsols.com">contact@leblancsols.com</a>.</p>
       <p class="small" id="done-time"></p>
     </div>
   </div>
