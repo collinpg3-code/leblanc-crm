@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { STAGES, STAGE_LABELS, STAGE_COLORS } from '../utils/stages'
 import SalesBrief from './SalesBrief'
 import AuthorizationPanel from './AuthorizationPanel'
+import EmailDrafts from './EmailDrafts'
 import '../styles/LeadDetail.css'
 
 const known = (v) => v && v !== 'Unknown'
@@ -48,13 +49,15 @@ export default function LeadDetail({ lead, onClose, onUpdate, onDelete }) {
         </header>
 
         <nav className="detail-tabs" aria-label="Lead sections">
-          {[['brief', 'Sales brief'], ['info', 'Details'], ['update', 'Update']].map(([id, label]) => (
+          {[['brief', 'Brief'], ['emails', 'Emails'], ['info', 'Details'], ['update', 'Update']].map(([id, label]) => (
             <button key={id} className={tab === id ? 'active' : ''} onClick={() => setTab(id)}>{label}</button>
           ))}
         </nav>
 
         <div className="detail-body">
           {tab === 'brief' && <SalesBrief lead={lead} />}
+
+          {tab === 'emails' && <EmailDrafts lead={lead} toEmail={email} />}
 
           {tab === 'info' && (
             <>

@@ -18,6 +18,7 @@ const list = (v, max, itemMax) => (Array.isArray(v) ? v : []).map(x => str(x, it
 const SERVICES = ['Website Redesign', 'Security Check', 'Security Fixes', 'Redesign + Security'];
 const SERVICE_VALUE = { 'Website Redesign': 0, 'Security Check': 100, 'Security Fixes': 450, 'Redesign + Security': 0 };
 const PRIORITY = ['high', 'medium', 'low'];
+const num = (v) => (Number.isFinite(+v) && v !== null && v !== '' ? Math.max(0, Math.min(100, Math.round(+v))) : null);
 
 function cleanBrief(raw) {
   let b = raw;
@@ -43,6 +44,27 @@ function cleanBrief(raw) {
       .slice(0, 8),
     talkingPoints: list(b.talkingPoints, 10, 240),
     pitch: str(b.pitch, 1200),
+    // Objective site scores (Lighthouse mobile + certificate check)
+    siteScore: b.siteScore && typeof b.siteScore === 'object' ? {
+      mobileSpeed: num(b.siteScore.mobileSpeed), accessibility: num(b.siteScore.accessibility),
+      seo: num(b.siteScore.seo), bestPractices: num(b.siteScore.bestPractices),
+      certOk: typeof b.siteScore.certOk === 'boolean' ? b.siteScore.certOk : null,
+      loadTime: str(b.siteScore.loadTime, 20)
+    } : null,
+    leadScore: num(b.leadScore),
+    whyJuicy: str(b.whyJuicy, 400),
+    // How to close this specific lead
+    winPlan: b.winPlan && typeof b.winPlan === 'object' ? {
+      offer: str(b.winPlan.offer, 400),
+      closers: list(b.winPlan.closers, 6, 300),
+      objections: (Array.isArray(b.winPlan.objections) ? b.winPlan.objections : [])
+        .map(o => ({ objection: str(o?.objection, 160), response: str(o?.response, 500) }))
+        .filter(o => o.objection && o.response).slice(0, 6)
+    } : null,
+    // Hand-tailored emails (override the CRM's templates)
+    emails: (Array.isArray(b.emails) ? b.emails : [])
+      .map(e => ({ label: str(e?.label, 60), subject: str(e?.subject, 160), body: str(e?.body, 4000) }))
+      .filter(e => e.subject && e.body).slice(0, 6),
     writtenAt: new Date().toISOString()
   };
   return brief.summary || brief.talkingPoints.length ? brief : null;

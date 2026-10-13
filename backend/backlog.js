@@ -88,7 +88,8 @@ module.exports = function registerBacklogRoutes(app, { authenticateToken, loadDa
   // so the refill job can avoid researching them again.
   app.get('/api/backlog', authenticateToken, (req, res) => {
     const { backlog, engagements } = loadData();
-    const body = { count: backlog.length, next: backlog.slice(0, 5).map(l => ({ name: l.name, industry: l.industry })) };
+    const ranked = [...backlog].sort((a, b) => (b.brief?.leadScore ?? -1) - (a.brief?.leadScore ?? -1));
+    const body = { count: backlog.length, next: ranked.slice(0, 5).map(l => ({ name: l.name, industry: l.industry, score: l.brief?.leadScore ?? null })) };
     if (req.query.known) {
       body.known = [...backlog, ...engagements].map(l => ({ name: l.name, website: l.website || null }));
     }
@@ -104,10 +105,11 @@ module.exports = function registerBacklogRoutes(app, { authenticateToken, loadDa
     res.json({ added, skipped: req.body.leads.length - added, count: data.backlog.length });
   });
 
-  // Move the next N backlog leads into the pipeline.
+  // Move the next N backlog leads into the pipeline, best leads first.
   app.post('/api/backlog/pull', authenticateToken, (req, res) => {
     const count = Math.min(Math.max(parseInt(req.body.count, 10) || 0, 1), MAX_PULL);
     const data = loadData();
+    data.backlog.sort((a, b) => (b.brief?.leadScore ?? -1) - (a.brief?.leadScore ?? -1));
     const batch = data.backlog.splice(0, count);
     const now = new Date().toISOString();
     for (const lead of batch) {

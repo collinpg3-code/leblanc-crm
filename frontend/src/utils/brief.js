@@ -3,6 +3,28 @@
 
 const has = (text, re) => re.test(text)
 
+// Default closing plan when the lead finder hasn't written a custom one.
+export function defaultWinPlan(lead, brief) {
+  const redesign = /redesign/i.test(brief.recommendedService || '')
+  return {
+    offer: redesign
+      ? 'Offer a free homepage mockup. Seeing their own business on a new site does the selling for you.'
+      : 'Offer the $100 security check, and credit it toward any fixes or a redesign if they go ahead.',
+    closers: [
+      'Ask: "What would a few extra calls a week be worth to you?" Let them put the number on it.',
+      'Show them their site and one of our demos side by side on your phone.',
+      'Make the next step tiny: "Can I send you a free mockup this week? No commitment."',
+      'Mention we are local and small, so they deal with you directly, not a call center.'
+    ],
+    objections: [
+      { objection: "It's too expensive", response: "We're a small local team, so we're a lot friendlier on price than big agencies. Tell me your budget and I'll build a plan around it. We can also start small and grow it." },
+      { objection: 'We already have a web person', response: "No problem. I'm happy to give you a free second opinion on the site. If your web person wants to handle the fixes, I'll hand them the list." },
+      { objection: 'Not right now', response: 'Totally fair. Can I send a free mockup so you have it when the timing is right? I will check back in a couple of months.' },
+      { objection: 'Our site works fine', response: `It does work, and most people would say the same. The question is how many people leave before they call. On a phone, ${(brief.websiteNeeds?.[0] || 'small things').toLowerCase()} can cost you customers without you ever knowing.` }
+    ]
+  }
+}
+
 export function fallbackBrief(lead) {
   const text = [lead.findings, lead.notes, lead.stack].filter(Boolean).join(' ').toLowerCase()
   const name = lead.name || 'this business'

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fallbackBrief } from '../utils/brief'
+import { fallbackBrief, defaultWinPlan } from '../utils/brief'
 import AskFor from './AskFor'
 import '../styles/SalesBrief.css'
 
@@ -11,6 +11,7 @@ const store = {
 // Plug-and-play talk track for a lead: opener, checklist, needs, security, pitch.
 export default function SalesBrief({ lead }) {
   const brief = lead.brief || fallbackBrief(lead)
+  const win = brief.winPlan?.closers?.length ? brief.winPlan : defaultWinPlan(lead, brief)
   const key = `brief-checked-${lead.id}`
   const [checked, setChecked] = useState(() => store.get(key))
   const [copied, setCopied] = useState(false)
@@ -29,7 +30,9 @@ export default function SalesBrief({ lead }) {
         {brief.auto && <span className="brief-auto" title="A full brief will be added by the next lead refresh">Quick brief</span>}
       </div>
       <AskFor lead={lead} />
+      {brief.whyJuicy && <p className="brief-juicy"><strong>Why this lead:</strong> {brief.whyJuicy}</p>}
       <p className="brief-summary">{brief.summary}</p>
+      {brief.siteScore && <Scorecard s={brief.siteScore} />}
 
       {brief.opener && (
         <div className="brief-block opener">
@@ -83,6 +86,36 @@ export default function SalesBrief({ lead }) {
           <p>{brief.pitch}</p>
         </div>
       )}
+
+      <div className="brief-block win">
+        <h4>How to win this one</h4>
+        <p className="win-offer"><strong>Lead with:</strong> {win.offer}</p>
+        <ul className="dots">{win.closers.map((c, i) => <li key={i}>{c}</li>)}</ul>
+        <h5>If they say…</h5>
+        {win.objections.map((o, i) => (
+          <details key={i} className="objection">
+            <summary>“{o.objection}”</summary>
+            <p>{o.response}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function Scorecard({ s }) {
+  const cls = (v) => (v == null ? '' : v < 50 ? 'bad' : v < 80 ? 'meh' : 'good')
+  const items = [
+    ['Mobile speed', s.mobileSpeed], ['Accessibility', s.accessibility], ['Google SEO', s.seo], ['Best practices', s.bestPractices]
+  ].filter(([, v]) => v != null)
+  return (
+    <div className="scorecard">
+      <h4>Google scores their site (on a phone)</h4>
+      <div className="scores">
+        {items.map(([k, v]) => <div key={k} className={cls(v)}><b>{v}</b><span>{k}</span></div>)}
+        {s.certOk === false && <div className="bad"><b>!</b><span>"Not secure" warning</span></div>}
+      </div>
+      {s.loadTime && <p>Main content takes <strong>{s.loadTime}</strong> to appear on a phone.</p>}
     </div>
   )
 }

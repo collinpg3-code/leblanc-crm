@@ -1,0 +1,21 @@
+.emails { display: grid; gap: 10px; }
+.email-warn { background: #F8EDE8; border-left: 3px solid var(--rust); color: var(--rust); padding: 10px 12px; font-size: 13.5px; }
+.email-to { font-size: 13.5px; color: var(--slate); }
+.email-to strong { color: var(--ink); overflow-wrap: anywhere; }
+
+.draft { border: 1px solid var(--line); background: var(--white); }
+.draft.open { border-color: var(--ink); }
+.draft-head { width: 100%; display: flex; justify-content: space-between; align-items: center; border: none; min-height: 50px; padding: 0 16px; font: 600 15px var(--sans); text-align: left; }
+.draft-head .chev { font-size: 20px; color: var(--slate); }
+.draft-body { padding: 4px 16px 16px; display: grid; gap: 6px; }
+.draft-body .row { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
+.draft-body label { font: 600 11px var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--slate); }
+.draft-body .row button { min-height: 34px; padding: 4px 14px; font-size: 13px; }
+.draft-body .subject { font-weight: 600; font-size: 15px; background: var(--panel); border: 1px solid var(--line); padding: 10px 12px; }
+.draft-body .body { white-space: pre-wrap; word-break: break-word; font: 400 14.5px/1.6 var(--sans); background: var(--panel); border: 1px solid var(--line); padding: 12px; margin: 0; }
+.draft-body .send { display: grid; place-items: center; min-height: 48px; margin-top: 8px; background: var(--teal); color: var(--white); text-decoration: none; font: 600 15px var(--sans); }
+
+.sig { border: 1px dashed var(--line); padding: 10px 14px; }
+.sig summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+.sig textarea { margin-top: 10px; resize: vertical; }
+.sig .hint { font-size: 12.5px; color: var(--slate); margin-top: 6px; }

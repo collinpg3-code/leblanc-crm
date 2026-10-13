@@ -7,7 +7,7 @@
 .detail-meta { font-size: 13px; color: var(--slate); }
 .detail-close { border: none; width: 44px; min-height: 44px; padding: 0; font-size: 18px; color: var(--slate); flex: none; }
 
-.detail-tabs { display: grid; grid-template-columns: repeat(3, 1fr); border-block: 1px solid var(--line); }
+.detail-tabs { display: grid; grid-template-columns: repeat(4, 1fr); border-block: 1px solid var(--line); }
 .detail-tabs button { border: none; border-bottom: 3px solid transparent; min-height: 46px; font-size: 14px; color: var(--slate); }
 .detail-tabs button.active { color: var(--ink); border-bottom-color: var(--teal); background: transparent; }
 
