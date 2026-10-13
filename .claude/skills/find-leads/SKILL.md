@@ -30,8 +30,8 @@ For each niche + town combination:
 ## 3. Qualify ruthlessly
 1. Put candidates in `clients/<batch>/candidates.json` as `[{ "business", "url", "industry", "location" }]`.
 2. Score their sites (≈1 min each): `node scripts/score-sites.mjs clients/<batch>/candidates.json clients/<batch>/scores.json`
-3. After research (step 4) run: `node scripts/lead-score.mjs clients/<batch>/leads.json clients/<batch>/scores.json clients/<batch>/leads.scored.json --min 60`
-   It adds Google scores, a 0–100 `leadScore` and `whyJuicy`, sorts best first and drops weak leads. Need (50) + can pay (25) + can reach the decision-maker (25).
+3. After research (step 4) run: `node scripts/lead-score.mjs clients/<batch>/leads.json clients/<batch>/scores.json clients/<batch>/leads.scored.json --min 50`
+   It adds Google scores, a 0–100 `leadScore` and `whyJuicy`, sorts best first and drops weak leads. Need (50) + can pay (25) + can reach the decision-maker (25). Put review counts, years in business and red flags you saw (broken links, placeholder text, no phone number, "Not secure", outdated content) into public_flags/summary/websiteNeeds so the scorer counts them. Add "reviews": <number> when known.
    No-website businesses: set `brief.leadScore` yourself (65–80 if established) and explain in `whyJuicy`.
 Only push leads that pass.
 

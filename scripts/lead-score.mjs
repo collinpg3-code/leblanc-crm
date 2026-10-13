@@ -30,12 +30,31 @@ export function scoreLead(lead, s = {}) {
   if ((b.websiteNeeds || []).some(n => /online booking|quote form|"get a quote"/i.test(n))) { need += 6; why.push('no easy way to book or get a quote online') }
   const issues = b.securityIssues || []
   if (issues.some(i => i.priority === 'high')) { need += 8; why.push('serious security issue') } else if (issues.some(i => i.priority === 'medium')) need += 4
+
+  // Red flags the researcher saw on the site (these matter more than raw speed).
+  const seen = [lead.public_flags, b.summary, ...(b.websiteNeeds || []), ...issues.map(i => i.issue)].join(' ').toLowerCase()
+  const flag = (re, pts, msg) => { if (re.test(seen)) { need += pts; if (msg) why.push(msg) } }
+  if (!lead.url) flag(/./, 30, null)
+  else flag(/no (real |actual |own )?website|forwards to a directory|redirects to a directory|facebook only|facebook-only/, 25, 'no real website of their own')
+  if (s.certOk == null) flag(/not secure|no https|http only|http-only|without https/, 12, 'browsers show "Not secure"')
+  flag(/placeholder|lorem ipsum|add your text|under construction|coming soon/, 8, 'template placeholder text is live on the site')
+  flag(/broken (link|email|form|feed|page|menu)|links go nowhere|dead link|error on the (home)?page/, 6, 'broken links or features on the site')
+  flag(/no phone number|phone number (isn't|is not|not) (listed|shown|on)/, 6, 'no phone number on the site')
+  flag(/wordpress [1-5]\.\d/, 4, null)
+  flag(/(testimonials|news|blog|posts?) (are |is )?from 20(0\d|1\d)|last updated 20(0\d|1\d)/, 5, 'site content is years out of date')
+  flag(/never names|doesn't name|no team page|no about page/, 3, null)
   need = Math.min(need, 50)
 
   const ind = `${lead.industry || ''} ${lead.business || lead.name || ''}`
   let value = HIGH_VALUE.test(ind) ? 15 : MID_VALUE.test(ind) ? 11 : 7
   if ((lead.teamSize || 0) >= 4) value += 5
   if (lead.locations > 1) value += 5
+  // Established = can pay: review count, years in business, awards.
+  const reviews = lead.reviews || +(/(\d{2,4})\+?\s*(google\s*)?reviews/.exec(seen)?.[1] || 0)
+  if (reviews >= 100) { value += 6; why.push(`${reviews} reviews, so they're busy and established`) } else if (reviews >= 30) value += 3
+  const since = +(/(since|established|est\.?|founded( in)?)\s*(19\d\d|20[0-1]\d)/.exec(seen)?.[3] || 0)
+  if (since && since <= 2016) { value += 3; why.push(`in business since ${since}`) }
+  if (/award|readers'? choice|best of|builder of the year|top rated/.test(seen)) value += 2
   value = Math.min(value, 25)
 
   const dm = lead.decisionMaker || {}

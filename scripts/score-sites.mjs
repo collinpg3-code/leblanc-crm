@@ -5,6 +5,7 @@
 // Re-running skips businesses already scored. ~1 minute per site.
 import fs from 'fs'
 import https from 'https'
+import http from 'http'
 import path from 'path'
 import { execFileSync } from 'child_process'
 import { createRequire } from 'module'
@@ -17,6 +18,10 @@ const leads = JSON.parse(fs.readFileSync(inFile, 'utf8').replace(/^﻿/, ''))
 const tmp = path.join(path.dirname(path.resolve(outFile)), '.lh-tmp.json')
 
 function certCheck(url) {
+  // http:// sites: check whether HTTPS works at all; if not, browsers show "Not secure".
+  if (url.startsWith('http://')) {
+    return certCheck(url.replace(/^http:/, 'https:')).then(r => (r.certOk ? r : { certOk: false, certError: r.certError || 'no HTTPS' }))
+  }
   return new Promise(resolve => {
     const req = https.get(url, { timeout: 15000 }, res => { res.resume(); resolve({ certOk: true }) })
     req.on('error', e => resolve(/CERT|SSL|TLS|self.signed|altname|expired/i.test(`${e.code} ${e.message}`) ? { certOk: false, certError: e.code } : { certOk: null, certError: e.code || e.message }))
