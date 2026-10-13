@@ -12,7 +12,8 @@ const crypto = require('crypto');
 const store = require('./store');
 const registerBacklogRoutes = require('./backlog');
 const registerAuthorizationRoutes = require('./authorization');
-const { registerBriefRoutes } = require('./brief');
+const { registerBriefRoutes, recordFeedback } = require('./brief');
+const STAGE_RANK = ['prospect', 'qualified', 'authorized', 'scan', 'report', 'fix'];
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -190,6 +191,12 @@ app.put('/api/engagements/:id', authenticateToken, (req, res) => {
 
   data.engagements[index] = updated;
 
+  // Learn from what Collin does with the lead
+  if (changes.archived === true) recordFeedback(data, updated, 'archived');
+  if (changes.archived === false) recordFeedback(data, updated, 'restored');
+  if (oldStage !== updated.stage && STAGE_RANK.indexOf(updated.stage) > STAGE_RANK.indexOf(oldStage)) recordFeedback(data, updated, `progressed:${updated.stage}`);
+  if (changes.callStatus === 'interested' || changes.callStatus === 'not_interested') recordFeedback(data, updated, changes.callStatus);
+
   // Log stage change
   if (oldStage !== updated.stage) {
     data.activity.push({
@@ -215,6 +222,7 @@ app.delete('/api/engagements/:id', authenticateToken, (req, res) => {
   }
 
   data.engagements = data.engagements.filter(e => e.id !== req.params.id);
+  recordFeedback(data, engagement, 'deleted');
 
   data.activity.push({
     type: 'deleted',

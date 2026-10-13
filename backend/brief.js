@@ -107,6 +107,13 @@ function registerBriefRoutes(app, { authenticateToken, loadData, saveData }) {
     res.json({ total: missing.length, leads: missing.slice(0, limit) });
   });
 
+  // What Collin kept, progressed, archived or deleted, newest first.
+  app.get('/api/leads/feedback', authenticateToken, (req, res) => {
+    const fb = [...(loadData().leadFeedback || [])].reverse();
+    const count = (v) => fb.filter(f => f.verdict.startsWith(v)).length;
+    res.json({ summary: { liked: count('progressed') + count('interested'), disliked: count('archived') + count('deleted') + count('not_interested') }, feedback: fb.slice(0, 200) });
+  });
+
   // Save the decision-maker on a pipeline or backlog lead.
   app.put('/api/leads/:id/contact', authenticateToken, (req, res) => {
     const dm = cleanDecisionMaker(req.body.decisionMaker);
@@ -146,4 +153,24 @@ function registerBriefRoutes(app, { authenticateToken, loadData, saveData }) {
   });
 }
 
-module.exports = { cleanBrief, cleanDecisionMaker, registerBriefRoutes, SERVICE_VALUE };
+// Implicit lead feedback from what Collin does in the CRM, so the lead finder
+// can learn what he likes (progressed/interested) and doesn't (archived/deleted).
+function recordFeedback(data, lead, verdict) {
+  if (!data.leadFeedback) data.leadFeedback = [];
+  data.leadFeedback.push({
+    verdict,
+    name: lead.name,
+    industry: lead.industry || null,
+    location: lead.location || null,
+    website: lead.website || null,
+    source: lead.source || null,
+    leadScore: lead.brief?.leadScore ?? null,
+    whyJuicy: lead.brief?.whyJuicy || null,
+    recommendedService: lead.brief?.recommendedService || lead.service || null,
+    decisionMaker: lead.decisionMaker?.name ? `${lead.decisionMaker.name} (${lead.decisionMaker.confidence})` : null,
+    at: new Date().toISOString()
+  });
+  if (data.leadFeedback.length > 500) data.leadFeedback = data.leadFeedback.slice(-500);
+}
+
+module.exports = { cleanBrief, cleanDecisionMaker, registerBriefRoutes, recordFeedback, SERVICE_VALUE };

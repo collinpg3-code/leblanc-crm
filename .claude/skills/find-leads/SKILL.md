@@ -14,8 +14,11 @@ Collin could call them tomorrow, point at something real on their website, and t
 - Never invent a business, person, number, email, review count or finding. Unverified = leave it out.
 - People: only names/contact details the business publishes (its site, Google Business Profile, Michigan LARA filings, chamber/trade directory listings). No people-search/data-broker sites, no personal cell numbers or home addresses, no guessed email patterns.
 
-## Collin's lead feedback (learn his taste; newest last)
-Not strict rules, just signals of what he likes and doesn't. Lean toward leads like the "liked" ones.
+## Collin's lead feedback (learn his taste)
+Before digging, run `.\scripts\crm-backlog.ps1 -Feedback`. It lists what Collin did with past leads in the CRM:
+`progressed:*` / `interested` = liked, `archived` / `deleted` / `not_interested` = disliked. Look for patterns
+(niches, towns, kinds of website problems, whether an owner was named, score ranges) and lean toward what he
+keeps. These are signals, not strict rules. Notes he gave directly (newest last):
 - **Liked:** Hankwitz Heating & Cooling, Ludington. Family HVAC since 1975, named owners, Readers' Choice winner, no real website (domain forwards to a directory page).
 - **Liked:** Corble Builders, Petoskey. Custom builder since 2002, Builder of the Year, visibly broken site features, owner's own email published.
 - **Disliked:** the first generic batch (mostly fine-looking WordPress sites pulled from directories, weak signals, no named owner).

@@ -28,6 +28,7 @@ param(
   [switch]$NeedsBriefs,
   [string]$PushBriefs,
   [switch]$NeedsContacts,
+  [switch]$Feedback,
   [string]$PushContacts,
   [int]$Limit = 15,
   [string]$ExportTo,
@@ -128,6 +129,13 @@ if ($PushBriefs) {
     } catch { $failed++; "FAILED $($item.id): $($_.Exception.Message)" }
   }
   "BRIEFS_SAVED=$ok FAILED=$failed"
+}
+
+if ($Feedback) {
+  # What Collin liked (progressed / interested) and didn't (archived / deleted / not interested).
+  $r = Invoke-RestMethod -Uri "$CrmUrl/api/leads/feedback" -Headers $headers -TimeoutSec 60
+  "LIKED=$($r.summary.liked) DISLIKED=$($r.summary.disliked)"
+  $r.feedback | ForEach-Object { "{0,-22} {1} | {2} | {3} | score {4} | {5}" -f $_.verdict, $_.name, $_.industry, $_.location, $_.leadScore, $_.whyJuicy }
 }
 
 if ($NeedsContacts) {
