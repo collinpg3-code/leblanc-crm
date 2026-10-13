@@ -6,7 +6,7 @@
  */
 
 const crypto = require('crypto');
-const { cleanBrief, SERVICE_VALUE } = require('./brief');
+const { cleanBrief, cleanDecisionMaker, SERVICE_VALUE } = require('./brief');
 
 const MAX_PULL = 50;
 const str = (v, max) => (v == null ? '' : String(v).trim().slice(0, max));
@@ -30,7 +30,8 @@ function cleanLead(raw) {
     findings: str(raw.findings || raw.public_flags, 1000) || null,
     angle: str(raw.outreach_angle || raw.angle, 1000) || null,
     notes: str(raw.notes, 1000) || null,
-    brief: cleanBrief(raw.brief)
+    brief: cleanBrief(raw.brief),
+    decisionMaker: cleanDecisionMaker(raw.decisionMaker)
   };
 }
 
@@ -71,6 +72,7 @@ function toEngagement(lead, now) {
     service,
     estimatedValue: SERVICE_VALUE[service] ?? 0,
     brief: lead.brief || null,
+    decisionMaker: lead.decisionMaker || null,
     authorized: false,
     source: 'lead-scout',
     createdAt: now,

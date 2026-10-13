@@ -28,6 +28,7 @@
 
 .lead-card h3 { font-size: 21px; overflow-wrap: anywhere; }
 .card-meta { font-size: 13px; color: var(--slate); }
+.card-askfor { font-size: 13.5px; color: var(--ink); background: var(--panel); border-left: 2px solid var(--teal); padding: 4px 8px; }
 
 .card-summary {
   font-size: 14px;

@@ -30,6 +30,9 @@ export default function LeadCard({ lead, stageColors, onSelect, isSelected }) {
 
       <h3>{lead.name}</h3>
       {meta && <p className="card-meta">{meta}</p>}
+      {lead.decisionMaker?.name && (
+        <p className="card-askfor">Ask for <strong>{lead.decisionMaker.name}</strong>{lead.decisionMaker.role ? `, ${lead.decisionMaker.role}` : ''}</p>
+      )}
 
       <p className="card-summary">{brief.summary}</p>
 

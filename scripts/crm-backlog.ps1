@@ -12,6 +12,10 @@
            Prints leads (pipeline + backlog) that have no sales brief yet, as JSON.
            .\scripts\crm-backlog.ps1 -PushBriefs clients\batch\briefs.json
            Saves a JSON array of { "id": "...", "brief": { ... } } onto those leads.
+  People:  .\scripts\crm-backlog.ps1 -NeedsContacts [-Limit 15]
+           Prints leads with no decision-maker yet, as JSON.
+           .\scripts\crm-backlog.ps1 -PushContacts clients\batch\contacts.json
+           Saves a JSON array of { "id": "...", "decisionMaker": { ... } } onto those leads.
   Backup:  .\scripts\crm-backlog.ps1 -ExportTo clients\archive\leads-backup.json
            Saves every pipeline and backlog lead to a local JSON file.
   Reset:   .\scripts\crm-backlog.ps1 -ResetAll -ExportTo <backup.json>
@@ -23,6 +27,8 @@ param(
   [string]$PushJson,
   [switch]$NeedsBriefs,
   [string]$PushBriefs,
+  [switch]$NeedsContacts,
+  [string]$PushContacts,
   [int]$Limit = 15,
   [string]$ExportTo,
   [switch]$ResetAll,
@@ -122,4 +128,24 @@ if ($PushBriefs) {
     } catch { $failed++; "FAILED $($item.id): $($_.Exception.Message)" }
   }
   "BRIEFS_SAVED=$ok FAILED=$failed"
+}
+
+if ($NeedsContacts) {
+  $r = Invoke-RestMethod -Uri "$CrmUrl/api/leads/needs-contact?limit=$Limit" -Headers $headers -TimeoutSec 60
+  "MISSING_CONTACTS_TOTAL=$($r.total)"
+  $r.leads | ConvertTo-Json -Depth 4
+}
+
+if ($PushContacts) {
+  Remove-TypeData System.Array -ErrorAction SilentlyContinue
+  $items = ConvertFrom-Json (Read-JsonArray $PushContacts)
+  $ok = 0; $failed = 0
+  foreach ($item in $items) {
+    $body = @{ decisionMaker = $item.decisionMaker } | ConvertTo-Json -Depth 6
+    try {
+      Invoke-RestMethod -Uri "$CrmUrl/api/leads/$($item.id)/contact" -Method Put -ContentType 'application/json; charset=utf-8' -Headers $headers -Body ([Text.Encoding]::UTF8.GetBytes($body)) -TimeoutSec 60 | Out-Null
+      $ok++
+    } catch { $failed++; "FAILED $($item.id): $($_.Exception.Message)" }
+  }
+  "CONTACTS_SAVED=$ok FAILED=$failed"
 }

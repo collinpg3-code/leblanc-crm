@@ -6,7 +6,8 @@ import '../styles/LeadDetail.css'
 
 const known = (v) => v && v !== 'Unknown'
 const emailOf = (contact) => (/<([^>]+)>/.exec(contact || '') || [])[1] || ((contact || '').match(/[^\s<>]+@[^\s<>]+\.[^\s<>]+/) || [])[0] || ''
-const phoneOf = (lead) => lead.phone || ((lead.contact || '').match(/\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/) || [])[0] || ''
+// Prefer the decision-maker's direct line/email when one was found.
+const phoneOf = (lead) => lead.decisionMaker?.phone || lead.phone || ((lead.contact || '').match(/\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/) || [])[0] || ''
 
 export default function LeadDetail({ lead, onClose, onUpdate, onDelete }) {
   const [notes, setNotes] = useState(lead.notes || '')
@@ -15,7 +16,7 @@ export default function LeadDetail({ lead, onClose, onUpdate, onDelete }) {
   const [tab, setTab] = useState('brief')
   const [confirmDelete, setConfirmDelete] = useState(false)
 
-  const email = emailOf(lead.contact)
+  const email = lead.decisionMaker?.email || emailOf(lead.contact)
   const phone = phoneOf(lead)
   const tel = phone.replace(/[^\d+]/g, '')
 

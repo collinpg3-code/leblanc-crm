@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fallbackBrief } from '../utils/brief'
+import AskFor from './AskFor'
 import '../styles/SalesBrief.css'
 
 const store = {
@@ -27,6 +28,7 @@ export default function SalesBrief({ lead }) {
         <span className="brief-service">Pitch: {brief.recommendedService}</span>
         {brief.auto && <span className="brief-auto" title="A full brief will be added by the next lead refresh">Quick brief</span>}
       </div>
+      <AskFor lead={lead} />
       <p className="brief-summary">{brief.summary}</p>
 
       {brief.opener && (

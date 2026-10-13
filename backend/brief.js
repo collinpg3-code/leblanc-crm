@@ -48,7 +48,55 @@ function cleanBrief(raw) {
   return brief.summary || brief.talkingPoints.length ? brief : null;
 }
 
+// The person to ask for. Only business-published or public-record details
+// (their website, Google listing, state business registry, chamber listings).
+const CONFIDENCE = ['confirmed', 'likely'];
+function cleanDecisionMaker(raw) {
+  let d = raw;
+  if (typeof d === 'string') {
+    try { d = JSON.parse(d); } catch { return null; }
+  }
+  if (!d || typeof d !== 'object') return null;
+  const email = str(d.email, 200);
+  const phone = str(d.phone, 40);
+  const dm = {
+    name: str(d.name, 120),
+    role: str(d.role, 120),
+    phone: /^[0-9+().\-\s,x]{7,40}$/i.test(phone) ? phone : '',
+    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : '',
+    source: str(d.source, 200),
+    confidence: CONFIDENCE.includes(d.confidence) ? d.confidence : 'likely',
+    howToReach: str(d.howToReach, 300),
+    foundAt: new Date().toISOString()
+  };
+  return dm.name || dm.howToReach ? dm : null;
+}
+
 function registerBriefRoutes(app, { authenticateToken, loadData, saveData }) {
+  // Leads with no decision-maker yet, for the refill job.
+  app.get('/api/leads/needs-contact', authenticateToken, (req, res) => {
+    const limit = Math.min(parseInt(req.query.limit, 10) || 15, 50);
+    const { engagements, backlog } = loadData();
+    const pick = (l, kind) => ({ id: l.id, kind, name: l.name, website: l.website || null, location: l.location, contact: l.contact || null });
+    const missing = [
+      ...engagements.filter(e => !e.decisionMaker && !e.archived).map(e => pick(e, 'lead')),
+      ...backlog.filter(l => !l.decisionMaker).map(l => pick(l, 'backlog'))
+    ];
+    res.json({ total: missing.length, leads: missing.slice(0, limit) });
+  });
+
+  // Save the decision-maker on a pipeline or backlog lead.
+  app.put('/api/leads/:id/contact', authenticateToken, (req, res) => {
+    const dm = cleanDecisionMaker(req.body.decisionMaker);
+    if (!dm) return res.status(400).json({ error: 'Need at least a name or a howToReach note.' });
+    const data = loadData();
+    const lead = data.engagements.find(e => e.id === req.params.id) || data.backlog.find(l => l.id === req.params.id);
+    if (!lead) return res.status(404).json({ error: 'Lead not found' });
+    lead.decisionMaker = dm;
+    saveData(data);
+    res.json({ ok: true });
+  });
+
   // Leads (pipeline + backlog) that don't have a brief yet, for the refill job.
   app.get('/api/leads/needs-brief', authenticateToken, (req, res) => {
     const limit = Math.min(parseInt(req.query.limit, 10) || 15, 50);
@@ -76,4 +124,4 @@ function registerBriefRoutes(app, { authenticateToken, loadData, saveData }) {
   });
 }
 
-module.exports = { cleanBrief, registerBriefRoutes, SERVICE_VALUE };
+module.exports = { cleanBrief, cleanDecisionMaker, registerBriefRoutes, SERVICE_VALUE };
