@@ -14,3 +14,4 @@ backend/data.json
 
 # Lead backups (business contact details, keep local)
 clients/archive/
+clients/auto-*/

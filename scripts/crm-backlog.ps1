@@ -90,10 +90,18 @@ function Read-JsonArray($path) {
 }
 
 if ($PushJson) {
-  # Sent as raw JSON so nested brief objects keep their full depth.
-  $body = '{"leads":' + (Read-JsonArray $PushJson) + '}'
-  $r = Invoke-RestMethod -Uri "$CrmUrl/api/backlog" -Method Post -ContentType 'application/json; charset=utf-8' -Headers $headers -Body ([Text.Encoding]::UTF8.GetBytes($body)) -TimeoutSec 60
-  "ADDED=$($r.added) SKIPPED=$($r.skipped) BACKLOG_NOW=$($r.count)"
+  # Sent in batches of 10 (the API caps request size); briefs keep their full depth.
+  # Windows PowerShell 5.1 wraps arrays as {"value":[...],"Count":n} when re-serializing; this stops it.
+  Remove-TypeData System.Array -ErrorAction SilentlyContinue
+  $all = ConvertFrom-Json (Read-JsonArray $PushJson)
+  $added = 0; $skipped = 0; $count = 0
+  for ($i = 0; $i -lt $all.Count; $i += 10) {
+    $batch = $all[$i..([Math]::Min($i + 9, $all.Count - 1))]
+    $body = @{ leads = @($batch) } | ConvertTo-Json -Depth 10
+    $r = Invoke-RestMethod -Uri "$CrmUrl/api/backlog" -Method Post -ContentType 'application/json; charset=utf-8' -Headers $headers -Body ([Text.Encoding]::UTF8.GetBytes($body)) -TimeoutSec 60
+    $added += $r.added; $skipped += $r.skipped; $count = $r.count
+  }
+  "ADDED=$added SKIPPED=$skipped BACKLOG_NOW=$count"
 }
 
 if ($NeedsBriefs) {
@@ -103,7 +111,8 @@ if ($NeedsBriefs) {
 }
 
 if ($PushBriefs) {
-  $items = (Read-JsonArray $PushBriefs) | ConvertFrom-Json
+  Remove-TypeData System.Array -ErrorAction SilentlyContinue
+  $items = ConvertFrom-Json (Read-JsonArray $PushBriefs)
   $ok = 0; $failed = 0
   foreach ($item in $items) {
     $body = @{ brief = $item.brief } | ConvertTo-Json -Depth 8
