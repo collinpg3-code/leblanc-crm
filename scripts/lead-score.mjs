@@ -57,14 +57,18 @@ export function scoreLead(lead, s = {}) {
   if (/award|readers'? choice|best of|builder of the year|top rated/.test(seen)) value += 2
   value = Math.min(value, 25)
 
+  // Outreach is email-only (no cold calls), so reach = can we email the decision-maker.
   const dm = lead.decisionMaker || {}
+  const businessEmail = /[^\s@]+@[^\s@]+\.[^\s@]+/.test(lead.contact || '')
   let reach = 0
+  if (dm.email) { reach += 15; why.push(`direct email for ${dm.name || 'the owner'}`) }
+  else if (businessEmail) reach += 8
   if (dm.name) reach += dm.confidence === 'confirmed' ? 10 : 6
-  if (dm.email) { reach += 10; why.push(`direct email for ${dm.name || 'the owner'}`) }
-  if (dm.phone || lead.contact) reach += 5
   reach = Math.min(reach, 25)
+  const noEmail = !dm.email && !businessEmail
 
-  return { leadScore: need + value + reach, need, value, reach, whyJuicy: why.slice(0, 4).join('; ') }
+  // No email address at all = we can't reach them, so it's not a lead for us.
+  return { leadScore: noEmail ? 0 : need + value + reach, need, value, reach, noEmail, whyJuicy: why.slice(0, 4).join('; ') }
 }
 
 const out = leads.map(l => {
@@ -89,5 +93,5 @@ const out = leads.map(l => {
 
 const kept = out.filter(l => l.brief.leadScore >= min)
 fs.writeFileSync(outFile, JSON.stringify(kept.map(({ _score, ...l }) => l), null, 2))
-for (const l of out) console.log(`${String(l.brief.leadScore).padStart(3)}  need ${String(l._score.need).padStart(2)} value ${String(l._score.value).padStart(2)} reach ${String(l._score.reach).padStart(2)}  ${l.brief.leadScore >= min ? 'KEEP' : 'drop'}  ${l.business}`)
+for (const l of out) console.log(`${String(l.brief.leadScore).padStart(3)}  need ${String(l._score.need).padStart(2)} value ${String(l._score.value).padStart(2)} reach ${String(l._score.reach).padStart(2)}  ${l.brief.leadScore >= min ? 'KEEP' : 'drop'}  ${l.business}${l._score.noEmail ? '  (no email found)' : ''}`)
 console.log(`KEPT=${kept.length} DROPPED=${out.length - kept.length} (min ${min})`)

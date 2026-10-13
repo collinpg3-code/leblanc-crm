@@ -6,7 +6,14 @@ description: Dig hard for high-quality LeBlanc Solutions leads (website redesign
 # find-leads — the hard-dig playbook
 
 Quality over quantity. **Five leads that want us beat fifty that don't.** A lead is only worth adding if
-Collin could call them tomorrow, point at something real on their website, and they'd care.
+Collin could email them tomorrow, point at something real on their website, and they'd care.
+
+**Outreach is email-only. Collin does NOT cold call** (it went badly: hang-ups, "our site is fine", awkward).
+So: every lead needs a reachable email (the owner's own business email is best; the business inbox is OK).
+No email found = not a lead (the scorer gives it 0). The emails are the most important thing you write:
+they must lead with proof the owner can see for themselves (their Google phone score, something broken
+on their site, a local competitor's better site) and end with a tiny, easy ask ("Want me to send a free
+mockup?"), never "can we hop on a call". Skip the phone `opener` field.
 
 ## Hard rules (never break)
 - Public sources only. Never scan or probe sites (no hidden paths, admin URLs, port checks). Normal page visits + `scripts/score-sites.mjs` (Google Lighthouse, same as PageSpeed) only.
@@ -46,6 +53,7 @@ Only push leads that pass.
 
 ## 4. Research the keepers (2–4 normal page visits each)
 - Home, About/Team/Our Doctors/Attorneys, Services, Contact.
+- Find an email: the owner's own business email if published (staff page, contact page), otherwise the main business inbox. Required.
 - Capture: what they do best, how long in business, what they're proud of (family-owned, awards, local roots), how customers book/contact today, review count and rating if shown publicly, the decision-maker (rules above) and team size.
 - Find **one local competitor with a better website** (online booking, modern, fast) — great pitch material ("<competitor> lets patients book online in 30 seconds").
 - Note real security tells you saw (no HTTPS/"Not secure", outdated PHP/WordPress shown publicly, http resources, unencrypted forms).
@@ -71,11 +79,11 @@ Example first email (style, not a template):
   "brief": {
     "summary": "2-3 sentences: who they are + what's holding the site back",
     "recommendedService": "Website Redesign | Redesign + Security | Security Check | Security Fixes",
-    "opener": "first line for a call, specific to them",
+    
     "websiteNeeds": ["3-5 specifics"],
     "benefits": ["3-4, in their business terms (more booked cleanings, more roof estimates...)"],
     "securityIssues": [{ "priority": "high|medium|low", "issue": "", "whyItMatters": "" }],
-    "talkingPoints": ["5-7 ordered points for the call"],
+    "talkingPoints": ["5-7 points for when they reply (reply email or a call THEY asked for)"],
     "pitch": "30-second pitch, specific to them",
     "winPlan": {
       "offer": "the specific opening offer (e.g. free homepage mockup, $100 check credited toward redesign)",

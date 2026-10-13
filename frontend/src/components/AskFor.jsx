@@ -6,15 +6,15 @@ export default function AskFor({ lead }) {
   if (!dm) {
     return (
       <div className="askfor empty">
-        <h4>Ask for</h4>
-        <p><strong>The owner or office manager.</strong> No decision-maker found yet. Ask the front desk: “Who handles your website?” and get their name and direct line.</p>
+        <h4>Who to email</h4>
+        <p><strong>The owner.</strong> No name found yet. Send the first email to the business address and start with “Hi there,”. Owners of small businesses usually read the main inbox.</p>
       </div>
     )
   }
   const tel = (dm.phone || '').replace(/[^\d+x]/gi, '').replace(/x.*/i, '')
   return (
     <div className="askfor">
-      <h4>Ask for <span className={`conf ${dm.confidence}`}>{dm.confidence === 'confirmed' ? 'Confirmed' : 'Likely'}</span></h4>
+      <h4>Who to email <span className={`conf ${dm.confidence}`}>{dm.confidence === 'confirmed' ? 'Confirmed' : 'Likely'}</span></h4>
       <p className="who">{dm.name || 'The owner'}{dm.role && <span>, {dm.role}</span>}</p>
       {(dm.phone || dm.email) && (
         <div className="direct">

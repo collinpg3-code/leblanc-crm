@@ -4,13 +4,12 @@ import { fallbackBrief } from '../utils/brief'
 import '../styles/LeadCard.css'
 
 const known = (v) => v && v !== 'Unknown'
-const phoneOf = (lead) => lead.phone || ((lead.contact || '').match(/\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/) || [])[0] || ''
 
 export default function LeadCard({ lead, stageColors, onSelect, isSelected }) {
   const color = stageColors[lead.stage]
   const brief = lead.brief || fallbackBrief(lead)
   const topIssue = brief.securityIssues?.find(i => i.priority === 'high')
-  const phone = phoneOf(lead)
+  const hasEmail = !!(lead.decisionMaker?.email || /@/.test(lead.contact || ''))
   const meta = [lead.industry, lead.location && lead.location.split(',').slice(-2).join(',').trim()].filter(known).join(' · ')
 
   return (
@@ -31,7 +30,7 @@ export default function LeadCard({ lead, stageColors, onSelect, isSelected }) {
       <h3>{lead.name}</h3>
       {meta && <p className="card-meta">{meta}</p>}
       {lead.decisionMaker?.name && (
-        <p className="card-askfor">Ask for <strong>{lead.decisionMaker.name}</strong>{lead.decisionMaker.role ? `, ${lead.decisionMaker.role}` : ''}</p>
+        <p className="card-askfor">Email <strong>{lead.decisionMaker.name}</strong>{lead.decisionMaker.role ? `, ${lead.decisionMaker.role}` : ''}</p>
       )}
 
       <p className="card-summary">{brief.summary}</p>
@@ -39,9 +38,9 @@ export default function LeadCard({ lead, stageColors, onSelect, isSelected }) {
       {topIssue && <p className="card-issue"><span>High</span>{topIssue.issue}</p>}
 
       <div className="card-actions" onClick={(e) => e.stopPropagation()}>
-        {phone && <a href={`tel:${phone.replace(/[^\d+]/g, '')}`}>Call</a>}
-        {lead.website && <a href={`https://${lead.website}`} target="_blank" rel="noopener noreferrer">Site</a>}
-        <button type="button" onClick={onSelect}>Open brief →</button>
+        {lead.website && <a href={`https://${lead.website}`} target="_blank" rel="noopener noreferrer">Their site</a>}
+        <span className={`card-email ${hasEmail ? '' : 'none'}`}>{hasEmail ? '✉ Email ready' : 'No email found'}</span>
+        <button type="button" onClick={onSelect}>Open →</button>
       </div>
     </article>
   )

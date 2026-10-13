@@ -55,7 +55,7 @@ export default function LeadDetail({ lead, onClose, onUpdate, onDelete }) {
         </nav>
 
         <div className="detail-body">
-          {tab === 'brief' && <SalesBrief lead={lead} />}
+          {tab === 'brief' && <SalesBrief lead={lead} onEmail={() => setTab('emails')} />}
 
           {tab === 'emails' && <EmailDrafts lead={lead} toEmail={email} />}
 
@@ -102,10 +102,9 @@ export default function LeadDetail({ lead, onClose, onUpdate, onDelete }) {
         </div>
 
         <footer className="action-bar">
-          {tel ? <a className="act primary" href={`tel:${tel}`}>Call</a> : <span className="act disabled">No phone</span>}
-          {tel && <a className="act" href={`sms:${tel}`}>Text</a>}
-          {email ? <a className="act" href={`mailto:${email}`}>Email</a> : <span className="act disabled">No email</span>}
-          {lead.website && <a className="act" href={`https://${lead.website}`} target="_blank" rel="noopener noreferrer">Site</a>}
+          <button type="button" className="act primary" onClick={() => setTab('emails')}>{email ? 'Email' : 'Emails'}</button>
+          {lead.website && <a className="act" href={`https://${lead.website}`} target="_blank" rel="noopener noreferrer">Their site</a>}
+          {tel && <a className="act subtle" href={`tel:${tel}`} title="For people who replied and asked for a call">Call</a>}
         </footer>
       </div>
     </div>

@@ -9,7 +9,7 @@ const store = {
 }
 
 // Plug-and-play talk track for a lead: opener, checklist, needs, security, pitch.
-export default function SalesBrief({ lead }) {
+export default function SalesBrief({ lead, onEmail }) {
   const brief = lead.brief || fallbackBrief(lead)
   const win = brief.winPlan?.closers?.length ? brief.winPlan : defaultWinPlan(lead, brief)
   const key = `brief-checked-${lead.id}`
@@ -34,25 +34,12 @@ export default function SalesBrief({ lead }) {
       <p className="brief-summary">{brief.summary}</p>
       {brief.siteScore && <Scorecard s={brief.siteScore} />}
 
-      {brief.opener && (
-        <div className="brief-block opener">
-          <h4>Open with</h4>
-          <p>“{brief.opener}”</p>
+      <div className="brief-next">
+        <div>
+          <h4>Next step</h4>
+          <p>Send the first email. No calls needed: let them read it and reply when they're ready.</p>
         </div>
-      )}
-
-      <div className="brief-block">
-        <h4>Talk about <span className="count">{checked.length}/{brief.talkingPoints.length}</span></h4>
-        <ul className="checklist">
-          {brief.talkingPoints.map((t, i) => (
-            <li key={i}>
-              <label className={checked.includes(i) ? 'done' : ''}>
-                <input type="checkbox" checked={checked.includes(i)} onChange={() => toggle(i)} />
-                <span>{t}</span>
-              </label>
-            </li>
-          ))}
-        </ul>
+        {onEmail && <button type="button" className="btn-primary" onClick={onEmail}>Open emails</button>}
       </div>
 
       {brief.securityIssues?.length > 0 && (
@@ -86,6 +73,21 @@ export default function SalesBrief({ lead }) {
           <p>{brief.pitch}</p>
         </div>
       )}
+
+      <div className="brief-block">
+        <h4>When they reply <span className="count">{checked.length}/{brief.talkingPoints.length}</span></h4>
+        <p className="reply-hint">They wrote back, so they're interested. Use these in your reply, or on a call if they ask for one.</p>
+        <ul className="checklist">
+          {brief.talkingPoints.map((t, i) => (
+            <li key={i}>
+              <label className={checked.includes(i) ? 'done' : ''}>
+                <input type="checkbox" checked={checked.includes(i)} onChange={() => toggle(i)} />
+                <span>{t}</span>
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div className="brief-block win">
         <h4>How to win this one</h4>

@@ -11,10 +11,10 @@ export function defaultWinPlan(lead, brief) {
       ? 'Offer a free homepage mockup. Seeing their own business on a new site does the selling for you.'
       : 'Offer the $100 security check, and credit it toward any fixes or a redesign if they go ahead.',
     closers: [
-      'Ask: "What would a few extra calls a week be worth to you?" Let them put the number on it.',
-      'Show them their site and one of our demos side by side on your phone.',
-      'Make the next step tiny: "Can I send you a free mockup this week? No commitment."',
-      'Mention we are local and small, so they deal with you directly, not a call center.'
+      'Lead with proof, not opinions: their Google score, a screenshot, or a competitor whose site is better.',
+      'Make the ask tiny: "Want me to send over a free mockup?" One-word replies are easy to send.',
+      'When they reply, send the mockup fast (within a day or two). Speed wins trust.',
+      'Mention we are local and small, so they deal with you directly, and we work with their budget.'
     ],
     objections: [
       { objection: "It's too expensive", response: "We're a small local team, so we're a lot friendlier on price than big agencies. Tell me your budget and I'll build a plan around it. We can also start small and grow it." },

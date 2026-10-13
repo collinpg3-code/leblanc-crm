@@ -147,6 +147,16 @@ module.exports = function registerBacklogRoutes(app, { authenticateToken, loadDa
     res.json({ removed, kept: kept.length });
   });
 
+  // Outreach is email-only: remove backlog leads with no email address at all.
+  app.post('/api/backlog/prune-no-email', authenticateToken, (req, res) => {
+    const data = loadData();
+    const hasEmail = (l) => !!(l.decisionMaker?.email || /[^\s@]+@[^\s@]+\.[^\s@]+/.test(l.contact || ''));
+    const removed = data.backlog.filter(l => !hasEmail(l));
+    data.backlog = data.backlog.filter(hasEmail);
+    saveData(data);
+    res.json({ removed: removed.map(l => l.name), count: data.backlog.length });
+  });
+
   // Lead Scout sync scripts: leads go to the backlog. Response keeps the
   // old { imported, total } shape the scripts print.
   app.post('/api/leads/sync', authenticateToken, (req, res) => {

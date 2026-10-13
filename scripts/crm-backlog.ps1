@@ -33,6 +33,7 @@ param(
   [int]$Limit = 15,
   [string]$ExportTo,
   [switch]$ResetAll,
+  [switch]$PruneNoEmail,
   [int]$Target = 50,
   [string]$CrmUrl = 'https://leblanc-backend.onrender.com',
   [string]$Username = 'CollinLB12'
@@ -67,6 +68,13 @@ if ($ResetAll) {
   if (-not $check.exportedAt) { Write-Error 'Backup file looks wrong; not resetting.' }
   $r = Invoke-RestMethod -Uri "$CrmUrl/api/leads/reset" -Method Post -ContentType 'application/json' -Headers $headers -Body '{"confirm":"DELETE ALL LEADS"}' -TimeoutSec 60
   "RESET removed_pipeline=$($r.removed.pipeline) removed_backlog=$($r.removed.backlog) kept_signed=$($r.kept)"
+}
+
+if ($PruneNoEmail) {
+  if (-not $ExportTo) { Write-Error '-PruneNoEmail requires -ExportTo so a backup is saved first.' }
+  $r = Invoke-RestMethod -Uri "$CrmUrl/api/backlog/prune-no-email" -Method Post -ContentType 'application/json' -Headers $headers -Body '{}' -TimeoutSec 60
+  "PRUNED=$(@($r.removed).Count) BACKLOG_NOW=$($r.count)"
+  $r.removed | ForEach-Object { "  - $_" }
 }
 
 if ($Status) {

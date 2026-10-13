@@ -35,6 +35,8 @@
 .action-bar { display: flex; gap: 8px; padding: 10px 14px; padding-bottom: max(10px, env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: var(--white); }
 .act { flex: 1; display: grid; place-items: center; min-height: 50px; border: 1.5px solid var(--ink); color: var(--ink); text-decoration: none; font: 600 15px var(--sans); }
 .act.primary { background: var(--teal); border-color: var(--teal); color: var(--white); }
+button.act { border-radius: 0; cursor: pointer; }
+.act.subtle { flex: 0 0 auto; padding: 0 16px; border-color: var(--line); color: var(--slate); font-weight: 500; }
 .act.disabled { border-color: var(--line); color: var(--slate); font-weight: 500; font-size: 13px; }
 
 @media (max-width: 640px) {
