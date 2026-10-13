@@ -14,10 +14,11 @@ Collin could call them tomorrow, point at something real on their website, and t
 - Never invent a business, person, number, email, review count or finding. Unverified = leave it out.
 - People: only names/contact details the business publishes (its site, Google Business Profile, Michigan LARA filings, chamber/trade directory listings). No people-search/data-broker sites, no personal cell numbers or home addresses, no guessed email patterns.
 
-## What "amazing" looks like (Collin's gold-standard leads)
-- **Hankwitz Heating & Cooling, Ludington:** family HVAC business since 1975, owners named (David and Kelly Hankwitz), Readers' Choice winner, and **no real website** (their domain forwards to a directory page advertising competitors). A competitor in town has online service requests.
-- **Corble Builders, Petoskey:** custom builder since 2002, Builder of the Year badge, and a site with **visibly broken things** (dead email link, broken Facebook feed, menu items going nowhere). The owner publishes his own email.
-Pattern: established and proud (years, awards, reviews) + an obvious, embarrassing website problem you can point at + a named owner you can reach. Find more like these.
+## Collin's lead feedback (learn his taste; newest last)
+Not strict rules, just signals of what he likes and doesn't. Lean toward leads like the "liked" ones.
+- **Liked:** Hankwitz Heating & Cooling, Ludington. Family HVAC since 1975, named owners, Readers' Choice winner, no real website (domain forwards to a directory page).
+- **Liked:** Corble Builders, Petoskey. Custom builder since 2002, Builder of the Year, visibly broken site features, owner's own email published.
+- **Disliked:** the first generic batch (mostly fine-looking WordPress sites pulled from directories, weak signals, no named owner).
 
 ## 1. Who we want (ideal lead)
 - **Location:** Michigan, northern Michigan first (Traverse City, Petoskey, Charlevoix, Harbor Springs, Gaylord, Cadillac, Alpena, Manistee, Ludington), then Grand Rapids/Lansing suburbs.
